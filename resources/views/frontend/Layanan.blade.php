@@ -216,7 +216,7 @@
         </section>
 
         {{-- 4. KEUNIKAN & FASILITAS (GRID CARDS) --}}
-        <section class="py-20 bg-slate-100">
+        <section id="sudut-unik-fasilitas" class="py-20 bg-slate-100">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16" data-aos="fade-up">
                     <h2 class="text-3xl font-bold text-slate-900">Sudut Unik & Fasilitas</h2>
