@@ -561,28 +561,37 @@
                 <section class="mb-24" data-aos="fade-up">
                     <div class="flex justify-between items-end mb-8">
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-800"><i class="fas fa-images text-blue-800 mr-2"></i> Galeri Kegiatan</h2>
-                        <a href="#" class="px-5 py-2 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition text-sm font-medium">Lihat Semua</a>
+                        <a href="{{ route('layanan') }}#galeri-kegiatan" class="px-5 py-2 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition text-sm font-medium">Lihat Semua</a>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        {{-- Item Galeri 1 --}}
-                        <div class="relative h-64 rounded-xl overflow-hidden group cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1577017040065-65052869463d?q=80&w=600" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        {{-- Item Galeri 1 - Pemerintahan --}}
+                        <div class="gallery-item pemerintahan relative h-64 rounded-xl overflow-hidden group cursor-pointer">
+                            <img src="https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
-                                Lihat Kegiatan
+                                <div class="text-center">
+                                    <i class="fas fa-users text-2xl mb-2"></i>
+                                    <p>Rapat Desa</p>
+                                </div>
                             </div>
                         </div>
-                        {{-- Item Galeri 2 --}}
-                        <div class="relative h-64 rounded-xl overflow-hidden group cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=600" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        {{-- Item Galeri 2 - Kemasyarakatan --}}
+                        <div class="gallery-item kemasyarakatan relative h-64 rounded-xl overflow-hidden group cursor-pointer">
+                            <img src="https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
-                                Lihat Kegiatan
+                                <div class="text-center">
+                                    <i class="fas fa-hands-helping text-2xl mb-2"></i>
+                                    <p>Gotong Royong</p>
+                                </div>
                             </div>
                         </div>
-                        {{-- Item Galeri 3 --}}
-                        <div class="relative h-64 rounded-xl overflow-hidden group cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=600" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        {{-- Item Galeri 3 - Pembangunan --}}
+                        <div class="gallery-item pembangunan relative h-64 rounded-xl overflow-hidden group cursor-pointer">
+                            <img src="https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
-                                Lihat Kegiatan
+                                <div class="text-center">
+                                    <i class="fas fa-road text-2xl mb-2"></i>
+                                    <p>Pembangunan Jalan</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -652,6 +661,51 @@
     </main>
 
     @include('frontend.layouts.footer')
+
+    {{-- Advanced Gallery Viewer Modal --}}
+    <div id="galleryViewerModal" class="hidden fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm">
+        <div class="relative w-full h-full p-4 md:p-8 flex flex-col lg:flex-row">
+            <!-- Header Controls -->
+            <div class="absolute top-4 left-4 right-4 flex justify-between items-start z-50">
+                <h2 id="galleryViewerAlbumTitle" class="text-white text-xl md:text-2xl font-bold bg-black/50 px-4 py-2 rounded-lg backdrop-blur-sm"></h2>
+                <button id="galleryViewerClose" class="text-white text-4xl hover:text-gray-300 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Main Image Area -->
+            <div id="galleryViewerMain" class="flex-grow h-full flex flex-col justify-center items-center relative lg:mr-4">
+                <h3 id="galleryViewerTitle" class="text-white text-lg md:text-xl font-normal mb-4 text-center"></h3>
+
+                <div id="galleryViewerMainImageContainer" class="relative w-full flex-grow flex items-center justify-center overflow-hidden">
+                    <img id="galleryViewerMainImage" src="" alt="" class="max-w-full max-h-full object-contain transition-opacity duration-300">
+
+                    <!-- Loading Spinner -->
+                    <div id="galleryViewerLoader" class="absolute inset-0 flex items-center justify-center bg-black/50 hidden">
+                        <div class="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <button id="galleryViewerPrev" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white w-12 h-12 rounded-full text-2xl flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="galleryViewerNext" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white w-12 h-12 rounded-full text-2xl flex items-center justify-center transition-all duration-300 hover:scale-110">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <!-- Image Counter -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full">
+                    <span id="galleryViewerCounter" class="text-white text-sm font-medium"></span>
+                </div>
+            </div>
+
+            <!-- Thumbnails Sidebar -->
+            <div id="galleryViewerThumbnails" class="lg:w-48 xl:w-56 flex-shrink-0 h-full overflow-y-auto flex lg:flex-col gap-3 pr-2 pt-20 pb-4 lg:pt-20 lg:pb-4">
+                <!-- Thumbnails will be dynamically added here -->
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
@@ -769,6 +823,194 @@
                 options: commonOptions
             });
         }
+
+        // Gallery Data
+        const galleryData = {
+            pemerintahan: {
+                title: 'Kegiatan Pemerintahan',
+                images: [{
+                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg',
+                        caption: 'Rapat Desa'
+                    },
+                    {
+                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954056_d8ad3ecfe0494c04463f.jpg',
+                        caption: 'Musrenbang'
+                    },
+                    {
+                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954022_0bf4e65d09285d943a44.jpg',
+                        caption: 'Pembahasan APBDes'
+                    }
+                ]
+            },
+            kemasyarakatan: {
+                title: 'Kegiatan Kemasyarakatan',
+                images: [{
+                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg',
+                        caption: 'Gotong Royong'
+                    },
+                    {
+                        src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Pengajian',
+                        caption: 'Pengajian Rutin'
+                    },
+                    {
+                        src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu',
+                        caption: 'Kegiatan Posyandu'
+                    }
+                ]
+            },
+            pembangunan: {
+                title: 'Kegiatan Pembangunan',
+                images: [{
+                        src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa',
+                        caption: 'Pembangunan Jalan Desa'
+                    },
+                    {
+                        src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Drainase',
+                        caption: 'Perbaikan Drainase'
+                    },
+                    {
+                        src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=MCK',
+                        caption: 'Pembangunan MCK'
+                    }
+                ]
+            }
+        };
+
+        // Gallery Viewer Functions
+        const viewerModal = document.getElementById('galleryViewerModal');
+        const viewerMainImage = document.getElementById('galleryViewerMainImage');
+        const viewerImageTitle = document.getElementById('galleryViewerTitle');
+        const viewerAlbumTitle = document.getElementById('galleryViewerAlbumTitle');
+        const viewerThumbnailsContainer = document.getElementById('galleryViewerThumbnails');
+        const viewerPrevBtn = document.getElementById('galleryViewerPrev');
+        const viewerNextBtn = document.getElementById('galleryViewerNext');
+        const viewerCloseBtn = document.getElementById('galleryViewerClose');
+        const viewerCounter = document.getElementById('galleryViewerCounter');
+        const viewerLoader = document.getElementById('galleryViewerLoader');
+
+        let viewerCurrentImages = [];
+        let viewerCurrentIndex = 0;
+
+        function openGalleryViewer(category) {
+            const album = galleryData[category];
+            if (!album || !album.images || album.images.length === 0) {
+                console.error("Album not found or is empty:", category);
+                return;
+            }
+
+            viewerCurrentImages = album.images;
+            viewerCurrentIndex = 0;
+            viewerAlbumTitle.textContent = album.title;
+
+            // Create thumbnails
+            viewerThumbnailsContainer.innerHTML = '';
+            album.images.forEach((image, index) => {
+                const thumb = document.createElement('div');
+                thumb.className = `viewer-thumbnail relative w-full h-20 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 border-2 ${index === 0 ? 'border-white' : 'border-transparent'} hover:border-white`;
+                thumb.dataset.index = index;
+                thumb.innerHTML = `<img src="${image.src}" alt="${image.caption}" class="w-full h-full object-cover">`;
+                viewerThumbnailsContainer.appendChild(thumb);
+            });
+
+            viewerModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            updateGalleryView();
+        }
+
+        function closeGalleryViewer() {
+            viewerModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateGalleryView() {
+            if (viewerCurrentImages.length === 0) return;
+
+            const image = viewerCurrentImages[viewerCurrentIndex];
+
+            // Show loader
+            viewerLoader.classList.remove('hidden');
+            viewerMainImage.style.opacity = '0';
+
+            // Load new image
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                viewerMainImage.src = image.src;
+                viewerMainImage.alt = image.caption;
+                viewerImageTitle.textContent = image.caption;
+                viewerMainImage.style.opacity = '1';
+                viewerLoader.classList.add('hidden');
+
+                // Update counter
+                viewerCounter.textContent = `${viewerCurrentIndex + 1} / ${viewerCurrentImages.length}`;
+
+                // Update thumbnails
+                const thumbnails = viewerThumbnailsContainer.querySelectorAll('.viewer-thumbnail');
+                thumbnails.forEach(thumb => {
+                    thumb.classList.toggle('border-transparent', parseInt(thumb.dataset.index) !== viewerCurrentIndex);
+                });
+
+                // Scroll active thumbnail into view
+                const activeThumbnail = document.querySelector(`.viewer-thumbnail[data-index='${viewerCurrentIndex}']`);
+                if (activeThumbnail) {
+                    activeThumbnail.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            };
+            tempImg.onerror = function() {
+                viewerLoader.classList.add('hidden');
+                console.error("Failed to load image:", image.src);
+            };
+            tempImg.src = image.src;
+        }
+
+        function showNextGalleryImage() {
+            viewerCurrentIndex = (viewerCurrentIndex + 1) % viewerCurrentImages.length;
+            updateGalleryView();
+        }
+
+        function showPrevGalleryImage() {
+            viewerCurrentIndex = (viewerCurrentIndex - 1 + viewerCurrentImages.length) % viewerCurrentImages.length;
+            updateGalleryView();
+        }
+
+        // Gallery click handlers
+        document.addEventListener('click', (e) => {
+            const galleryItem = e.target.closest('.gallery-item');
+            if (galleryItem) {
+                e.preventDefault();
+                const category = Array.from(galleryItem.classList).find(cls => ['pemerintahan', 'kemasyarakatan', 'pembangunan'].includes(cls));
+                if (category) {
+                    openGalleryViewer(category);
+                }
+            }
+        });
+
+        // Gallery viewer controls
+        viewerThumbnailsContainer.addEventListener('click', (e) => {
+            if (e.target.matches('.viewer-thumbnail')) {
+                viewerCurrentIndex = parseInt(e.target.dataset.index);
+                updateGalleryView();
+            }
+        });
+
+        viewerPrevBtn.addEventListener('click', showPrevGalleryImage);
+        viewerNextBtn.addEventListener('click', showNextGalleryImage);
+        viewerCloseBtn.addEventListener('click', closeGalleryViewer);
+
+        viewerModal.addEventListener('click', (e) => {
+            if (e.target === viewerModal) {
+                closeGalleryViewer();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (viewerModal.classList.contains('hidden')) return;
+            if (e.key === 'ArrowRight') showNextGalleryImage();
+            if (e.key === 'ArrowLeft') showPrevGalleryImage();
+            if (e.key === 'Escape') closeGalleryViewer();
+        });
     </script>
 </body>
 

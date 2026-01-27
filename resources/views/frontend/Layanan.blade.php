@@ -374,9 +374,9 @@
         </section>
 
         {{-- 7. GALERI KEGIATAN --}}
-        <section id="galeri-kegiatan" class="py-20 bg-white">
+
             <div class="container mx-auto px-6">
-                <div class="text-center mb-16" data-aos="fade-up">
+                  <section id="galeri-kegiatan" class="py-20 bg-white">      <div class="text-center mb-16" data-aos="fade-up">
                     <h2 class="text-3xl font-bold text-slate-900 mb-4">
                         <i class="fas fa-images text-purple-500 mr-2"></i>Galeri Kegiatan
                     </h2>
