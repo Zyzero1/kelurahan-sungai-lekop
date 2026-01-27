@@ -537,6 +537,12 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div class="service-card group">
+                            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600 text-2xl group-hover:bg-blue-600 group-hover:text-white transition"><i class="fas fa-building"></i></div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">Sudut Unik & Fasilitas</h3>
+                            <p class="text-gray-500 text-sm mb-6">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
+                            <a href="{{ route('layanan') }}#sudut-unik-fasilitas" class="text-blue-600 font-semibold hover:text-blue-800 text-sm">Jelajahi Fasilitas <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                        <div class="service-card group">
                             <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600 text-2xl group-hover:bg-blue-600 group-hover:text-white transition"><i class="fas fa-store"></i></div>
                             <h3 class="text-xl font-bold mb-2 text-gray-800">UMKM Lokal</h3>
                             <p class="text-gray-500 text-sm mb-6">Dukung dan kenalkan produk Usaha Mikro Kecil Menengah khas Sungai Lekop.</p>
@@ -547,12 +553,6 @@
                             <h3 class="text-xl font-bold mb-2 text-gray-800">Potensi Wisata</h3>
                             <p class="text-gray-500 text-sm mb-6">Eksplorasi keindahan alam dan destinasi wisata di wilayah Sungai Lekop.</p>
                             <a href="{{ route('layanan') }}#pariwisata" class="text-blue-600 font-semibold hover:text-blue-800 text-sm">Temukan Wisata <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-                        <div class="service-card group">
-                            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600 text-2xl group-hover:bg-blue-600 group-hover:text-white transition"><i class="fas fa-images"></i></div>
-                            <h3 class="text-xl font-bold mb-2 text-gray-800">Galeri Kegiatan</h3>
-                            <p class="text-gray-500 text-sm mb-6">Dokumentasi kegiatan kemasyarakatan dan pembangunan di Sungai Lekop.</p>
-                            <a href="{{ route('layanan') }}#galeri-kegiatan" class="text-blue-600 font-semibold hover:text-blue-800 text-sm">Lihat Galeri <i class="fas fa-arrow-right ml-1"></i></a>
                         </div>
                     </div>
                 </section>
