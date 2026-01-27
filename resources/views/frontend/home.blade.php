@@ -311,9 +311,9 @@
 
             {{-- 1. SOSMED VERTIKAL (Desktop Only) --}}
             <div class="hidden md:flex social-vertical">
-                <a href="https://facebook.com" class="social-btn group"><i class="fab fa-facebook-f text-lg"></i></a>
-                <a href="https://instagram.com" class="social-btn group"><i class="fab fa-instagram text-lg"></i></a>
-                <a href="https://youtube.com" class="social-btn group"><i class="fab fa-youtube text-lg"></i></a>
+                <a href="{{ $homeContent->social_facebook ?? '#' }}" class="social-btn group"><i class="fab fa-facebook-f text-lg"></i></a>
+                <a href="{{ $homeContent->social_instagram ?? '#' }}" class="social-btn group"><i class="fab fa-instagram text-lg"></i></a>
+                <a href="{{ $homeContent->social_youtube ?? '#' }}" class="social-btn group"><i class="fab fa-youtube text-lg"></i></a>
             </div>
 
             {{-- Gambar lokal untuk hero slide --}}
@@ -329,12 +329,12 @@
             {{-- 3. KONTEN TENGAH --}}
             <div class="hero-content animate-fade-in">
                 <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 drop-shadow-lg leading-tight">
-                    Selamat Datang di <br>
-                    <span class="text-blue-300">Kelurahan Sungai Lekop</span>
+                    {{ $homeContent->hero_title ?? 'Selamat Datang di' }} <br>
+                    <span class="text-blue-300">{{ $homeContent->hero_title ? '' : 'Kelurahan Sungai Lekop' }}</span>
                 </h1>
 
                 <p class="text-base md:text-xl mb-8 text-gray-200 font-light max-w-2xl mx-auto drop-shadow-md">
-                    Melayani dengan hati, mewujudkan pelayanan publik yang transparan, akuntabel, dan humanis menuju masyarakat sejahtera.
+                    {{ $homeContent->hero_subtitle ?? 'Melayani dengan hati, mewujudkan pelayanan publik yang transparan, akuntabel, dan humanis menuju masyarakat sejahtera.' }}
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center w-full">
@@ -348,9 +348,9 @@
 
                 {{-- Sosmed Mobile (Horizontal di bawah tombol) --}}
                 <div class="flex md:hidden gap-4 mt-8 justify-center">
-                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                    <a href="{{ $homeContent->social_facebook ?? '#' }}" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ $homeContent->social_instagram ?? '#' }}" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ $homeContent->social_youtube ?? '#' }}" class="social-btn"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
 
@@ -380,20 +380,20 @@
                                 <i class="fas fa-landmark"></i> Tentang Kami
                             </h3>
                             <p class="text-gray-600 leading-relaxed mb-4">
-                                Kelurahan Sungai Lekop adalah salah satu kelurahan yang terletak di Kecamatan Bintan Timur, Kabupaten Bintan. Kami berkomitmen untuk memberikan pelayanan terbaik kepada masyarakat dalam berbagai aspek administrasi dan pembangunan.
+                                {{ $homeContent->profil_tentang ?? 'Kelurahan Sungai Lekop adalah salah satu kelurahan yang terletak di Kecamatan Bintan Timur, Kabupaten Bintan. Kami berkomitmen untuk memberikan pelayanan terbaik kepada masyarakat dalam berbagai aspek administrasi dan pembangunan.' }}
                             </p>
                             <div class="space-y-2">
                                 <div class="flex items-center gap-3">
                                     <i class="fas fa-map-marker-alt text-red-500"></i>
-                                    <span class="text-gray-700">Jl. Korindo Km. 22 No. 1A, Sungai Lekop</span>
+                                    <span class="text-gray-700">{{ $homeContent->profil_alamat ?? 'Jl. Korindo Km. 22 No. 1A, Sungai Lekop' }}</span>
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <i class="fas fa-envelope text-blue-500"></i>
-                                    <span class="text-gray-700">kelurahan@sungailekop.id</span>
+                                    <span class="text-gray-700">{{ $homeContent->profil_email ?? 'kelurahan@sungailekop.id' }}</span>
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <i class="fab fa-instagram text-purple-500"></i>
-                                    <span class="text-gray-700">@Kelurahansungailekop</span>
+                                    <span class="text-gray-700">{{ $homeContent->profil_instagram ?? '@Kelurahansungailekop' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -404,24 +404,24 @@
                             <div class="mb-6">
                                 <h4 class="font-semibold text-yellow-300 mb-2">Visi</h4>
                                 <p class="text-blue-100 italic">
-                                    "Terwujudnya Kelurahan Sungai Lekop yang maju, mandiri, dan sejahtera berbasis pelayanan prima."
+                                    "{{ $homeContent->profil_visi ?? 'Terwujudnya Kelurahan Sungai Lekop yang maju, mandiri, dan sejahtera berbasis pelayanan prima.' }}"
                                 </p>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-yellow-300 mb-2">Misi</h4>
                                 <ul class="space-y-2 text-blue-100 text-sm">
+                                    @php
+                                    $misiItems = $homeContent->profil_misi ?? "• Memberikan pelayanan administrasi yang cepat dan transparan\n• Meningkatkan partisipasi masyarakat dalam pembangunan\n• Menjaga kebersihan dan keindahan lingkungan";
+                                    $misiArray = explode("\n", $misiItems);
+                                    @endphp
+                                    @foreach($misiArray as $misi)
+                                    @if(trim($misi))
                                     <li class="flex gap-2">
                                         <i class="fas fa-check-circle text-green-400 mt-0.5"></i>
-                                        <span>Memberikan pelayanan administrasi yang cepat dan transparan</span>
+                                        <span>{{ trim($misi, '• ') }}</span>
                                     </li>
-                                    <li class="flex gap-2">
-                                        <i class="fas fa-check-circle text-green-400 mt-0.5"></i>
-                                        <span>Meningkatkan partisipasi masyarakat dalam pembangunan</span>
-                                    </li>
-                                    <li class="flex gap-2">
-                                        <i class="fas fa-check-circle text-green-400 mt-0.5"></i>
-                                        <span>Menjaga kebersihan dan keindahan lingkungan</span>
-                                    </li>
+                                    @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -432,28 +432,28 @@
                 <section id="statistik" class="mb-24" data-aos="fade-up">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div class="stat-card group">
-                            <div class="stat-number">15,203</div>
+                            <div class="stat-number">{{ number_format($homeContent->statistik_penduduk ?? 15203, 0, ',', '.') }}</div>
                             <div class="text-gray-500 font-medium">Total Penduduk</div>
                             <div class="absolute bottom-4 right-4 text-gray-100 group-hover:text-blue-900 transition-colors">
                                 <i class="fas fa-users text-4xl opacity-30 group-hover:opacity-100"></i>
                             </div>
                         </div>
                         <div class="stat-card group">
-                            <div class="stat-number">32</div>
+                            <div class="stat-number">{{ $homeContent->statistik_rt ?? 32 }}</div>
                             <div class="text-gray-500 font-medium">Jumlah RT</div>
                             <div class="absolute bottom-4 right-4 text-gray-100 group-hover:text-blue-900 transition-colors">
                                 <i class="fas fa-home text-4xl opacity-30 group-hover:opacity-100"></i>
                             </div>
                         </div>
                         <div class="stat-card group">
-                            <div class="stat-number">9</div>
+                            <div class="stat-number">{{ $homeContent->statistik_rw ?? 9 }}</div>
                             <div class="text-gray-500 font-medium">Jumlah RW</div>
                             <div class="absolute bottom-4 right-4 text-gray-100 group-hover:text-blue-900 transition-colors">
                                 <i class="fas fa-map-marked-alt text-4xl opacity-30 group-hover:opacity-100"></i>
                             </div>
                         </div>
                         <div class="stat-card group">
-                            <div class="stat-number">12</div>
+                            <div class="stat-number">{{ $homeContent->statistik_layanan ?? 12 }}</div>
                             <div class="text-gray-500 font-medium">Layanan Publik</div>
                             <div class="absolute bottom-4 right-4 text-gray-100 group-hover:text-blue-900 transition-colors">
                                 <i class="fas fa-hand-holding-heart text-4xl opacity-30 group-hover:opacity-100"></i>
@@ -467,11 +467,11 @@
                     <div class="flex justify-between items-center mb-8">
                         <div>
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
-                                <i class="fas fa-newspaper text-blue-800 mr-2"></i> Berita Utama
+                                <i class="fas fa-newspaper text-blue-800 mr-2"></i> {{ $homeContent->berita_title ?? 'Berita Utama' }}
                             </h2>
                         </div>
                         <a href="{{ route('berita') }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
-                            Lihat Semua <i class="fas fa-arrow-right ml-2"></i>
+                            {{ $homeContent->berita_link_text ?? 'Lihat Semua' }} <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
 
@@ -479,12 +479,12 @@
                         {{-- Berita Besar Kiri --}}
                         <div class="lg:col-span-2">
                             <div class="relative rounded-2xl overflow-hidden shadow-lg h-[450px] group cursor-pointer">
-                                <img src="https://images.unsplash.com/photo-1590402494587-44b71d87e3f6?q=80&w=1280" alt="News" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                                <img src="{{ $homeContent->berita_featured_image ?? 'https://images.unsplash.com/photo-1590402494587-44b71d87e3f6?q=80&w=1280' }}" alt="News" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                                 <div class="absolute bottom-0 left-0 p-8 text-white">
-                                    <span class="bg-blue-600 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">TERBARU</span>
-                                    <h3 class="text-2xl md:text-3xl font-bold mb-2 leading-tight">Kegiatan Gotong Royong Massal di Lingkungan RW 02</h3>
-                                    <p class="text-gray-300 text-sm line-clamp-2 mt-2">Masyarakat Kelurahan Sungai Lekop antusias mengikuti kegiatan bersih-bersih lingkungan demi kenyamanan bersama.</p>
+                                    <span class="bg-blue-600 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">{{ $homeContent->berita_featured_label ?? 'TERBARU' }}</span>
+                                    <h3 class="text-2xl md:text-3xl font-bold mb-2 leading-tight">{{ $homeContent->berita_featured_title ?? 'Kegiatan Gotong Royong Massal di Lingkungan RW 02' }}</h3>
+                                    <p class="text-gray-300 text-sm line-clamp-2 mt-2">{{ $homeContent->berita_featured_desc ?? 'Masyarakat Kelurahan Sungai Lekop antusias mengikuti kegiatan bersih-bersih lingkungan demi kenyamanan bersama.' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -493,8 +493,8 @@
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 h-full">
                                 <div class="flex border-b mb-4">
-                                    <button class="news-tab-btn active mr-4" data-tab="terkini">Terkini</button>
-                                    <button class="news-tab-btn" data-tab="populer">Populer</button>
+                                    <button class="news-tab-btn active mr-4" data-tab="terkini">{{ $homeContent->berita_tab_terkini ?? 'Terkini' }}</button>
+                                    <button class="news-tab-btn" data-tab="populer">{{ $homeContent->berita_tab_populer ?? 'Populer' }}</button>
                                 </div>
 
                                 {{-- Tab Terkini --}}
@@ -538,20 +538,20 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div class="service-card group">
                             <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600 text-2xl group-hover:bg-blue-600 group-hover:text-white transition"><i class="fas fa-building"></i></div>
-                            <h3 class="text-xl font-bold mb-2 text-gray-800">Sudut Unik & Fasilitas</h3>
-                            <p class="text-gray-500 text-sm mb-6">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">{{ $homeContent->jelajah_fasilitas_title ?? 'Sudut Unik & Fasilitas' }}</h3>
+                            <p class="text-gray-500 text-sm mb-6">{{ $homeContent->jelajah_fasilitas_desc ?? 'Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.' }}</p>
                             <a href="{{ route('layanan') }}#sudut-unik-fasilitas" class="text-blue-600 font-semibold hover:text-blue-800 text-sm">Jelajahi Fasilitas <i class="fas fa-arrow-right ml-1"></i></a>
                         </div>
                         <div class="service-card group">
                             <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600 text-2xl group-hover:bg-blue-600 group-hover:text-white transition"><i class="fas fa-store"></i></div>
-                            <h3 class="text-xl font-bold mb-2 text-gray-800">UMKM Lokal</h3>
-                            <p class="text-gray-500 text-sm mb-6">Dukung dan kenalkan produk Usaha Mikro Kecil Menengah khas Sungai Lekop.</p>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">{{ $homeContent->jelajah_umkm_title ?? 'UMKM Lokal' }}</h3>
+                            <p class="text-gray-500 text-sm mb-6">{{ $homeContent->jelajah_umkm_desc ?? 'Dukung dan kenalkan produk Usaha Mikro Kecil Menengah khas Sungai Lekop.' }}</p>
                             <a href="{{ route('layanan') }}#umkm-lokal" class="text-blue-600 font-semibold hover:text-blue-800 text-sm">Jelajahi UMKM <i class="fas fa-arrow-right ml-1"></i></a>
                         </div>
                         <div class="service-card group">
                             <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600 text-2xl group-hover:bg-blue-600 group-hover:text-white transition"><i class="fas fa-mountain"></i></div>
-                            <h3 class="text-xl font-bold mb-2 text-gray-800">Potensi Wisata</h3>
-                            <p class="text-gray-500 text-sm mb-6">Eksplorasi keindahan alam dan destinasi wisata di wilayah Sungai Lekop.</p>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">{{ $homeContent->jelajah_wisata_title ?? 'Potensi Wisata' }}</h3>
+                            <p class="text-gray-500 text-sm mb-6">{{ $homeContent->jelajah_wisata_desc ?? 'Eksplorasi keindahan alam dan destinasi wisata di wilayah Sungai Lekop.' }}</p>
                             <a href="{{ route('layanan') }}#pariwisata" class="text-blue-600 font-semibold hover:text-blue-800 text-sm">Temukan Wisata <i class="fas fa-arrow-right ml-1"></i></a>
                         </div>
                     </div>
@@ -643,7 +643,7 @@
                         <i class="fas fa-quote-left text-4xl text-blue-300 mb-6"></i>
                         <h2 class="text-2xl font-bold mb-4">Komitmen Pelayanan</h2>
                         <p class="text-xl mb-8 max-w-3xl mx-auto leading-relaxed">
-                            "Melayani dengan hati, mewujudkan pelayanan publik yang transparan, akuntabel, dan humanis menuju masyarakat sejahtera."
+                            "{{ $homeContent->testimonial_text ?? 'Melayani dengan hati, mewujudkan pelayanan publik yang transparan, akuntabel, dan humanis menuju masyarakat sejahtera.' }}"
                         </p>
                         <div class="flex items-center justify-center gap-2">
                             <i class="fas fa-star text-yellow-400"></i>
@@ -652,7 +652,7 @@
                             <i class="fas fa-star text-yellow-400"></i>
                             <i class="fas fa-star text-yellow-400"></i>
                         </div>
-                        <p class="text-blue-200 mt-4">- Pemerintah Kelurahan Sungai Lekop -</p>
+                        <p class="text-blue-200 mt-4">- {{ $homeContent->testimonial_author ?? 'Pemerintah Kelurahan Sungai Lekop' }} -</p>
                     </div>
                 </section>
 

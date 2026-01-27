@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\LayananController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HomeContentController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProfilController as FrontProfil;
 use App\Http\Controllers\Frontend\LayananController as FrontLayanan;
@@ -17,7 +18,8 @@ use App\Http\Controllers\Frontend\BeritaController as FrontBerita;
 | AUTH ROUTES (LOGIN, LOGOUT, dll)
 |--------------------------------------------------------------------------
 */
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -40,10 +42,17 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/profil', [ProfilController::class, 'update'])
         ->name('profil.update');
 
+    // === HOME CONTENT MANAGEMENT ===
+    Route::get('/home-content', [HomeContentController::class, 'index'])
+        ->name('home-content.index');
+
+    Route::put('/home-content', [HomeContentController::class, 'update'])
+        ->name('home-content.update');
+
     // === LAYANAN & BERITA ===
     Route::resource('layanan', LayananController::class);
     Route::resource('berita', BeritaController::class)
-    ->parameters(['berita' => 'berita']);
+        ->parameters(['berita' => 'berita']);
 });
 
 /*
