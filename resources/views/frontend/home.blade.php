@@ -318,19 +318,26 @@
 
             {{-- Gambar lokal untuk hero slide --}}
             <div class="hero-slide active">
+                @if(!empty($homeContent->hero_banner_image_1))
+                <img src="{{ asset('uploads/hero/'.$homeContent->hero_banner_image_1) }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @else
                 <img src="{{ asset('images/kantor.png') }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @endif
                 <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
             </div>
             <div class="hero-slide">
+                @if(!empty($homeContent->hero_banner_image_2))
+                <img src="{{ asset('uploads/hero/'.$homeContent->hero_banner_image_2) }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @else
                 <img src="{{ asset('images/kantor-sungailekop.JPG') }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @endif
                 <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
             </div>
 
             {{-- 3. KONTEN TENGAH --}}
             <div class="hero-content animate-fade-in">
                 <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 drop-shadow-lg leading-tight">
-                    {{ $homeContent->hero_title ?? 'Selamat Datang di' }} <br>
-                    <span class="text-blue-300">{{ $homeContent->hero_title ? '' : 'Kelurahan Sungai Lekop' }}</span>
+                    {{ $homeContent->hero_title ?? 'Selamat Datang di Kelurahan Sungai Lekop' }}
                 </h1>
 
                 <p class="text-base md:text-xl mb-8 text-gray-200 font-light max-w-2xl mx-auto drop-shadow-md">

@@ -11,7 +11,8 @@ class HomeController extends Controller
     public function index()
     {
         $beritas = Berita::latest()->limit(3)->get();
-        $homeContent = HomeContent::first();
+        $homeContent = HomeContent::firstOrCreate([]);
+
         return view('frontend.home', compact('beritas', 'homeContent'));
     }
 }

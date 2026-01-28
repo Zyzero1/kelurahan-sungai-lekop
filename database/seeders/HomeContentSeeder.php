@@ -48,16 +48,6 @@ class HomeContentSeeder extends Seeder
             'testimonial_text' => 'Melayani dengan hati, mewujudkan pelayanan publik yang transparan, akuntabel, dan humanis menuju masyarakat sejahtera.',
             'testimonial_author' => 'Pemerintah Kelurahan Sungai Lekop',
 
-            // Berita Utama Section
-            'berita_title' => 'Berita Utama',
-            'berita_link_text' => 'Lihat Semua',
-            'berita_tab_terkini' => 'Terkini',
-            'berita_tab_populer' => 'Populer',
-            'berita_featured_title' => 'Kegiatan Gotong Royong Massal di Lingkungan RW 02',
-            'berita_featured_desc' => 'Masyarakat Kelurahan Sungai Lekop antusias mengikuti kegiatan bersih-bersih lingkungan demi kenyamanan bersama.',
-            'berita_featured_image' => 'https://images.unsplash.com/photo-1590402494587-44b71d87e3f6?q=80&w=1280',
-            'berita_featured_label' => 'TERBARU',
-
             // Social Media Links
             'social_facebook' => 'https://facebook.com',
             'social_instagram' => 'https://instagram.com',

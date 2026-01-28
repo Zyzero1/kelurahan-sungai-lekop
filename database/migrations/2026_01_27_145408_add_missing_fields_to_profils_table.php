@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('home_contents', function (Blueprint $table) {
+        Schema::table('profils', function (Blueprint $table) {
             //
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('home_contents', function (Blueprint $table) {
+        Schema::table('profils', function (Blueprint $table) {
             //
         });
     }

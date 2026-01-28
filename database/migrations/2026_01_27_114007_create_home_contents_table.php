@@ -46,17 +46,7 @@ return new class extends Migration
 
             // Testimonial
             $table->text('testimonial_text')->nullable();
-            $table->string('testimonial_author')->nullable()->max(255);
-
-            // Berita Utama Section
-            $table->string('berita_title')->nullable()->max(255);
-            $table->string('berita_link_text')->nullable()->max(255);
-            $table->string('berita_tab_terkini')->nullable()->max(255);
-            $table->string('berita_tab_populer')->nullable()->max(255);
-            $table->string('berita_featured_title')->nullable()->max(255);
-            $table->text('berita_featured_desc')->nullable();
-            $table->string('berita_featured_image')->nullable()->max(255);
-            $table->string('berita_featured_label')->nullable()->max(255);
+            $table->string('testimonial_author')->nullable();
 
             // Social Media Links
             $table->string('social_facebook')->nullable();

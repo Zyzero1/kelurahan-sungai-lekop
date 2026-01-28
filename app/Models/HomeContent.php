@@ -10,6 +10,8 @@ class HomeContent extends Model
         // Hero Banner
         'hero_title',
         'hero_subtitle',
+        'hero_banner_image_1',
+        'hero_banner_image_2',
         'hero_button1_text',
         'hero_button1_link',
         'hero_button2_text',
@@ -40,16 +42,6 @@ class HomeContent extends Model
         // Testimonial
         'testimonial_text',
         'testimonial_author',
-
-        // Berita Utama Section
-        'berita_title',
-        'berita_link_text',
-        'berita_tab_terkini',
-        'berita_tab_populer',
-        'berita_featured_title',
-        'berita_featured_desc',
-        'berita_featured_image',
-        'berita_featured_label',
 
         // Social Media Links
         'social_facebook',

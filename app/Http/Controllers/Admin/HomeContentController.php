@@ -18,10 +18,30 @@ class HomeContentController extends Controller
     {
         $homeContent = HomeContent::firstOrCreate([]);
 
+        // Upload hero banner image 1
+        if ($request->hasFile('hero_banner_image_1')) {
+            $file = $request->file('hero_banner_image_1');
+            $heroBannerImage1 = time() . '_1.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/hero'), $heroBannerImage1);
+        } else {
+            $heroBannerImage1 = $homeContent->hero_banner_image_1;
+        }
+
+        // Upload hero banner image 2
+        if ($request->hasFile('hero_banner_image_2')) {
+            $file = $request->file('hero_banner_image_2');
+            $heroBannerImage2 = time() . '_2.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/hero'), $heroBannerImage2);
+        } else {
+            $heroBannerImage2 = $homeContent->hero_banner_image_2;
+        }
+
         $validated = $request->validate([
             // Hero Banner
             'hero_title' => 'nullable|string|max:255',
             'hero_subtitle' => 'nullable|string',
+            'hero_banner_image_1' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'hero_banner_image_2' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
             // Profil Singkat
             'profil_tentang' => 'nullable|string',
@@ -65,7 +85,10 @@ class HomeContentController extends Controller
             'social_youtube' => 'nullable|string|max:255',
         ]);
 
-        $homeContent->update($validated);
+        $homeContent->update(array_merge($validated, [
+            'hero_banner_image_1' => $heroBannerImage1,
+            'hero_banner_image_2' => $heroBannerImage2,
+        ]));
 
         return redirect()->route('admin.home-content.index')
             ->with('success', 'Konten halaman beranda berhasil diperbarui!');
