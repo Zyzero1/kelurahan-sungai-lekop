@@ -10,34 +10,46 @@ class ProfilController extends Controller
 {
     public function index()
     {
-        $profil = Profil::first();
+        $profil = Profil::orderBy('id', 'desc')->first();
         return view('admin.profil.index', compact('profil'));
     }
 
     public function edit()
     {
-        $profil = Profil::firstOrCreate([]);
+        $profil = Profil::orderBy('id', 'desc')->firstOrCreate([]);
         return view('admin.profil.edit', compact('profil'));
     }
 
     public function update(Request $request)
     {
-        $profil = Profil::firstOrCreate([]);
+        $profil = Profil::orderBy('id', 'desc')->firstOrCreate([]);
 
         // Upload foto lurah
         if ($request->hasFile('foto_lurah')) {
-            $file = $request->file('foto_lurah');
-            $namaFotoLurah = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/lurah'), $namaFotoLurah);
+            try {
+                $file = $request->file('foto_lurah');
+                $namaFotoLurah = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/lurah'), $namaFotoLurah);
+            } catch (\Exception $e) {
+                return redirect()
+                    ->route('admin.profil.edit')
+                    ->with('error', 'Gagal upload foto lurah: ' . $e->getMessage());
+            }
         } else {
             $namaFotoLurah = $profil->foto_lurah;
         }
 
         // Upload struktur
         if ($request->hasFile('struktur')) {
-            $file = $request->file('struktur');
-            $namaStruktur = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/struktur'), $namaStruktur);
+            try {
+                $file = $request->file('struktur');
+                $namaStruktur = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/struktur'), $namaStruktur);
+            } catch (\Exception $e) {
+                return redirect()
+                    ->route('admin.profil.edit')
+                    ->with('error', 'Gagal upload struktur organisasi: ' . $e->getMessage());
+            }
         } else {
             $namaStruktur = $profil->struktur;
         }
@@ -51,6 +63,12 @@ class ProfilController extends Controller
             'luas_wilayah'   => $request->luas_wilayah,
             'jumlah_rw'      => $request->jumlah_rw,
             'jumlah_rt'      => $request->jumlah_rt,
+
+            // Demografi Penduduk
+            'jumlah_laki_laki'     => $request->jumlah_laki_laki,
+            'jumlah_perempuan'     => $request->jumlah_perempuan,
+            'jumlah_kk'            => $request->jumlah_kk,
+            'demografi_deskripsi'   => $request->demografi_deskripsi,
 
             // Pimpinan & Identitas
             'nama_lurah'     => $request->nama_lurah,
@@ -72,7 +90,7 @@ class ProfilController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.profil.index')
+            ->route('admin.profil.edit')
             ->with('success', 'Profil Kelurahan berhasil diperbarui');
     }
 }

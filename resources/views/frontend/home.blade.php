@@ -333,6 +333,14 @@
                 @endif
                 <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
             </div>
+            <div class="hero-slide">
+                @if(!empty($homeContent->hero_banner_image_3))
+                <img src="{{ asset('uploads/hero/'.$homeContent->hero_banner_image_3) }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @else
+                <img src="{{ asset('images/kantor.png') }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @endif
+                <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+            </div>
 
             {{-- 3. KONTEN TENGAH --}}
             <div class="hero-content animate-fade-in">

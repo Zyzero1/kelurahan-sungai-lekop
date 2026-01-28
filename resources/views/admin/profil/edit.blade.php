@@ -6,6 +6,28 @@
 
 <h1 class="text-2xl font-bold mb-6">Edit Profil Kelurahan</h1>
 
+@if(session('success'))
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+    {{ session('success') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+    {{ session('error') }}
+</div>
+@endif
+
+@if($errors->any())
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+    <ul class="list-disc list-inside">
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
 
 
 <form action="{{ route('admin.profil.update') }}"
@@ -57,6 +79,51 @@
         <div>
             <label class="block font-semibold mb-1">Telepon/WA</label>
             <input type="text" name="telepon" class="w-full border p-2 rounded" placeholder="Telepon" value="{{ old('telepon', $profil->telepon) }}">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block font-semibold mb-1">Jumlah RT</label>
+            <input type="number" name="jumlah_rt" class="w-full border p-2 rounded" placeholder="Jumlah RT" value="{{ old('jumlah_rt', $profil->jumlah_rt) }}">
+            <p class="text-sm text-gray-500 mt-1">Total jumlah Rukun Tetangga</p>
+        </div>
+        <div>
+            <label class="block font-semibold mb-1">Jumlah RW</label>
+            <input type="number" name="jumlah_rw" class="w-full border p-2 rounded" placeholder="Jumlah RW" value="{{ old('jumlah_rw', $profil->jumlah_rw) }}">
+            <p class="text-sm text-gray-500 mt-1">Total jumlah Rukun Warga</p>
+        </div>
+    </div>
+
+    <!-- Demografi Penduduk Section -->
+    <div class="border-t pt-6 mt-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-chart-pie text-blue-600"></i>
+            Demografi Penduduk
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+                <label class="block font-semibold mb-1">Jumlah Laki-laki</label>
+                <input type="number" name="jumlah_laki_laki" class="w-full border p-2 rounded" placeholder="Jumlah Laki-laki" value="{{ old('jumlah_laki_laki', $profil->jumlah_laki_laki) }}">
+                <p class="text-sm text-gray-500 mt-1">Jumlah penduduk laki-laki</p>
+            </div>
+            <div>
+                <label class="block font-semibold mb-1">Jumlah Perempuan</label>
+                <input type="number" name="jumlah_perempuan" class="w-full border p-2 rounded" placeholder="Jumlah Perempuan" value="{{ old('jumlah_perempuan', $profil->jumlah_perempuan) }}">
+                <p class="text-sm text-gray-500 mt-1">Jumlah penduduk perempuan</p>
+            </div>
+            <div>
+                <label class="block font-semibold mb-1">Jumlah KK</label>
+                <input type="number" name="jumlah_kk" class="w-full border p-2 rounded" placeholder="Jumlah KK" value="{{ old('jumlah_kk', $profil->jumlah_kk) }}">
+                <p class="text-sm text-gray-500 mt-1">Jumlah Kepala Keluarga</p>
+            </div>
+        </div>
+
+        <div>
+            <label class="block font-semibold mb-1">Deskripsi Demografi</label>
+            <textarea name="demografi_deskripsi" rows="3" class="w-full border p-2 rounded" placeholder="Deskripsi data demografi penduduk">{{ old('demografi_deskripsi', $profil->demografi_deskripsi) }}</textarea>
+            <p class="text-sm text-gray-500 mt-1">Penjelasan tentang komposisi penduduk di kelurahan</p>
         </div>
     </div>
 

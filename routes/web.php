@@ -60,7 +60,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 | FRONTEND ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Test route for debugging
+Route::get('/profil-test', function () {
+    $profil = \App\Models\Profil::first();
+    return view('frontend.profil', compact('profil'));
+});
+
+Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('home');
 
 Route::get('/profil', [FrontProfil::class, 'index'])->name('profil');
 Route::get('/layanan', [FrontLayanan::class, 'index'])->name('layanan');

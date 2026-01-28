@@ -9,7 +9,7 @@ class ProfilController extends Controller
 {
     public function index()
     {
-        $profil = Profil::first();
+        $profil = Profil::orderBy('id', 'desc')->first();
         return view('frontend.profil', compact('profil'));
     }
 }

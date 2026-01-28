@@ -12,6 +12,7 @@ class HomeContent extends Model
         'hero_subtitle',
         'hero_banner_image_1',
         'hero_banner_image_2',
+        'hero_banner_image_3',
         'hero_button1_text',
         'hero_button1_link',
         'hero_button2_text',

@@ -18,6 +18,12 @@ class Profil extends Model
         'jumlah_rw',
         'jumlah_rt',
 
+        // Demografi Penduduk
+        'jumlah_laki_laki',
+        'jumlah_perempuan',
+        'jumlah_kk',
+        'demografi_deskripsi',
+
         // Pimpinan & Identitas
         'nama_lurah',
         'nip_lurah',
