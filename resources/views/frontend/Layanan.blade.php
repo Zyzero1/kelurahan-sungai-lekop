@@ -331,49 +331,7 @@
             </div>
         </section>
 
-        {{-- 6. PARIWISATA --}}
-        <section id="pariwisata" class="py-20 bg-slate-50">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16" data-aos="fade-up">
-                    <h2 class="text-3xl font-bold text-slate-900 mb-4">
-                        <i class="fas fa-camera text-blue-500 mr-2"></i>Pariwisata
-                    </h2>
-                    <p class="text-slate-600 max-w-2xl mx-auto">Eksplorasi keindahan alam dan destinasi wisata di Sungai Lekop</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-8 mb-12">
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group" data-aos="fade-right">
-                        <div class="h-64 overflow-hidden">
-                            <img src="https://placehold.co/600x400/3b82f6/FFFFFF?text=Tugu+Kerupuk" alt="Tugu Kerupuk" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Tugu Kerupuk</h3>
-                            <p class="text-slate-600 text-sm mb-4">Ikon landmark Sungai Lekop yang menjadi simbol industri kerupuk</p>
-                            <div class="flex items-center text-blue-600">
-                                <i class="fas fa-map-marker-alt mr-2"></i>
-                                <span class="text-sm">Simpang Jl. Korindo</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group" data-aos="fade-left">
-                        <div class="h-64 overflow-hidden">
-                            <img src="https://placehold.co/600x400/10b981/FFFFFF?text=Wisata+Edukasi" alt="Wisata Edukasi" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Wisata Edukasi Industri</h3>
-                            <p class="text-slate-600 text-sm mb-4">Kunjungi sentra produksi kerupuk dan pelajari proses pembuatannya</p>
-                            <div class="flex items-center text-green-600">
-                                <i class="fas fa-clock mr-2"></i>
-                                <span class="text-sm">Buka: 09:00 - 16:00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- 7. GALERI KEGIATAN --}}
+        {{-- 6. GALERI KEGIATAN --}}
 
             <div class="container mx-auto px-6">
                   <section id="galeri-kegiatan" class="py-20 bg-white">      <div class="text-center mb-16" data-aos="fade-up">
@@ -492,7 +450,7 @@
             </div>
         </section>
 
-        {{-- 8. POTENSI WILAYAH --}}
+        {{-- 7. POTENSI WILAYAH --}}
         <section id="potensi-wilayah" class="py-20 bg-slate-50">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16" data-aos="fade-up">
@@ -538,7 +496,7 @@
             </div>
         </section>
 
-        {{-- 9. STATISTIK / HIGHLIGHTS SECTION --}}
+        {{-- 8. STATISTIK / HIGHLIGHTS SECTION --}}
         <section class="py-16 bg-blue-900 text-white">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-blue-700/50">
@@ -562,7 +520,7 @@
             </div>
         </section>
 
-        {{-- 6. PETA / CALL TO ACTION --}}
+        {{-- 9. PETA / CALL TO ACTION --}}
         <section class="py-20 bg-white">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-2xl font-bold text-slate-900 mb-6">Ingin Berkunjung atau Bekerjasama?</h2>
