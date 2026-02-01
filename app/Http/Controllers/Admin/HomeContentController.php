@@ -141,6 +141,19 @@ class HomeContentController extends Controller
                 'statistik_rw' => 'nullable|integer|min:0',
                 'statistik_layanan' => 'nullable|integer|min:0',
 
+                // Layanan Publik
+                'layanan_publik_title' => 'nullable|string|max:255',
+                'layanan_publik_desc' => 'nullable|string',
+                'layanan_kk_baru' => 'nullable|boolean',
+                'layanan_nikah' => 'nullable|boolean',
+                'layanan_akte_lahir' => 'nullable|boolean',
+                'layanan_akte_mati' => 'nullable|boolean',
+                'layanan_uang_duka' => 'nullable|boolean',
+                'layanan_tambah_anak' => 'nullable|boolean',
+                'layanan_sktm' => 'nullable|boolean',
+                'layanan_bpjs' => 'nullable|boolean',
+                'layanan_sku' => 'nullable|boolean',
+
                 // Jelajah Lekop
                 'jelajah_fasilitas_title' => 'nullable|string|max:255',
                 'jelajah_fasilitas_desc' => 'nullable|string',

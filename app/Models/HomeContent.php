@@ -32,6 +32,19 @@ class HomeContent extends Model
         'statistik_rw',
         'statistik_layanan',
 
+        // Layanan Publik
+        'layanan_publik_title',
+        'layanan_publik_desc',
+        'layanan_kk_baru',
+        'layanan_nikah',
+        'layanan_akte_lahir',
+        'layanan_akte_mati',
+        'layanan_uang_duka',
+        'layanan_tambah_anak',
+        'layanan_sktm',
+        'layanan_bpjs',
+        'layanan_sku',
+
         // Jelajah Lekop
         'jelajah_fasilitas_title',
         'jelajah_fasilitas_desc',

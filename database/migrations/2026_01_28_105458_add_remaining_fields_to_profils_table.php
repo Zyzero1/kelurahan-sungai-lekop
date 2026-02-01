@@ -12,20 +12,38 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('profils', function (Blueprint $table) {
-            // Informasi Umum
-            $table->string('kode_pos')->nullable()->after('alamat');
-            $table->string('luas_wilayah')->nullable()->after('kode_pos');
+            // Informasi Umum - hanya tambahkan jika belum ada
+            if (!Schema::hasColumn('profils', 'kode_pos')) {
+                $table->string('kode_pos')->nullable()->after('alamat');
+            }
+            if (!Schema::hasColumn('profils', 'luas_wilayah')) {
+                $table->string('luas_wilayah')->nullable()->after('kode_pos');
+            }
 
             // Pimpinan & Identitas
-            $table->string('nama_lurah')->nullable()->after('demografi_deskripsi');
-            $table->string('nip_lurah')->nullable()->after('nama_lurah');
-            $table->string('foto_lurah')->nullable()->after('nip_lurah');
-            $table->string('email')->nullable()->after('foto_lurah');
-            $table->string('telepon')->nullable()->after('email');
-            $table->text('motto_lurah')->nullable()->after('telepon');
+            if (!Schema::hasColumn('profils', 'nama_lurah')) {
+                $table->string('nama_lurah')->nullable()->after('demografi_deskripsi');
+            }
+            if (!Schema::hasColumn('profils', 'nip_lurah')) {
+                $table->string('nip_lurah')->nullable()->after('nama_lurah');
+            }
+            if (!Schema::hasColumn('profils', 'foto_lurah')) {
+                $table->string('foto_lurah')->nullable()->after('nip_lurah');
+            }
+            if (!Schema::hasColumn('profils', 'email')) {
+                $table->string('email')->nullable()->after('foto_lurah');
+            }
+            if (!Schema::hasColumn('profils', 'telepon')) {
+                $table->string('telepon')->nullable()->after('email');
+            }
+            if (!Schema::hasColumn('profils', 'motto_lurah')) {
+                $table->text('motto_lurah')->nullable()->after('telepon');
+            }
 
             // Struktur
-            $table->string('struktur')->nullable()->after('motto_lurah');
+            if (!Schema::hasColumn('profils', 'struktur')) {
+                $table->string('struktur')->nullable()->after('motto_lurah');
+            }
         });
     }
 

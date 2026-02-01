@@ -224,21 +224,157 @@
         .service-card {
             background: white;
             border-radius: 16px;
-            padding: 2rem;
+            padding: 2.5rem;
             border: 1px solid #f1f5f9;
-            transition: 0.3s;
+            transition: all 0.4s ease;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .service-card:hover {
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            border-color: var(--primary-500);
         }
 
-        /* Animasi */
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-600);
+            transition: 0.3s;
+        }
+
+        .service-card:hover .card-icon {
+            transform: scale(1.1) translateX(25px);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-description {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-link {
+            color: var(--primary-600);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        /* --- MODAL STYLES --- */
+        .service-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .service-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .service-modal-container {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px);
+            transition: 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .service-modal-overlay.active .service-modal-container {
+            transform: translateY(0);
+        }
+
+        .service-modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .service-modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal-tab-btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #64748b;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .modal-tab-btn.active {
+            color: var(--primary-600);
+            border-bottom-color: var(--primary-600);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Timeline for Alur */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid #e2e8f0;
+            margin-left: 0.5rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.45rem;
+            top: 0.25rem;
+            width: 14px;
+            height: 14px;
+            background: var(--primary-500);
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        /* Animations */
         @keyframes bounce {
 
             0%,
@@ -255,6 +391,18 @@
 
             60% {
                 transform: translateY(-5px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -356,8 +504,8 @@
                     <a href="#berita-utama" class="btn-cta-blue flex items-center justify-center">
                         <i class="fas fa-newspaper mr-2"></i> Berita Utama
                     </a>
-                    <a href="#layanan-kami" class="btn-cta-glass flex items-center justify-center">
-                        <i class="fas fa-compass mr-2"></i> Jelajah Lekop
+                    <a href="#layanan-publik" class="btn-cta-glass flex items-center justify-center">
+                        <i class="fas fa-concierge-bell mr-2"></i> Layanan Publik
                     </a>
                 </div>
 
@@ -477,7 +625,7 @@
                     </div>
                 </section>
 
-                {{-- BERITA UTAMA --}}
+                {{-- JELAJAH LEKOP --}}
                 <section id="berita-utama" class="mb-24" data-aos="fade-up">
                     <div class="flex justify-between items-center mb-8">
                         <div>
@@ -539,6 +687,99 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                {{-- LAYANAN PUBLIK --}}
+                <section id="layanan-publik" class="mb-24" data-aos="fade-up">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-800">
+                            <i class="fas fa-handshake text-blue-800 mr-2"></i> {{ $homeContent->layanan_publik_title ?? 'Layanan Publik' }}
+                        </h2>
+                        <p class="text-gray-600 mt-2">{{ $homeContent->layanan_publik_desc ?? 'Informasi persyaratan dan alur pengurusan administrasi kependudukan' }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        @if($homeContent->layanan_kk_baru ?? true)
+                        <div class="service-card" onclick="openServiceModal('kk_baru')">
+                            <div class="card-icon"><i class="fas fa-users-cog"></i></div>
+                            <h3 class="card-title">Pembuatan KK Baru</h3>
+                            <p class="card-description">Pengurusan Kartu Keluarga baru baik karena pindah datang maupun pembuatan awal.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_nikah ?? true)
+                        <div class="service-card" onclick="openServiceModal('nikah')">
+                            <div class="card-icon"><i class="fas fa-heart"></i></div>
+                            <h3 class="card-title">Surat Pengantar Nikah</h3>
+                            <p class="card-description">Layanan administrasi pengantar nikah untuk kelengkapan berkas ke KUA.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_akte_lahir ?? true)
+                        <div class="service-card" onclick="openServiceModal('akte_lahir')">
+                            <div class="card-icon"><i class="fas fa-baby"></i></div>
+                            <h3 class="card-title">Akte Kelahiran</h3>
+                            <p class="card-description">Layanan pembuatan akte kelahiran bagi bayi yang baru lahir di wilayah Sungai Lekop.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_akte_mati ?? true)
+                        <div class="service-card" onclick="openServiceModal('akte_mati')">
+                            <div class="card-icon"><i class="fas fa-book-dead"></i></div>
+                            <h3 class="card-title">Akte Kematian</h3>
+                            <p class="card-description">Layanan pelaporan dan pembuatan akte kematian bagi warga yang meninggal dunia.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_uang_duka ?? true)
+                        <div class="service-card" onclick="openServiceModal('uang_duka')">
+                            <div class="card-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                            <h3 class="card-title">Santunan Uang Duka</h3>
+                            <p class="card-description">Layanan pengurusan santunan kematian/uang duka bagi ahli waris yang berhak.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_tambah_anak ?? true)
+                        <div class="service-card" onclick="openServiceModal('tambah_anak')">
+                            <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                            <h3 class="card-title">Penambahan Anak (KK)</h3>
+                            <p class="card-description">Update data Kartu Keluarga untuk penambahan anggota keluarga baru (anak).</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_sktm ?? true)
+                        <div class="service-card" onclick="openServiceModal('sktm')">
+                            <div class="card-icon"><i class="fas fa-file-invoice"></i></div>
+                            <h3 class="card-title">SKTM & Belum Menikah</h3>
+                            <p class="card-description">Surat keterangan tidak mampu, belum memiliki rumah, atau status belum menikah.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_bpjs ?? true)
+                        <div class="service-card" onclick="openServiceModal('bpjs')">
+                            <div class="card-icon"><i class="fas fa-notes-medical"></i></div>
+                            <h3 class="card-title">Surat Pengantar BPJS</h3>
+                            <p class="card-description">Layanan surat pengantar untuk pendaftaran atau pengurusan BPJS Kesehatan.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
+
+                        @if($homeContent->layanan_sku ?? true)
+                        <div class="service-card" onclick="openServiceModal('sku')">
+                            <div class="card-icon"><i class="fas fa-store"></i></div>
+                            <h3 class="card-title">Surat Keterangan Usaha</h3>
+                            <p class="card-description">Layanan pembuatan surat keterangan usaha (SKU) untuk keperluan permodalan/izin.</p>
+                            <span class="card-link">Lihat Persyaratan <i class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+                        @endif
                     </div>
                 </section>
 
@@ -676,6 +917,67 @@
     </main>
 
     @include('frontend.layouts.footer')
+
+    {{-- MODAL LAYANAN PUBLIK --}}
+    <div id="serviceModal" class="service-modal-overlay">
+        <div class="service-modal-container">
+            <div class="service-modal-header">
+                <h3 class="text-xl font-bold text-blue-900 flex items-center">
+                    <i id="modalIcon" class="fas fa-file-alt mr-3 text-blue-600"></i>
+                    <span id="modalTitle">Detail Layanan</span>
+                </h3>
+                <button onclick="closeServiceModal()" class="text-gray-400 hover:text-red-500 transition">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="flex border-b bg-gray-50 px-8">
+                <button class="modal-tab-btn active" onclick="switchModalTab(event, 'tabSyarat')">Persyaratan</button>
+                <button class="modal-tab-btn" onclick="switchModalTab(event, 'tabAlur')">Alur Proses</button>
+            </div>
+
+            <div class="service-modal-body">
+                <div id="tabSyarat" class="tab-content active">
+                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-clipboard-check mr-2 text-green-600"></i> Berkas yang Dibutuhkan:
+                    </h4>
+                    <ul id="syaratList" class="space-y-3 text-gray-600">
+                    </ul>
+                </div>
+
+                <div id="tabAlur" class="tab-content">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="font-bold text-gray-800">Langkah 1: Persiapan Berkas</h5>
+                            <p class="text-sm text-gray-500">Lengkapi seluruh dokumen persyaratan sesuai daftar dan masukkan ke dalam Map.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="font-bold text-gray-800">Langkah 2: Penyerahan ke Loket</h5>
+                            <p class="text-sm text-gray-500">Datang ke Kantor Kelurahan Sungai Lekop pada jam kerja (Senin-Jumat) untuk verifikasi berkas.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="font-bold text-gray-800">Langkah 3: Pemrosesan & Validasi</h5>
+                            <p class="text-sm text-gray-500">Petugas memproses permohonan dan melakukan validasi data oleh pejabat berwenang.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h5 class="font-bold text-gray-800">Langkah 4: Pengambilan Dokumen</h5>
+                            <p class="text-sm text-gray-500">Warga menerima dokumen atau surat keterangan yang telah selesai diproses.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 border-t bg-gray-50 flex justify-end rounded-b-[20px]">
+                <button onclick="closeServiceModal()" class="px-6 py-2 bg-gray-200 hover:bg-gray-300 rounded-[20px] font-bold text-gray-700 transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 
     {{-- Advanced Gallery Viewer Modal --}}
     <div id="galleryViewerModal" class="hidden fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm">
@@ -1020,11 +1322,90 @@
             }
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (viewerModal.classList.contains('hidden')) return;
-            if (e.key === 'ArrowRight') showNextGalleryImage();
-            if (e.key === 'ArrowLeft') showPrevGalleryImage();
-            if (e.key === 'Escape') closeGalleryViewer();
+        // DATA LAYANAN PUBLIK
+        const serviceData = {
+            'kk_baru': {
+                title: 'Pembuatan KK Baru',
+                icon: 'fa-users-cog',
+                syarat: ['Mengisi Formulir F1.01', 'Surat Pindah Datang/Draft KK', 'Fotocopy KTP Sekeluarga', 'Fotocopy Ijazah', 'Fotocopy Akte Kelahiran', 'Fotocopy Buku Nikah', 'Masing-masing berkas di Fotokopi rangkap 2', 'Wajib Gunakan Map']
+            },
+            'nikah': {
+                title: 'Surat Pengantar Nikah',
+                icon: 'fa-heart',
+                syarat: ['Pengantar RT RW', 'Foto Uk. 2x3 Latar biru (2 lembar)', 'Fotocopy KTP Catin Pria & Wanita', 'Fotocopy KK Catin Pria & Wanita', 'Fotocopy Akte Kelahiran Ybs', 'Fotocopy Ijazah Terakhir Ybs', 'Masing-masing berkas di fotokopi rangkap 1', 'Wajib Gunakan Map']
+            },
+            'akte_lahir': {
+                title: 'Akte Kelahiran',
+                icon: 'fa-baby',
+                syarat: ['Form F-2.01', 'Form F-1.06', 'Fotocopy KK dan KTP Ortu', 'Fotocopy KTP Saksi 2 Orang', 'Fotocopy Surat Bidan', 'Fotocopy Surat Nikah', 'Berkas di Fotokopi rangkap', 'Wajib Gunakan Map']
+            },
+            'akte_mati': {
+                title: 'Akte Kematian',
+                icon: 'fa-book-dead',
+                syarat: ['Pengantar RT RW', 'Form F2.01', 'Surat kematian dari RS (Bila Meninggal di RS)', 'Fotocopy KK dan KTP ybs', 'Fotocopy KTP Pelapor', 'Fotocopy KTP Saksi 2 Orang', 'Wajib Gunakan Map']
+            },
+            'uang_duka': {
+                title: 'Santunan Uang Duka',
+                icon: 'fa-hand-holding-usd',
+                syarat: ['KTP Asli Almarhum', 'Fotocopy KK Sebelum Penghapusan', 'Fotocopy KK Setelah Penghapusan', 'Fotocopy KK dan KTP Ahli Waris', 'SPTJM & SKTM dari Kelurahan', 'Surat Kematian & Ahli Waris dari Kelurahan', 'Akte Kematian', 'Berkas di Fotokopi Rangkap 2', 'Wajib Gunakan Map']
+            },
+            'tambah_anak': {
+                title: 'Penambahan Anak (KK)',
+                icon: 'fa-user-plus',
+                syarat: ['Form F1.06', 'Surat Lahir', 'Surat Nikah', 'Fotocopy Kartu Keluarga', 'Fotocopy KTP', 'Wajib Gunakan Map']
+            },
+            'sktm': {
+                title: 'SKTM / Belum Rumah / Belum Menikah',
+                icon: 'fa-file-invoice',
+                syarat: ['Surat Pengantar', 'Fotocopy Kartu Keluarga', 'Fotocopy KTP', 'Wajib Gunakan Map']
+            },
+            'bpjs': {
+                title: 'Surat Pengantar BPJS',
+                icon: 'fa-notes-medical',
+                syarat: ['Surat Pengantar', 'Surat Pernyataan Penghasilan', 'Fotocopy KK', 'Fotocopy KTP', 'Wajib Gunakan Map']
+            },
+            'sku': {
+                title: 'Surat Keterangan Usaha (SKU)',
+                icon: 'fa-store',
+                syarat: ['Surat Pengantar', 'Fotocopy Kartu Keluarga', 'Fotocopy KTP', 'Foto Usaha', 'Wajib Gunakan Map']
+            }
+        };
+
+        // Modal Logic
+        function openServiceModal(key) {
+            const data = serviceData[key];
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalIcon').className = `fas ${data.icon} mr-3 text-blue-600`;
+
+            const list = document.getElementById('syaratList');
+            list.innerHTML = data.syarat.map(item => `
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i>
+                    <span>${item}</span>
+                </li>
+            `).join('');
+
+            document.getElementById('serviceModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeServiceModal() {
+            document.getElementById('serviceModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchModalTab(event, tabId) {
+            const container = event.target.closest('.service-modal-container');
+            container.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Close on ESC
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeServiceModal();
         });
     </script>
 </body>
