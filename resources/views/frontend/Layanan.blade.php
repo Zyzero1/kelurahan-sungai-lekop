@@ -133,6 +133,9 @@
                     <a href="#sentra-industri" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">
                         <i class="fas fa-industry mr-2"></i>Sentra Industri
                     </a>
+                    <a href="#sudut-unik-fasilitas" class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition">
+                        <i class="fas fa-th mr-2"></i>Sudut Unik & Fasilitas
+                    </a>
                     <a href="#umkm-lokal" class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition">
                         <i class="fas fa-store mr-2"></i>UMKM Lokal
                     </a>
@@ -223,46 +226,236 @@
                     <p class="text-slate-600 mt-2">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
                 </div>
 
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="100" onclick="openModal('masjid')">
+                {{-- Category Filter Buttons --}}
+                <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="100">
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all duration-300 shadow-md border border-blue-700" data-filter="all">
+                        <i class="fas fa-th mr-2"></i>Semua
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="puskesmas">
+                        <i class="fas fa-hospital mr-2"></i>Puskesmas
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="posyandu">
+                        <i class="fas fa-baby mr-2"></i>Posyandu
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="sd">
+                        <i class="fas fa-school mr-2"></i>SD
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="smp">
+                        <i class="fas fa-graduation-cap mr-2"></i>SMP
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="sma">
+                        <i class="fas fa-university mr-2"></i>SMA/SMK/MAN
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="masjid">
+                        <i class="fas fa-mosque mr-2"></i>Masjid
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="surau">
+                        <i class="fas fa-pray mr-2"></i>Surau
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="tpa">
+                        <i class="fas fa-book-open mr-2"></i>TPA/TPQ
+                    </button>
+                </div>
+
+                {{-- Search Bar --}}
+                <div class="max-w-2xl mx-auto mb-10" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative">
+                        <input type="text" id="facility-search" placeholder="Cari fasilitas..." class="w-full px-12 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all duration-300 shadow-sm">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <button id="clear-search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="facilities-grid" class="grid md:grid-cols-3 gap-8">
+                    {{-- Puskesmas --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="100" data-category="puskesmas" onclick="openModal('puskesmas')">
                         <div class="h-48 overflow-hidden">
-                            <img src="https://placehold.co/600x400/1e3a8a/FFFFFF?text=Masjid+Al-Kautsar" alt="Masjid Al-Kautsar" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <img src="https://placehold.co/600x400/ef4444/FFFFFF?text=Puskesmas" alt="Puskesmas" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                         </div>
                         <div class="p-6">
                             <div class="flex items-center mb-3">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Religi</span>
-                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
+                                <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Kesehatan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-red-600 transition"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Masjid Al-Kautsar & Al-Fattah</h3>
-                            <p class="text-slate-600 text-sm mb-4">Pusat kegiatan keagamaan warga yang makmur. Terletak strategis di Perum Griya Indo Kencana dan Jl. Musi.</p>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Puskesmas Pembantu</h3>
+                            <p class="text-slate-600 text-sm mb-4">Fasilitas kesehatan utama melayani kebutuhan medis dasar warga Sungai Lekop.</p>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="200" onclick="openModal('sekolah')">
+                    {{-- Posyandu --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="200" data-category="posyandu" onclick="openModal('posyandu')">
                         <div class="h-48 overflow-hidden">
-                            <img src="https://placehold.co/600x400/2563eb/FFFFFF?text=Pendidikan" alt="Sekolah Dasar" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <img src="https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu" alt="Posyandu" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                         </div>
                         <div class="p-6">
                             <div class="flex items-center mb-3">
-                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
-                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Kesehatan Anak</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-green-600 transition"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Generasi Penerus</h3>
-                            <p class="text-slate-600 text-sm mb-4">Rumah bagi SDN 011 (Km. 20) dan SDN 015 (Jl. Korindo), mencetak generasi muda Sungai Lekop yang berprestasi.</p>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Posyandu Melati</h3>
+                            <p class="text-slate-600 text-sm mb-4">Pelayanan kesehatan ibu dan balita, pemantauan tumbuh kembang anak.</p>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="300" onclick="openModal('potensi')">
+                    {{-- SD --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="300" data-category="sd" onclick="openModal('sd')">
                         <div class="h-48 overflow-hidden">
-                            <img src="https://placehold.co/600x400/059669/FFFFFF?text=Potensi+Alam" alt="Potensi Alam" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <img src="https://placehold.co/600x400/3b82f6/FFFFFF?text=SDN+011" alt="SDN 011" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                         </div>
                         <div class="p-6">
                             <div class="flex items-center mb-3">
-                                <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">Masa Depan</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
                                 <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Potensi Alam & Perikanan</h3>
-                            <p class="text-slate-600 text-sm mb-4">Pengembangan potensi wilayah pesisir untuk budidaya perikanan dan konservasi lingkungan yang berkelanjutan.</p>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">SDN 011 Bintan Timur</h3>
+                            <p class="text-slate-600 text-sm mb-4">Sekolah dasar unggulan di Km 20, mencetak generasi berkualitas dan berprestasi.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="400" data-category="sd" onclick="openModal('sd')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/3b82f6/FFFFFF?text=SDN+015" alt="SDN 015" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">SDN 015 Bintan Timur</h3>
+                            <p class="text-slate-600 text-sm mb-4">Sekolah dasar di Jl. Korindo, dekat dengan sentra industri kerupuk.</p>
+                        </div>
+                    </div>
+
+                    {{-- SMP --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="500" data-category="smp" onclick="openModal('smp')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/8b5cf6/FFFFFF?text=SMP+Negeri" alt="SMP Negeri" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-purple-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">SMP Negeri 1 Bintan Timur</h3>
+                            <p class="text-slate-600 text-sm mb-4">Sekolah menengah pertama terdekat dengan fasilitas lengkap dan berkualitas.</p>
+                        </div>
+                    </div>
+
+                    {{-- SMA/SMK/MAN --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="600" data-category="sma" onclick="openModal('sma')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/f59e0b/FFFFFF?text=SMK+Negeri" alt="SMK Negeri" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-orange-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">SMK Negeri 1 Bintan</h3>
+                            <p class="text-slate-600 text-sm mb-4">Sekolah menengah kejuruan dengan berbagai program keahlian terkini.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="700" data-category="sma" onclick="openModal('sma')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/06b6d4/FFFFFF?text=MAN" alt="MAN" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-cyan-100 text-cyan-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-cyan-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">MAN 1 Bintan</h3>
+                            <p class="text-slate-600 text-sm mb-4">Madrasah aliyah negeri dengan pendidikan Islam dan umum yang terpadu.</p>
+                        </div>
+                    </div>
+
+                    {{-- Masjid --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="800" data-category="masjid" onclick="openModal('masjid')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/059669/FFFFFF?text=Masjid+Al-Kautsar" alt="Masjid Al-Kautsar" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">Religi</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-emerald-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Masjid Al-Kautsar</h3>
+                            <p class="text-slate-600 text-sm mb-4">Masjid utama di Perumahan Griya Indo Kencana, pusat kegiatan keagamaan.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="900" data-category="masjid" onclick="openModal('masjid')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/059669/FFFFFF?text=Masjid+Al-Fattah" alt="Masjid Al-Fattah" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">Religi</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-emerald-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Masjid Al-Fattah</h3>
+                            <p class="text-slate-600 text-sm mb-4">Masjid di Jl. Musi, melayani kegiatan spiritual warga sekitar.</p>
+                        </div>
+                    </div>
+
+                    {{-- Surau --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="1000" data-category="surau" onclick="openModal('surau')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/6366f1/FFFFFF?text=Surau+Al-Ikhlas" alt="Surau Al-Ikhlas" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded">Religi</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-indigo-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Surau Al-Ikhlas</h3>
+                            <p class="text-slate-600 text-sm mb-4">Surau kecil untuk sholat berjamaah dan kegiatan keagamaan harian.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="1100" data-category="surau" onclick="openModal('surau')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/6366f1/FFFFFF?text=Surau+At-Taubah" alt="Surau At-Taubah" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded">Religi</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-indigo-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Surau At-Taubah</h3>
+                            <p class="text-slate-600 text-sm mb-4">Surau di kawasan perumahan, tempat ibadah yang nyaman dan damai.</p>
+                        </div>
+                    </div>
+
+                    {{-- TPA/TPQ --}}
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="1200" data-category="tpa" onclick="openModal('tpa')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/a855f7/FFFFFF?text=TPA+Al-Hikmah" alt="TPA Al-Hikmah" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-violet-100 text-violet-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan Islam</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-violet-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">TPA Al-Hikmah</h3>
+                            <p class="text-slate-600 text-sm mb-4">Taman pendidikan Al-Qur'an untuk anak usia dini belajar dasar Islam.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="1300" data-category="tpa" onclick="openModal('tpa')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/a855f7/FFFFFF?text=TPQ+Nurul+Iman" alt="TPQ Nurul Iman" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-violet-100 text-violet-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan Islam</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-violet-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">TPQ Nurul Iman</h3>
+                            <p class="text-slate-600 text-sm mb-4">Taman pendidikan Al-Qur'an dengan metode pembelajaran modern.</p>
                         </div>
                     </div>
                 </div>
@@ -333,8 +526,9 @@
 
         {{-- 6. GALERI KEGIATAN --}}
 
-            <div class="container mx-auto px-6">
-                  <section id="galeri-kegiatan" class="py-20 bg-white">      <div class="text-center mb-16" data-aos="fade-up">
+        <div class="container mx-auto px-6">
+            <section id="galeri-kegiatan" class="py-20 bg-white">
+                <div class="text-center mb-16" data-aos="fade-up">
                     <h2 class="text-3xl font-bold text-slate-900 mb-4">
                         <i class="fas fa-images text-purple-500 mr-2"></i>Galeri Kegiatan
                     </h2>
@@ -447,7 +641,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
         </section>
 
         {{-- 7. POTENSI WILAYAH --}}
@@ -883,45 +1077,109 @@
             const modalContent = document.getElementById('modalContent');
 
             const facilityData = {
-                masjid: {
-                    title: 'Fasilitas Keagamaan',
+                puskesmas: {
+                    title: 'Fasilitas Kesehatan',
                     items: [{
-                            name: 'Masjid Al-Kautsar',
-                            src: 'https://placehold.co/600x400/1e3a8a/FFFFFF?text=Masjid+Al-Kautsar',
-                            location: 'Perumahan Griya Indo Kencana'
+                            name: 'Puskesmas Pembantu Sungai Lekop',
+                            src: 'https://placehold.co/600x400/ef4444/FFFFFF?text=Puskesmas',
+                            location: 'Jl. Poros Km 20, Sungai Lekop'
                         },
                         {
-                            name: 'Masjid Al-Fattah',
-                            src: 'https://placehold.co/600x400/1e3a8a/FFFFFF?text=Masjid+Al-Fattah',
-                            location: 'Jl. Musi'
+                            name: 'Puskesmas Keliling',
+                            src: 'https://placehold.co/600x400/ef4444/FFFFFF?text=Puskesmas+Keliling',
+                            location: 'Melayani wilayah pemukiman warga'
                         }
                     ]
                 },
-                sekolah: {
-                    title: 'Fasilitas Pendidikan',
+                posyandu: {
+                    title: 'Posyandu',
+                    items: [{
+                            name: 'Posyandu Melati',
+                            src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu+Melati',
+                            location: 'Perumahan Griya Indo Kencana'
+                        },
+                        {
+                            name: 'Posyandu Mawar',
+                            src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu+Mawar',
+                            location: 'Kawasan Jl. Korindo'
+                        }
+                    ]
+                },
+                sd: {
+                    title: 'Sekolah Dasar',
                     items: [{
                             name: 'SDN 011 Bintan Timur',
-                            src: 'https://placehold.co/600x400/2563eb/FFFFFF?text=SDN+011',
+                            src: 'https://placehold.co/600x400/3b82f6/FFFFFF?text=SDN+011',
                             location: 'Km 20 (Pusat Kota)'
                         },
                         {
                             name: 'SDN 015 Bintan Timur',
-                            src: 'https://placehold.co/600x400/2563eb/FFFFFF?text=SDN+015',
+                            src: 'https://placehold.co/600x400/3b82f6/FFFFFF?text=SDN+015',
                             location: 'Jl. Korindo'
                         }
                     ]
                 },
-                potensi: {
-                    title: 'Potensi Alam & Perikanan',
+                smp: {
+                    title: 'Sekolah Menengah Pertama',
                     items: [{
-                            name: 'Budidaya Air Tawar',
-                            src: 'https://placehold.co/600x400/059669/FFFFFF?text=Area+Budidaya',
-                            location: 'Kawasan Pesisir Sungai Lekop'
+                        name: 'SMP Negeri 1 Bintan Timur',
+                        src: 'https://placehold.co/600x400/8b5cf6/FFFFFF?text=SMP+Negeri+1',
+                        location: 'Jl. Poros Km 22'
+                    }]
+                },
+                sma: {
+                    title: 'Sekolah Menengah Atas/Kejuruan',
+                    items: [{
+                            name: 'SMK Negeri 1 Bintan',
+                            src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=SMK+Negeri+1',
+                            location: 'Kota Tanjungpinang'
                         },
                         {
-                            name: 'Kolam UMKM',
-                            src: 'https://placehold.co/600x400/059669/FFFFFF?text=Kolam+UMKM',
-                            location: 'Sentra Perikanan Terpadu'
+                            name: 'MAN 1 Bintan',
+                            src: 'https://placehold.co/600x400/06b6d4/FFFFFF?text=MAN+1+Bintan',
+                            location: 'Kecamatan Bintan Timur'
+                        }
+                    ]
+                },
+                masjid: {
+                    title: 'Masjid',
+                    items: [{
+                            name: 'Masjid Al-Kautsar',
+                            src: 'https://placehold.co/600x400/059669/FFFFFF?text=Masjid+Al-Kautsar',
+                            location: 'Perumahan Griya Indo Kencana'
+                        },
+                        {
+                            name: 'Masjid Al-Fattah',
+                            src: 'https://placehold.co/600x400/059669/FFFFFF?text=Masjid+Al-Fattah',
+                            location: 'Jl. Musi'
+                        }
+                    ]
+                },
+                surau: {
+                    title: 'Surau',
+                    items: [{
+                            name: 'Surau Al-Ikhlas',
+                            src: 'https://placehold.co/600x400/6366f1/FFFFFF?text=Surau+Al-Ikhlas',
+                            location: 'Kawasan Perumahan'
+                        },
+                        {
+                            name: 'Surau At-Taubah',
+                            src: 'https://placehold.co/600x400/6366f1/FFFFFF?text=Surau+At-Taubah',
+                            location: 'Jl. Korindo'
+                        }
+                    ]
+                },
+                tpa: {
+                    title: 'TPA/TPQ',
+                    items: [{
+                            name: 'TPA Al-Hikmah',
+                            src: 'https://placehold.co/600x400/a855f7/FFFFFF?text=TPA+Al-Hikmah',
+                            location: 'Perumahan Griya Indo Kencana'
+                        },
+                        {
+                            name: 'TPQ Nurul Iman',
+                            src: 'https://placehold.co/600x400/a855f7/FFFFFF?text=TPQ+Nurul+Iman',
+                            location: 'Kawasan Jl. Korindo'
                         }
                     ]
                 }
@@ -1024,6 +1282,122 @@
                 closeModal();
                 closeGalleryViewer();
             }
+        });
+
+        // Facilities Filtering and Search Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- SELECTORS ---
+            const filterButtons = document.querySelectorAll(".category-filter");
+            const searchInput = document.getElementById("facility-search");
+            const clearSearchBtn = document.getElementById("clear-search");
+            const allFacilityCards = Array.from(
+                document.querySelectorAll(".facility-card")
+            );
+            const facilitiesGrid = document.getElementById("facilities-grid");
+
+            // --- STATE ---
+            let filteredCards = allFacilityCards;
+
+            // --- CORE FUNCTIONS ---
+
+            // This function just updates the DOM to show the correct cards
+            function displayCards() {
+                if (!facilitiesGrid) return; // Guard clause
+
+                // Hide all cards, then show only the visible ones
+                allFacilityCards.forEach((card) => {
+                    if (filteredCards.includes(card)) {
+                        card.style.display = "";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            }
+
+            // Applies filters and search, then resets the view
+            function applyFiltersAndSearch() {
+                const category =
+                    document.querySelector(".category-filter.bg-blue-600")?.dataset
+                    .filter || "all";
+                const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
+                filteredCards = allFacilityCards.filter((card) => {
+                    const cardCategory = (card.dataset.category || "").toLowerCase();
+                    const cardTitle = (
+                        card.querySelector("h3")?.textContent || ""
+                    ).toLowerCase();
+                    const cardDescription = (
+                        card.querySelector("p")?.textContent || ""
+                    ).toLowerCase();
+                    const categoryMatch =
+                        category === "all" || cardCategory === category;
+                    const searchMatch =
+                        searchTerm === "" ||
+                        cardTitle.includes(searchTerm) ||
+                        cardDescription.includes(searchTerm) ||
+                        cardCategory.includes(searchTerm);
+                    return categoryMatch && searchMatch;
+                });
+
+                displayCards();
+            }
+
+            // --- EVENT LISTENERS ---
+            filterButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    filterButtons.forEach((btn) => {
+                        btn.classList.remove(
+                            "bg-blue-600",
+                            "text-white",
+                            "border-blue-700",
+                            "shadow-md"
+                        );
+                        btn.classList.add("bg-white", "text-gray-700", "border-gray-200");
+                    });
+                    button.classList.add(
+                        "bg-blue-600",
+                        "text-white",
+                        "border-blue-700",
+                        "shadow-md"
+                    );
+                    button.classList.remove(
+                        "bg-white",
+                        "text-gray-700",
+                        "border-gray-200"
+                    );
+                    applyFiltersAndSearch();
+                });
+            });
+
+            if (searchInput) {
+                let searchTimeout;
+                searchInput.addEventListener("input", () => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        applyFiltersAndSearch();
+                    }, 300);
+                });
+
+                // Show/hide clear button
+                searchInput.addEventListener("input", () => {
+                    if (clearSearchBtn) {
+                        clearSearchBtn.classList.toggle("hidden", searchInput.value.trim() === "");
+                    }
+                });
+            }
+
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener("click", () => {
+                    if (searchInput) {
+                        searchInput.value = "";
+                        clearSearchBtn.classList.add("hidden");
+                        applyFiltersAndSearch();
+                    }
+                });
+            }
+
+            // --- INITIAL RENDER ---
+            applyFiltersAndSearch();
         });
     </script>
 </body>
