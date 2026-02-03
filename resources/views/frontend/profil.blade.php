@@ -59,18 +59,6 @@
             border-left: 3px solid transparent;
         }
 
-        .timeline-dot {
-            position: absolute;
-            left: -10px;
-            top: 0;
-            width: 18px;
-            height: 18px;
-            background: var(--primary-600);
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 2px var(--primary-600);
-        }
-
         .nav-link.active {
             background-color: #eff6ff;
             color: var(--primary-900);
@@ -128,6 +116,9 @@
                             </a>
                             <a href="#visimisi" class="nav-link px-5 py-3 text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center gap-2">
                                 <i class="fas fa-bullseye w-4"></i> Visi & Misi
+                            </a>
+                            <a href="#demografi" class="nav-link px-5 py-3 text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center gap-2">
+                                <i class="fas fa-chart-pie w-4"></i> Demografi
                             </a>
                             <a href="#sejarah" class="nav-link px-5 py-3 text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition flex items-center gap-2">
                                 <i class="fas fa-history w-4"></i> Sejarah
@@ -245,20 +236,20 @@
                         </div>
                     </section>
 
-                    <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100" data-aos="fade-up">
+                    <section id="demografi" class="bg-white rounded-xl shadow-md p-8 border border-slate-100" data-aos="fade-up">
                         <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                             <i class="fas fa-chart-pie text-blue-600"></i> Demografi Penduduk
                         </h2>
 
                         @php
-                        $totalPenduduk = ($profil->jumlah_laki_laki ?? 0) + ($profil->jumlah_perempuan ?? 0);
-                        $persenLaki = $totalPenduduk > 0 ? round((($profil->jumlah_laki_laki ?? 0) / $totalPenduduk) * 100, 1) : 0;
-                        $persenPerempuan = $totalPenduduk > 0 ? round((($profil->jumlah_perempuan ?? 0) / $totalPenduduk) * 100, 1) : 0;
+                        $totalPenduduk = ($profil->jumlah_laki_laki ?? 5908) + ($profil->jumlah_perempuan ?? 5602);
+                        $persenLaki = $totalPenduduk > 0 ? round((($profil->jumlah_laki_laki ?? 5908) / $totalPenduduk) * 100, 1) : 0;
+                        $persenPerempuan = $totalPenduduk > 0 ? round((($profil->jumlah_perempuan ?? 5602) / $totalPenduduk) * 100, 1) : 0;
                         @endphp
 
-                        <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex flex-col md:flex-row items-center gap-8 mb-12">
                             <div class="w-full md:w-1/3">
-                                <div class="bg-white rounded-lg shadow-lg p-4" data-laki-laki="{{ $profil->jumlah_laki_laki ?? 0 }}" data-perempuan="{{ $profil->jumlah_perempuan ?? 0 }}">
+                                <div class="bg-white rounded-lg shadow-lg p-4" data-laki-laki="{{ $profil->jumlah_laki_laki ?? 5908 }}" data-perempuan="{{ $profil->jumlah_perempuan ?? 5602 }}">
                                     <canvas id="genderChart" width="200" height="200"></canvas>
                                 </div>
                             </div>
@@ -269,7 +260,7 @@
                                 </p>
                                 @else
                                 <p class="text-slate-600 mb-4 text-justify">
-                                    Berdasarkan data kependudukan terkini, {{ $profil->nama_kelurahan ?? 'Kelurahan' }} memiliki komposisi penduduk yang beragam. Data di samping merupakan perbandingan gender (laki-laki dan perempuan).
+                                    Berdasarkan data kependudukan terkini, {{ $profil->nama_kelurahan ?? 'Kelurahan Sungai Lekop' }} memiliki komposisi penduduk yang beragam. Data di samping merupakan perbandingan gender (laki-laki dan perempuan).
                                 </p>
                                 @endif
 
@@ -280,7 +271,7 @@
                                             <div>
                                                 <p class="text-xs text-slate-500 font-semibold">Laki-laki</p>
                                                 <p class="font-bold text-blue-800 text-xl">{{ $persenLaki }}%</p>
-                                                <p class="text-sm text-slate-600">{{ number_format($profil->jumlah_laki_laki ?? 0, 0, ',', '.') }} jiwa</p>
+                                                <p class="text-sm text-slate-600">{{ number_format($profil->jumlah_laki_laki ?? 5908, 0, ',', '.') }} jiwa</p>
                                             </div>
                                         </div>
                                     </div>
@@ -290,7 +281,7 @@
                                             <div>
                                                 <p class="text-xs text-slate-500 font-semibold">Perempuan</p>
                                                 <p class="font-bold text-pink-800 text-xl">{{ $persenPerempuan }}%</p>
-                                                <p class="text-sm text-slate-600">{{ number_format($profil->jumlah_perempuan ?? 0, 0, ',', '.') }} jiwa</p>
+                                                <p class="text-sm text-slate-600">{{ number_format($profil->jumlah_perempuan ?? 5602, 0, ',', '.') }} jiwa</p>
                                             </div>
                                         </div>
                                     </div>
@@ -307,6 +298,21 @@
                                     </div>
                                 </div>
                                 @endif
+                            </div>
+                        </div>
+
+                        {{-- Bar Chart Kelompok Umur --}}
+                        <div class="pt-8 border-t border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                <i class="fas fa-chart-bar text-blue-600"></i> Data Penduduk Berdasarkan Kelompok Umur
+                            </h3>
+                            <div class="bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-200">
+                                <div style="height: 400px;">
+                                    <canvas id="ageChart"
+                                        data-age-labels="{{ json_encode(($populations ?? collect())->pluck('age_group')->values()) }}"
+                                        data-age-male="{{ json_encode(($populations ?? collect())->pluck('male_count')->values()) }}"
+                                        data-age-female="{{ json_encode(($populations ?? collect())->pluck('female_count')->values()) }}"></canvas>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -326,7 +332,6 @@
 
                             @foreach($paragraphs as $index => $p)
                             <div class="timeline-item">
-                                <div class="timeline-dot"></div>
                                 <p class="text-slate-600 leading-relaxed text-justify">
                                     {{ $p }}
                                 </p>
@@ -356,7 +361,7 @@
                                 alt="Struktur Organisasi"
                                 class="w-full object-contain mx-auto transition-transform duration-500 hover:scale-105"
                                 style="max-height: 500px;">
-                            <div class="zoom-overlay absolute inset-0 flex items-center justify-center">
+                            <div class="zoom-overlay absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span class="bg-black/70 text-white px-4 py-2 rounded-full text-sm font-medium">
                                     <i class="fas fa-search-plus mr-2"></i> Klik untuk memperbesar
                                 </span>
@@ -373,11 +378,11 @@
                     <section id="lokasi" class="bg-white rounded-xl shadow-md p-8 border border-slate-100 mb-8" data-aos="fade-up">
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-slate-800">Lokasi Kantor</h2>
-                            <span class="text-sm text-slate-500"><i class="fas fa-map-marker-alt text-red-500"></i> {{ $profil->alamat ?? 'Tanjungpinang' }}</span>
+                            <span class="text-sm text-slate-500"><i class="fas fa-map-marker-alt text-red-500"></i> {{ $profil->alamat ?? 'Kelurahan Sungai Lekop' }}</span>
                         </div>
                         <div class="w-full h-80 bg-slate-200 rounded-xl overflow-hidden shadow-inner">
                             <iframe
-                                src="https://maps.google.com/maps?q=Kantor+Kelurahan+Sungai+Lekop,+Kecamatan+Bintan+Timur,+Kabupaten+Bintan,+Kepri&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15956.123456789!2d104.4!3d0.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwNTQnMDAuMCJOIDEwNMKwMjQnMDAuMCJF!5e0!3m2!1sid!2sid!4v123456789"
                                 width="100%"
                                 height="100%"
                                 style="border:0;"
@@ -396,9 +401,9 @@
 
     <div id="imageModal" class="fixed inset-0 z-[9999] hidden bg-black/90 backdrop-blur-sm items-center justify-center p-4" onclick="closeModal()">
         <button class="absolute top-6 right-6 text-white hover:text-red-400 text-4xl transition transform hover:rotate-90">
-            &times;
+            ×
         </button>
-        <img id="modalImg" src="" alt="Full View" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl animate-zoomIn">
+        <img id="modalImg" src="" alt="Full View" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl transition-all">
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -447,13 +452,13 @@
             });
         });
 
-        // Demografi Chart
-        const canvas = document.getElementById('genderChart');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            const chartContainer = canvas.closest('[data-laki-laki]');
-            const lakiLaki = parseInt(chartContainer.dataset.lakiLaki) || 0;
-            const perempuan = parseInt(chartContainer.dataset.perempuan) || 0;
+        // 1. Gender Chart (Versi Lama)
+        const canvasGender = document.getElementById('genderChart');
+        if (canvasGender) {
+            const ctx = canvasGender.getContext('2d');
+            const chartContainer = canvasGender.closest('[data-laki-laki]');
+            const lakiLaki = chartContainer ? (parseInt(chartContainer.dataset.lakiLaki) || 0) : 0;
+            const perempuan = chartContainer ? (parseInt(chartContainer.dataset.perempuan) || 0) : 0;
 
             if (lakiLaki > 0 || perempuan > 0) {
                 new Chart(ctx, {
@@ -488,6 +493,63 @@
                             animateRotate: true,
                             animateScale: true,
                             duration: 1000
+                        }
+                    }
+                });
+            }
+        }
+
+        // 2. Age Group Bar Chart (Tegak)
+        const ageCanvas = document.getElementById('ageChart');
+        if (ageCanvas) {
+            const ctxAge = ageCanvas.getContext('2d');
+            const labelsUmur = JSON.parse(ageCanvas.dataset.ageLabels || '[]');
+            const dataLaki = JSON.parse(ageCanvas.dataset.ageMale || '[]');
+            const dataPerempuan = JSON.parse(ageCanvas.dataset.ageFemale || '[]');
+
+            if (labelsUmur && labelsUmur.length > 0) {
+                new Chart(ctxAge, {
+                    type: 'bar',
+                    data: {
+                        labels: labelsUmur,
+                        datasets: [{
+                                label: 'Laki-laki',
+                                data: dataLaki,
+                                backgroundColor: '#3B82F6',
+                                borderRadius: 4,
+                            },
+                            {
+                                label: 'Perempuan',
+                                data: dataPerempuan,
+                                backgroundColor: '#EC4899',
+                                borderRadius: 4,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: '#f1f5f9'
+                                }
+                            }
                         }
                     }
                 });

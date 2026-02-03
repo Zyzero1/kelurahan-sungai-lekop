@@ -658,7 +658,8 @@
 
 <script>
     function addRequirement(fieldName) {
-        const container = event.target.closest('.border').querySelector('.space-y-2');
+        const button = event.target;
+        const container = button.closest('.border').querySelector('.space-y-2');
         const index = container.children.length;
 
         const newRequirement = document.createElement('div');
@@ -673,7 +674,7 @@
         </button>
     `;
 
-        container.insertBefore(newRequirement, event.target);
+        container.insertBefore(newRequirement, button.parentElement);
         updateRequirementNumbers(container);
     }
 

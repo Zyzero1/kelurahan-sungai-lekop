@@ -11,12 +11,12 @@ use App\Models\Berita;
 
 class DashboardController extends Controller
 {
-public function index()
-{
-return view('admin.dashboard.index', [
-'totalProfil' => Profil::count(),
-'totalLayanan' => Layanan::count(),
-'totalBerita' => Berita::count(),
-]);
-}
+    public function index()
+    {
+        return view('dashboard', [
+            'totalProfil' => Profil::count(),
+            'totalLayanan' => Layanan::count(),
+            'totalBerita' => Berita::count(),
+        ]);
+    }
 }

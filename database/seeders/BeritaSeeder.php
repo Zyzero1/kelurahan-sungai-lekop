@@ -62,7 +62,9 @@ class BeritaSeeder extends Seeder
         ];
 
         foreach ($sampleBeritas as $berita) {
-            Berita::create($berita);
+            $data = $berita;
+            unset($data['created_at'], $data['updated_at']);
+            Berita::updateOrCreate(['slug' => $data['slug']], $data);
         }
     }
 }

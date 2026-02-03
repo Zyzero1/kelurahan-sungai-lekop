@@ -42,6 +42,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/profil', [ProfilController::class, 'update'])
         ->name('profil.update');
 
+    Route::post('/profil/population-by-age', [ProfilController::class, 'storePopulationByAge'])
+        ->name('profil.population-by-age.store');
+
+    Route::put('/profil/population-by-age/{populationByAge}', [ProfilController::class, 'updatePopulationByAge'])
+        ->name('profil.population-by-age.update');
+
+    Route::delete('/profil/population-by-age/{populationByAge}', [ProfilController::class, 'destroyPopulationByAge'])
+        ->name('profil.population-by-age.destroy');
+
     // === HOME CONTENT MANAGEMENT ===
     Route::get('/home-content', [HomeContentController::class, 'index'])
         ->name('home-content.index');

@@ -154,6 +154,17 @@ class HomeContentController extends Controller
                 'layanan_bpjs' => 'nullable|boolean',
                 'layanan_sku' => 'nullable|boolean',
 
+                // Layanan Publik - Persyaratan (arrays)
+                'layanan_kk_baru_syarat.*' => 'nullable|string|max:500',
+                'layanan_nikah_syarat.*' => 'nullable|string|max:500',
+                'layanan_akte_lahir_syarat.*' => 'nullable|string|max:500',
+                'layanan_akte_mati_syarat.*' => 'nullable|string|max:500',
+                'layanan_uang_duka_syarat.*' => 'nullable|string|max:500',
+                'layanan_tambah_anak_syarat.*' => 'nullable|string|max:500',
+                'layanan_sktm_syarat.*' => 'nullable|string|max:500',
+                'layanan_bpjs_syarat.*' => 'nullable|string|max:500',
+                'layanan_sku_syarat.*' => 'nullable|string|max:500',
+
                 // Jelajah Lekop
                 'jelajah_fasilitas_title' => 'nullable|string|max:255',
                 'jelajah_fasilitas_desc' => 'nullable|string',
@@ -196,6 +207,47 @@ class HomeContentController extends Controller
             'hero_banner_image_2' => $heroBannerImage2,
             'hero_banner_image_3' => $heroBannerImage3,
         ]));
+
+        // Handle layanan persyaratan arrays separately
+        $layananSyaratFields = [
+            'layanan_kk_baru_syarat',
+            'layanan_nikah_syarat',
+            'layanan_akte_lahir_syarat',
+            'layanan_akte_mati_syarat',
+            'layanan_uang_duka_syarat',
+            'layanan_tambah_anak_syarat',
+            'layanan_sktm_syarat',
+            'layanan_bpjs_syarat',
+            'layanan_sku_syarat',
+        ];
+
+        foreach ($layananSyaratFields as $field) {
+            $syaratArray = $request->input($field, []);
+            // Filter out empty values and re-index
+            $filteredArray = array_values(array_filter($syaratArray, function ($value) {
+                return !is_null($value) && trim($value) !== '';
+            }));
+            $homeContent->{$field} = !empty($filteredArray) ? implode("\n", $filteredArray) : null;
+        }
+
+        // Handle layanan status checkboxes
+        $layananStatusFields = [
+            'layanan_kk_baru',
+            'layanan_nikah',
+            'layanan_akte_lahir',
+            'layanan_akte_mati',
+            'layanan_uang_duka',
+            'layanan_tambah_anak',
+            'layanan_sktm',
+            'layanan_bpjs',
+            'layanan_sku',
+        ];
+
+        foreach ($layananStatusFields as $field) {
+            $homeContent->{$field} = $request->has($field) ? 1 : 0;
+        }
+
+        $homeContent->save();
 
         Log::info('HomeContent updated successfully:', [
             'id' => $homeContent->id,

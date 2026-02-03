@@ -18,7 +18,7 @@
             {{ $totalProfil ?? 0 }}
         </p>
         <a href="{{ route('admin.profil.index') }}"
-           class="text-blue-600 hover:underline">
+            class="text-blue-600 hover:underline">
             Kelola Profil →
         </a>
     </div>
@@ -30,7 +30,7 @@
             {{ $totalLayanan ?? 0 }}
         </p>
         <a href="{{ route('admin.layanan.index') }}"
-           class="text-blue-600 hover:underline">
+            class="text-blue-600 hover:underline">
             Kelola Layanan →
         </a>
     </div>
@@ -42,7 +42,7 @@
             {{ $totalBerita ?? 0 }}
         </p>
         <a href="{{ route('admin.berita.index') }}"
-           class="text-blue-600 hover:underline">
+            class="text-blue-600 hover:underline">
             Kelola Berita →
         </a>
     </div>
