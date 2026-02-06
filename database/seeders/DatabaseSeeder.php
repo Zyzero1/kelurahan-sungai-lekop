@@ -27,9 +27,10 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call([
+            UserSeeder::class,
             BeritaSeeder::class,
             ProfilSeeder::class,
-            PopulationByAgeSeeder::class,
+            SocialMediaSeeder::class,
         ]);
     }
 }

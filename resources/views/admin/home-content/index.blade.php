@@ -37,6 +37,9 @@
         @csrf
         @method('PUT')
 
+        <!-- Hidden input to store checkbox states -->
+        <input type="hidden" id="checkboxStates" value="{{ json_encode(session('layanan_checkbox_states', [])) }}">
+
         <!-- Hero Banner Section -->
         <div class="bg-white rounded-xl shadow-md p-6">
             <div class="flex items-center mb-4">
@@ -371,7 +374,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_kk_baru_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -402,7 +406,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_nikah_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -433,7 +438,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_akte_lahir_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -463,7 +469,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_akte_mati_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -495,7 +502,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_uang_duka_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -524,7 +532,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_tambah_anak_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -551,7 +560,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_sktm_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -579,7 +589,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_bpjs_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -607,7 +618,8 @@
                                     <span class="text-sm text-gray-600 w-8">{{ $index + 1 }}.</span>
                                     <input type="text" name="layanan_sku_syarat[]" value="{{ trim($syarat) }}"
                                         class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                    <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
+                                    <button type="button" onclick="removeRequirement(this)"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
                                         ×
                                     </button>
                                 </div>
@@ -658,39 +670,130 @@
 
 <script>
     function addRequirement(fieldName) {
-        const button = event.target;
-        const container = button.closest('.border').querySelector('.space-y-2');
-        const index = container.children.length;
+        // Find the container more reliably
+        const firstInput = document.querySelector(`input[name="${fieldName}[]"]`);
+        if (!firstInput) {
+            console.error('Could not find input field for:', fieldName);
+            return;
+        }
+
+        const container = firstInput.closest('.space-y-2');
+        const button = event.target.closest('button');
+        const items = container.querySelectorAll('.flex');
+        const index = items.length;
 
         const newRequirement = document.createElement('div');
         newRequirement.className = 'flex items-center gap-2';
         newRequirement.innerHTML = `
-        <span class="text-sm text-gray-600 w-8">${index + 1}.</span>
-        <input type="text" name="${fieldName}[]" value=""
-            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            placeholder="Masukkan persyaratan baru">
-        <button type="button" onclick="removeRequirement(this)" class="text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center rounded hover:bg-red-50">
-            ×
-        </button>
-    `;
+            <span class="text-sm text-gray-600 w-8">${index + 1}.</span>
+            <input type="text" name="${fieldName}[]" value=""
+                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                placeholder="Masukkan persyaratan baru">
+            <button type="button" onclick="removeRequirement(this)" 
+                class="bg-red-600 hover:bg-red-700 text-white font-bold text-lg w-6 h-6 flex items-center justify-center rounded-full border-2 border-red-800 shadow-md transition-all hover:scale-110">
+                ×
+            </button>
+        `;
 
-        container.insertBefore(newRequirement, button.parentElement);
+        // Insert before the "Tambah Persyaratan" button
+        const addButtonContainer = button.parentElement;
+        container.insertBefore(newRequirement, addButtonContainer);
+
+        // Update numbering after adding
         updateRequirementNumbers(container);
     }
 
     function removeRequirement(button) {
         const container = button.closest('.space-y-2');
-        button.closest('.flex').remove();
+        const itemToRemove = button.closest('.flex');
+
+        // Always remove the item, even if it's the last one
+        itemToRemove.remove();
+
+        // Update numbering after removal
         updateRequirementNumbers(container);
     }
 
     function updateRequirementNumbers(container) {
-        const items = container.querySelectorAll('.flex');
+        // Find only the requirement rows with input fields
+        const items = container.querySelectorAll('.flex.items-center.gap-2');
+        console.log('Updating numbering for', items.length, 'items in container:', container);
+
         items.forEach((item, index) => {
             const numberSpan = item.querySelector('.text-sm.text-gray-600');
             if (numberSpan) {
-                numberSpan.textContent = `${index + 1}.`;
+                const newNumber = `${index + 1}.`;
+                numberSpan.textContent = newNumber;
+                console.log(`Updated item ${index} to number ${newNumber}`);
             }
         });
     }
+
+    // Initialize numbering on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait a bit for DOM to be fully ready
+        setTimeout(() => {
+            const containers = document.querySelectorAll('.space-y-2');
+            containers.forEach(container => {
+                updateRequirementNumbers(container);
+            });
+        }, 100);
+    });
+
+    // Save and restore checkbox states for layanan publik
+    document.addEventListener('DOMContentLoaded', function() {
+        // List of layanan checkbox names
+        const layananCheckboxes = [
+            'layanan_kk_baru',
+            'layanan_nikah',
+            'layanan_akte_lahir',
+            'layanan_akte_mati',
+            'layanan_uang_duka',
+            'layanan_tambah_anak',
+            'layanan_sktm',
+            'layanan_bpjs',
+            'layanan_sku'
+        ];
+
+        // Get checkbox states from session (passed from server)
+        const checkboxStatesInput = document.getElementById('checkboxStates');
+        const sessionStates = checkboxStatesInput ? JSON.parse(checkboxStatesInput.value) : [];
+
+        // Restore checkbox states from session if available
+        if (Object.keys(sessionStates).length > 0) {
+            layananCheckboxes.forEach(name => {
+                const checkbox = document.querySelector(`input[name="${name}"]`);
+                if (checkbox && sessionStates.hasOwnProperty(name)) {
+                    checkbox.checked = sessionStates[name] === 1;
+                }
+            });
+        }
+
+        // Save checkbox states before form submission
+        const form = document.querySelector('form[action="{{ route("admin.home-content.update") }}"]');
+        if (form) {
+            form.addEventListener('submit', function() {
+                const checkboxStates = {};
+                layananCheckboxes.forEach(name => {
+                    const checkbox = document.querySelector(`input[name="${name}"]`);
+                    if (checkbox) {
+                        checkboxStates[name] = checkbox.checked;
+                    }
+                });
+                localStorage.setItem('homeContentLayananCheckboxes', JSON.stringify(checkboxStates));
+            });
+        }
+
+        // Restore checkbox states from localStorage as fallback
+        const savedStates = localStorage.getItem('homeContentLayananCheckboxes');
+        if (savedStates && Object.keys(sessionStates).length === 0) {
+            const checkboxStates = JSON.parse(savedStates);
+            layananCheckboxes.forEach(name => {
+                const checkbox = document.querySelector(`input[name="${name}"]`);
+                if (checkbox && checkboxStates.hasOwnProperty(name)) {
+                    checkbox.checked = checkboxStates[name];
+                }
+            });
+        }
+    });
 </script>

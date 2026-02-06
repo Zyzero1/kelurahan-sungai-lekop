@@ -243,9 +243,16 @@ class HomeContentController extends Controller
             'layanan_sku',
         ];
 
+        // Store checkbox states in session for restoration after redirect
+        $checkboxStates = [];
         foreach ($layananStatusFields as $field) {
-            $homeContent->{$field} = $request->has($field) ? 1 : 0;
+            $isChecked = $request->has($field) ? 1 : 0;
+            $homeContent->{$field} = $isChecked;
+            $checkboxStates[$field] = $isChecked;
         }
+
+        // Flash checkbox states to session
+        session()->flash('layanan_checkbox_states', $checkboxStates);
 
         $homeContent->save();
 

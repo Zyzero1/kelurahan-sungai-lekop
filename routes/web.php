@@ -10,6 +10,8 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProfilController as FrontProfil;
 use App\Http\Controllers\Frontend\LayananController as FrontLayanan;
 use App\Http\Controllers\Frontend\BeritaController as FrontBerita;
+use App\Http\Controllers\Admin\KontakController;
+use App\Http\Controllers\Admin\SocialMediaController;
 
 
 
@@ -60,8 +62,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // === LAYANAN & BERITA ===
     Route::resource('layanan', LayananController::class);
+    Route::put('layanan/{layanan}/toggle-status', [LayananController::class, 'toggleStatus'])
+        ->name('layanan.toggle-status');
     Route::resource('berita', BeritaController::class)
         ->parameters(['berita' => 'berita']);
+
+    // === KONTAK ===
+    Route::resource('kontak', KontakController::class);
+
+    // === SOCIAL MEDIA ===
+    Route::resource('social-media', SocialMediaController::class);
 });
 
 /*
@@ -84,7 +94,8 @@ Route::get('/berita', [FrontBerita::class, 'index'])->name('berita');
 Route::get('/berita/{slug}', [FrontBerita::class, 'show'])->name('berita.show');
 
 Route::get('/kontak', function () {
-    return view('frontend.kontak');
+    $kontak = \App\Models\Kontak::first();
+    return view('frontend.kontak', compact('kontak'));
 })->name('kontak');
 
 

@@ -497,9 +497,20 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-slate-800 mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                                </h4>
+                                <p class="text-slate-600 text-sm">Resep turun temurun sejak 1985, menggunakan ikan segar pilihan tanpa pengawet, tekstur renyah tahan lama</p>
+                            </div>
+
                             <p class="text-slate-600 text-sm mb-4">Kerupuk khas Bintan dengan resep turun temurun, kualitas premium dan rasa autentik</p>
 
                             <div class="border-t pt-4 space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                                    <span class="text-gray-600">Berdiri: 1985</span>
+                                </div>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
                                     <span class="text-gray-600">Pemilik: Bapak Haji Ahmad</span>
@@ -553,9 +564,20 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-slate-800 mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                                </h4>
+                                <p class="text-slate-600 text-sm">100% bahan organik lokal, tanpa pewarna buatan, kemasan eco-friendly, resep keluarga sejak 1992</p>
+                            </div>
+
                             <p class="text-slate-600 text-sm mb-4">Makanan ringan homemade dengan bahan pilihan, tanpa pengawet dan pewarna buatan</p>
 
                             <div class="border-t pt-4 space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                                    <span class="text-gray-600">Berdiri: 1992</span>
+                                </div>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
                                     <span class="text-gray-600">Pemilik: Ibu Sumiati</span>
@@ -609,9 +631,20 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-slate-800 mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                                </h4>
+                                <p class="text-slate-600 text-sm">Layanan antar jemput gratis untuk radius 5km, stok selalu lengkap, harga grosir untuk reseller</p>
+                            </div>
+
                             <p class="text-slate-600 text-sm mb-4">Toko kelontong lengkap dengan harga bersaing, melayani antar jemput untuk warga sekitar</p>
 
                             <div class="border-t pt-4 space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                                    <span class="text-gray-600">Berdiri: 2005</span>
+                                </div>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
                                     <span class="text-gray-600">Pemilik: Bapak Budi Santoso</span>
@@ -665,9 +698,20 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-slate-800 mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                                </h4>
+                                <p class="text-slate-600 text-sm">Produk kosmetik herbal lokal, teknik potong modern, pelayanan VIP untuk pelanggan setia</p>
+                            </div>
+
                             <p class="text-slate-600 text-sm mb-4">Salon kecantikan dengan harga terjangkau, pelayanan ramah dan hasil memuaskan</p>
 
                             <div class="border-t pt-4 space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                                    <span class="text-gray-600">Berdiri: 2010</span>
+                                </div>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
                                     <span class="text-gray-600">Pemilik: Ibu Rina Sari</span>
@@ -721,9 +765,20 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-slate-800 mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                                </h4>
+                                <p class="text-slate-600 text-sm">Suku cadang original, garansi service 3 bulan, teknisi bersertifikat, siaga 24 jam</p>
+                            </div>
+
                             <p class="text-slate-600 text-sm mb-4">Bengkel motor terpercaya, melayani service panggilan untuk wilayah Sungai Lekop</p>
 
                             <div class="border-t pt-4 space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                                    <span class="text-gray-600">Berdiri: 2008</span>
+                                </div>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
                                     <span class="text-gray-600">Pemilik: Bapak Joko Prasetyo</span>
@@ -777,9 +832,20 @@
                                 </div>
                             </div>
 
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-slate-800 mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                                </h4>
+                                <p class="text-slate-600 text-sm">Bumbu rahasia keluarga, rempah pilihan dari petani lokal, porsi jumbo harga kaki lima</p>
+                            </div>
+
                             <p class="text-slate-600 text-sm mb-4">Warung makan dengan menu rumahan yang lezat, harga terjangkau dan porsi besar</p>
 
                             <div class="border-t pt-4 space-y-2">
+                                <div class="flex items-center text-sm">
+                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                                    <span class="text-gray-600">Berdiri: 2015</span>
+                                </div>
                                 <div class="flex items-center text-sm">
                                     <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
                                     <span class="text-gray-600">Pemilik: Ibu Narti Wijaya</span>

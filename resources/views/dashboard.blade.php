@@ -47,5 +47,17 @@
         </a>
     </div>
 
+    {{-- KONTAK --}}
+    <div class="bg-white rounded-xl shadow p-5">
+        <h3 class="text-lg font-semibold mb-2">Kontak</h3>
+        <p class="text-3xl font-bold text-blue-600 mb-3">
+            {{ $totalKontak ?? 0 }}
+        </p>
+        <a href="{{ route('admin.kontak.index') }}"
+            class="text-blue-600 hover:underline">
+            Kelola Kontak →
+        </a>
+    </div>
+
 </div>
 @endsection

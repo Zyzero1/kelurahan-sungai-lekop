@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PopulationByAge;
 use App\Models\Profil;
+use App\Models\Kontak;
 use Illuminate\Http\Request;
 
 class ProfilController extends Controller
@@ -185,5 +186,11 @@ class ProfilController extends Controller
         return redirect()
             ->route('admin.profil.index')
             ->with('success', 'Data kelompok umur berhasil dihapus');
+    }
+
+    public function kontak()
+    {
+        $kontak = Kontak::first();
+        return view('admin.kontak.index', compact('kontak'));
     }
 }

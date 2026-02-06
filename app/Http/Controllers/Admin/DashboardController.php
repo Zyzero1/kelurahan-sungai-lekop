@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Profil;
 use App\Models\Layanan;
 use App\Models\Berita;
+use App\Models\Kontak;
 
 
 class DashboardController extends Controller
@@ -17,6 +18,7 @@ class DashboardController extends Controller
             'totalProfil' => Profil::count(),
             'totalLayanan' => Layanan::count(),
             'totalBerita' => Berita::count(),
+            'totalKontak' => Kontak::count(),
         ]);
     }
 }

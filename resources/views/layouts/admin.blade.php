@@ -3,8 +3,34 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Kelurahan</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     @vite(['resources/css/app.css','resources/js/app.js'])
+
+    <style>
+        .admin-sidebar {
+            background: linear-gradient(to bottom, #1e3a8a, #1e40af) !important;
+            color: white !important;
+        }
+
+        .admin-sidebar * {
+            color: white !important;
+        }
+
+        .admin-sidebar .text-blue-300 {
+            color: #93c5fd !important;
+        }
+
+        .admin-sidebar .group-hover:hover .text-blue-300 {
+            color: white !important;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -14,19 +40,58 @@
 
 
         <!-- Sidebar -->
-        <aside class="w-64 bg-blue-900 text-white p-6">
-            <h2 class="text-xl font-bold mb-6">ADMIN KELURAHAN</h2>
-            <ul class="space-y-3">
-                <li><a href="{{ route('admin.dashboard') }}" class="block py-2 px-3 rounded hover:bg-blue-800 transition">Dashboard</a></li>
-                <li><a href="{{ route('admin.home-content.index') }}" class="block py-2 px-3 rounded hover:bg-blue-800 transition">Konten Beranda</a></li>
-                <li><a href="{{ route('admin.profil.index') }}" class="block py-2 px-3 rounded hover:bg-blue-800 transition">Profil</a></li>
-                <li><a href="{{ route('admin.layanan.index') }}" class="block py-2 px-3 rounded hover:bg-blue-800 transition">Layanan</a></li>
-                <li><a href="{{ route('admin.berita.index') }}" class="block py-2 px-3 rounded hover:bg-blue-800 transition">Berita</a></li>
-            </ul>
-            <form method="POST" action="{{ route('logout') }}" class="mt-6">
-                @csrf
-                <button class="bg-red-600 px-4 py-2 rounded">Logout</button>
-            </form>
+        <aside class="admin-sidebar w-64 text-white p-6 shadow-2xl flex flex-col h-screen">
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-2">ADMIN KELURAHAN</h2>
+                <div class="h-1 w-16 bg-blue-400 rounded"></div>
+            </div>
+
+            <nav class="space-y-2 flex-1">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-tachometer-alt w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ route('admin.home-content.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-home w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Konten Beranda</span>
+                </a>
+
+                <a href="{{ route('admin.profil.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-user-circle w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Profil</span>
+                </a>
+
+                <a href="{{ route('admin.layanan.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-concierge-bell w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Layanan</span>
+                </a>
+
+                <a href="{{ route('admin.berita.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-newspaper w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Berita</span>
+                </a>
+
+                <a href="{{ route('admin.kontak.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-address-book w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Kontak</span>
+                </a>
+
+                <a href="{{ route('admin.social-media.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-share-alt w-5 mr-3 text-blue-300 group-hover:text-white"></i>
+                    <span>Media Sosial</span>
+                </a>
+            </nav>
+
+            <div class="pt-8">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center py-3 px-4 bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-200 group">
+                        <i class="fas fa-sign-out-alt w-5 mr-2"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </div>
         </aside>
 
 
@@ -36,6 +101,8 @@
         </main>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

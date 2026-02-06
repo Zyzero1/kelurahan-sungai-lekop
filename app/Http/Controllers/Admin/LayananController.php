@@ -22,13 +22,17 @@ class LayananController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_layanan' => 'required|string|max:255',
+            'nama'         => 'required|string|max:255',
             'deskripsi'    => 'required|string',
+            'persyaratan'  => 'nullable|string',
+            'status'       => 'required|in:aktif,non_aktif',
         ]);
 
         Layanan::create([
-            'nama_layanan' => $request->nama_layanan,
+            'nama'         => $request->nama,
             'deskripsi'    => $request->deskripsi,
+            'persyaratan'  => $request->persyaratan,
+            'status'       => $request->status,
         ]);
 
         return redirect()
@@ -44,18 +48,33 @@ class LayananController extends Controller
     public function update(Request $request, Layanan $layanan)
     {
         $request->validate([
-            'nama_layanan' => 'required|string|max:255',
+            'nama'         => 'required|string|max:255',
             'deskripsi'    => 'required|string',
+            'persyaratan'  => 'nullable|string',
+            'status'       => 'required|in:aktif,non_aktif',
         ]);
 
         $layanan->update([
-            'nama_layanan' => $request->nama_layanan,
+            'nama'         => $request->nama,
             'deskripsi'    => $request->deskripsi,
+            'persyaratan'  => $request->persyaratan,
+            'status'       => $request->status,
         ]);
 
         return redirect()
             ->route('admin.layanan.index')
             ->with('success', 'Layanan berhasil diperbarui');
+    }
+
+    public function toggleStatus(Layanan $layanan)
+    {
+        $layanan->update([
+            'status' => $layanan->status === 'aktif' ? 'non_aktif' : 'aktif'
+        ]);
+
+        return redirect()
+            ->route('admin.layanan.index')
+            ->with('success', 'Status layanan berhasil diperbarui');
     }
 
     public function destroy(Layanan $layanan)
