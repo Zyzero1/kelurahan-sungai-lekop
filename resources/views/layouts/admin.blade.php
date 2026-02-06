@@ -48,37 +48,30 @@
 
             <nav class="space-y-2 flex-1">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-tachometer-alt w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Dashboard</span>
                 </a>
 
                 <a href="{{ route('admin.home-content.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-home w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Konten Beranda</span>
                 </a>
 
                 <a href="{{ route('admin.profil.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-user-circle w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Profil</span>
                 </a>
 
                 <a href="{{ route('admin.layanan.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-concierge-bell w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Layanan</span>
                 </a>
 
                 <a href="{{ route('admin.berita.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-newspaper w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Berita</span>
                 </a>
 
                 <a href="{{ route('admin.kontak.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-address-book w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Kontak</span>
                 </a>
 
                 <a href="{{ route('admin.social-media.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <i class="fas fa-share-alt w-5 mr-3 text-blue-300 group-hover:text-white"></i>
                     <span>Media Sosial</span>
                 </a>
             </nav>
@@ -87,7 +80,6 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full flex items-center justify-center py-3 px-4 bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-200 group">
-                        <i class="fas fa-sign-out-alt w-5 mr-2"></i>
                         <span>Logout</span>
                     </button>
                 </form>
