@@ -83,6 +83,66 @@
         .modal-scroll::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+        /* Floating Animation for Photos */
+        @keyframes float-up {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes float-down {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        .float-up {
+            animation: float-up 4s ease-in-out infinite;
+        }
+
+        .float-down {
+            animation: float-down 4s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        /* Override for positioned elements */
+        .transform.translate-y-12 {
+            animation: float-down-positioned 4s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        @keyframes float-down-positioned {
+
+            0%,
+            100% {
+                transform: translateY(48px);
+            }
+
+            50% {
+                transform: translateY(58px);
+            }
+        }
+
+        .photo-card {
+            transition: all 0.7s ease;
+        }
+
+        .photo-card:hover {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 
@@ -203,9 +263,25 @@
 
                     <div class="lg:w-1/2 order-1 lg:order-2" data-aos="fade-left">
                         <div class="grid grid-cols-2 gap-4">
-                            <img src="https://placehold.co/400x500/f3f4f6/333333?text=Produksi+Kerupuk" alt="Proses Pembuatan Kerupuk" class="w-full h-64 object-cover rounded-2xl shadow-lg transform translate-y-8">
+                            <div class="relative group photo-card float-up">
+                                <img src="https://placehold.co/400x500/f3f4f6/333333?text=Produksi+Kerupuk" alt="Proses Pembuatan Kerupuk" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                    <div class="p-4 text-white">
+                                        <p class="text-sm font-semibold">Proses Pembuatan Kerupuk</p>
+                                        <p class="text-xs opacity-90">Tradisi turun-temurun</p>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <img src="https://placehold.co/400x500/e5e7eb/333333?text=Tugu+Kerupuk" alt="Tugu Kerupuk Bintan" class="w-full h-64 object-cover rounded-2xl shadow-lg -translate-y-8">
+                            <div class="relative group photo-card float-down transform translate-y-12">
+                                <img src="https://placehold.co/400x500/e5e7eb/333333?text=Tugu+Kerupuk" alt="Tugu Kerupuk Bintan" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl group-hover:-translate-y-2">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                    <div class="p-4 text-white">
+                                        <p class="text-sm font-semibold">Tugu Kerupuk Bintan</p>
+                                        <p class="text-xs opacity-90">Ikon khas Sungai Lekop</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -466,421 +542,235 @@
                     <p class="text-slate-600 max-w-2xl mx-auto">Dukung produk-produk unggulan Usaha Mikro Kecil Menengah khas Sungai Lekop, Bintan</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
                     {{-- UMKM 1: Kerupuk Pak Haji --}}
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group" data-aos="fade-up">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" onclick="openUMKMModal('kerupuk-pak-haji')">
                         <div class="relative">
-                            <div class="h-56 overflow-hidden">
-                                <img src="https://placehold.co/400x300/f59e0b/FFFFFF?text=Kerupuk+Pak+Haji" alt="Kerupuk Pak Haji" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/f59e0b/FFFFFF?text=Kerupuk+Pak+Haji" alt="Kerupuk Pak Haji" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
-                            <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                                 <i class="fas fa-fire mr-1"></i>Best Seller
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-store text-orange-600 text-lg"></i>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-store text-orange-600 text-sm"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">Kerupuk Pak Haji</h3>
-                                    <p class="text-sm text-gray-500">Usaha Keluarga</p>
+                                    <h3 class="text-lg font-bold text-slate-900">Kerupuk Pak Haji</h3>
+                                    <p class="text-xs text-gray-500">Usaha Keluarga</p>
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">Produk Unggulan:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Ikan Tenggiri</span>
-                                    <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Atom</span>
-                                    <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Udang</span>
-                                </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Ikan</span>
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Atom</span>
+                                <span class="text-gray-400 text-xs">+1</span>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
-                                </h4>
-                                <p class="text-slate-600 text-sm">Resep turun temurun sejak 1985, menggunakan ikan segar pilihan tanpa pengawet, tekstur renyah tahan lama</p>
-                            </div>
-
-                            <p class="text-slate-600 text-sm mb-4">Kerupuk khas Bintan dengan resep turun temurun, kualitas premium dan rasa autentik</p>
-
-                            <div class="border-t pt-4 space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Berdiri: 1985</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Pemilik: Bapak Haji Ahmad</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">0812-3456-7890</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Jl. Korindo Km 20</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-orange-600 font-bold">Rp 25.000 - 60.000</span>
-                                <button class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm hover:bg-orange-600 transition">
-                                    <i class="fas fa-phone-alt mr-1"></i>Hubungi
+                            <div class="flex items-center justify-between">
+                                <span class="text-orange-600 font-bold text-sm">Rp 25-60rb</span>
+                                <button class="text-orange-500 hover:text-orange-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     {{-- UMKM 2: Ibu Sumi's Snack --}}
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="100" onclick="openUMKMModal('ibu-sumi-snack')">
                         <div class="relative">
-                            <div class="h-56 overflow-hidden">
-                                <img src="https://placehold.co/400x300/10b981/FFFFFF?text=Ibu+Sumi's+Snack" alt="Ibu Sumi's Snack" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/10b981/FFFFFF?text=Ibu+Sumi's+Snack" alt="Ibu Sumi's Snack" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
-                            <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            <div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                                 <i class="fas fa-leaf mr-1"></i>Organik
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-cookie-bite text-green-600 text-lg"></i>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-cookie-bite text-green-600 text-sm"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">Ibu Sumi's Snack</h3>
-                                    <p class="text-sm text-gray-500">Makanan Ringan</p>
+                                    <h3 class="text-lg font-bold text-slate-900">Ibu Sumi's Snack</h3>
+                                    <p class="text-xs text-gray-500">Kuliner Rumahan</p>
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">Produk Unggulan:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Kue Kering</span>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Pisang Goreng</span>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Donat Kampung</span>
-                                </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Kue Tradisional</span>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Snack</span>
+                                <span class="text-gray-400 text-xs">+2</span>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
-                                </h4>
-                                <p class="text-slate-600 text-sm">100% bahan organik lokal, tanpa pewarna buatan, kemasan eco-friendly, resep keluarga sejak 1992</p>
-                            </div>
-
-                            <p class="text-slate-600 text-sm mb-4">Makanan ringan homemade dengan bahan pilihan, tanpa pengawet dan pewarna buatan</p>
-
-                            <div class="border-t pt-4 space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Berdiri: 1992</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Pemilik: Ibu Sumiati</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">0813-6789-0123</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Perumahan Griya Indo Kencana</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-orange-600 font-bold">Rp 15.000 - 45.000</span>
-                                <button class="bg-green-500 text-white px-3 py-1 rounded-full text-sm hover:bg-green-600 transition">
-                                    <i class="fas fa-phone-alt mr-1"></i>Hubungi
+                            <div class="flex items-center justify-between">
+                                <span class="text-green-600 font-bold text-sm">Rp 15-45rb</span>
+                                <button class="text-green-500 hover:text-green-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {{-- UMKM 3: Toko Kelontong Pak Budi --}}
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group" data-aos="fade-up" data-aos-delay="200">
+                    {{-- UMKM 3: Toko Rajawali --}}
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="200" onclick="openUMKMModal('toko-rajawali')">
                         <div class="relative">
-                            <div class="h-56 overflow-hidden">
-                                <img src="https://placehold.co/400x300/3b82f6/FFFFFF?text=Toko+Pak+Budi" alt="Toko Pak Budi" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/3b82f6/FFFFFF?text=Toko+Rajawali" alt="Toko Rajawali" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
-                            <div class="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                                <i class="fas fa-check-circle mr-1"></i>Terpercaya
+                            <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-star mr-1"></i>Terpercaya
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-shopping-basket text-blue-600 text-lg"></i>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-shopping-basket text-blue-600 text-sm"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">Toko Kelontong Pak Budi</h3>
-                                    <p class="text-sm text-gray-500">Kebutuhan Sehari-hari</p>
+                                    <h3 class="text-lg font-bold text-slate-900">Toko Rajawali</h3>
+                                    <p class="text-xs text-gray-500">Kelontongan</p>
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">Layanan:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Sembako</span>
-                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Pulsa & Token</span>
-                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Antar</span>
-                                </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Sembako</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Minuman</span>
+                                <span class="text-gray-400 text-xs">+2</span>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
-                                </h4>
-                                <p class="text-slate-600 text-sm">Layanan antar jemput gratis untuk radius 5km, stok selalu lengkap, harga grosir untuk reseller</p>
-                            </div>
-
-                            <p class="text-slate-600 text-sm mb-4">Toko kelontong lengkap dengan harga bersaing, melayani antar jemput untuk warga sekitar</p>
-
-                            <div class="border-t pt-4 space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Berdiri: 2005</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Pemilik: Bapak Budi Santoso</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">0821-2345-6789</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Jl. Poros Km 22</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-orange-600 font-bold">Harga Bersaing</span>
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition">
-                                    <i class="fas fa-phone-alt mr-1"></i>Hubungi
+                            <div class="flex items-center justify-between">
+                                <span class="text-blue-600 font-bold text-sm">Rp 5-50rb</span>
+                                <button class="text-blue-500 hover:text-blue-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     {{-- UMKM 4: Salon Ibu Rina --}}
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="300" onclick="openUMKMModal('salon-ibu-rina')">
                         <div class="relative">
-                            <div class="h-56 overflow-hidden">
-                                <img src="https://placehold.co/400x300/a855f7/FFFFFF?text=Salon+Ibu+Rina" alt="Salon Ibu Rina" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/a855f7/FFFFFF?text=Salon+Ibu+Rina" alt="Salon Ibu Rina" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
-                            <div class="absolute top-4 right-4 bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            <div class="absolute top-2 right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                                 <i class="fas fa-star mr-1"></i>Recommended
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-cut text-purple-600 text-lg"></i>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-cut text-purple-600 text-sm"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">Salon Ibu Rina</h3>
-                                    <p class="text-sm text-gray-500">Kecantikan & Salon</p>
+                                    <h3 class="text-lg font-bold text-slate-900">Salon Ibu Rina</h3>
+                                    <p class="text-xs text-gray-500">Kecantikan</p>
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">Layanan:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Potong Rambut</span>
-                                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Creambath</span>
-                                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Makeup</span>
-                                </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Potong Rambut</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Creambath</span>
+                                <span class="text-gray-400 text-xs">+1</span>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
-                                </h4>
-                                <p class="text-slate-600 text-sm">Produk kosmetik herbal lokal, teknik potong modern, pelayanan VIP untuk pelanggan setia</p>
-                            </div>
-
-                            <p class="text-slate-600 text-sm mb-4">Salon kecantikan dengan harga terjangkau, pelayanan ramah dan hasil memuaskan</p>
-
-                            <div class="border-t pt-4 space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Berdiri: 2010</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Pemilik: Ibu Rina Sari</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">0819-8765-4321</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Kawasan Perumahan</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-orange-600 font-bold">Rp 25.000 - 150.000</span>
-                                <button class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm hover:bg-purple-600 transition">
-                                    <i class="fas fa-phone-alt mr-1"></i>Hubungi
+                            <div class="flex items-center justify-between">
+                                <span class="text-purple-600 font-bold text-sm">Rp 25-150rb</span>
+                                <button class="text-purple-500 hover:text-purple-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {{-- UMKM 5: Bengkel Pak Joko --}}
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group" data-aos="fade-up" data-aos-delay="400">
+                    {{-- UMKM 5: Bengkel Jaya Makmur --}}
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="400" onclick="openUMKMModal('bengkel-jaya-makmur')">
                         <div class="relative">
-                            <div class="h-56 overflow-hidden">
-                                <img src="https://placehold.co/400x400/6366f1/FFFFFF?text=Bengkel+Pak+Joko" alt="Bengkel Pak Joko" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/8b5cf6/FFFFFF?text=Bengkel+Jaya+Makmur" alt="Bengkel Jaya Makmur" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
-                            <div class="absolute top-4 right-4 bg-indigo-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                                <i class="fas fa-wrench mr-1"></i>24 Jam
+                            <div class="absolute top-2 right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-wrench mr-1"></i>Jasa
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-motorcycle text-indigo-600 text-lg"></i>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-motorcycle text-purple-600 text-sm"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">Bengkel Pak Joko</h3>
-                                    <p class="text-sm text-gray-500">Montir & Service</p>
+                                    <h3 class="text-lg font-bold text-slate-900">Bengkel Jaya Makmur</h3>
+                                    <p class="text-xs text-gray-500">Servis Motor</p>
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">Layanan:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Service Motor</span>
-                                    <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Ganti Oli</span>
-                                    <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Tambal Ban</span>
-                                </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Service</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Ganti Oli</span>
+                                <span class="text-gray-400 text-xs">+2</span>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
-                                </h4>
-                                <p class="text-slate-600 text-sm">Suku cadang original, garansi service 3 bulan, teknisi bersertifikat, siaga 24 jam</p>
-                            </div>
-
-                            <p class="text-slate-600 text-sm mb-4">Bengkel motor terpercaya, melayani service panggilan untuk wilayah Sungai Lekop</p>
-
-                            <div class="border-t pt-4 space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Berdiri: 2008</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Pemilik: Bapak Joko Prasetyo</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">0815-4321-9876</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Jl. Korindo Km 18</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-orange-600 font-bold">Rp 20.000 - 200.000</span>
-                                <button class="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm hover:bg-indigo-600 transition">
-                                    <i class="fas fa-phone-alt mr-1"></i>Hubungi
+                            <div class="flex items-center justify-between">
+                                <span class="text-purple-600 font-bold text-sm">Rp 20-200rb</span>
+                                <button class="text-purple-500 hover:text-purple-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {{-- UMKM 6: Warung Makan Bu Narti --}}
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group" data-aos="fade-up" data-aos-delay="500">
+                    {{-- UMKM 6: Warung Bu Narti --}}
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="500" onclick="openUMKMModal('warung-bu-narti')">
                         <div class="relative">
-                            <div class="h-56 overflow-hidden">
-                                <img src="https://placehold.co/400x300/ef4444/FFFFFF?text=Warung+Bu+Narti" alt="Warung Bu Narti" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/ef4444/FFFFFF?text=Warung+Bu+Narti" alt="Warung Bu Narti" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
-                            <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                                 <i class="fas fa-utensils mr-1"></i>Enak
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3">
-                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-bowl-food text-red-600 text-lg"></i>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-bowl-food text-red-600 text-sm"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900">Warung Makan Bu Narti</h3>
-                                    <p class="text-sm text-gray-500">Kuliner Nusantara</p>
+                                    <h3 class="text-lg font-bold text-slate-900">Warung Bu Narti</h3>
+                                    <p class="text-xs text-gray-500">Kuliner</p>
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">Menu Spesial:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Nasi Padang</span>
-                                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Ayam Bakar</span>
-                                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Soto</span>
-                                </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Nasi Padang</span>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Ayam Bakar</span>
+                                <span class="text-gray-400 text-xs">+1</span>
                             </div>
 
-                            <div class="mb-4">
-                                <h4 class="font-semibold text-slate-800 mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
-                                </h4>
-                                <p class="text-slate-600 text-sm">Bumbu rahasia keluarga, rempah pilihan dari petani lokal, porsi jumbo harga kaki lima</p>
-                            </div>
-
-                            <p class="text-slate-600 text-sm mb-4">Warung makan dengan menu rumahan yang lezat, harga terjangkau dan porsi besar</p>
-
-                            <div class="border-t pt-4 space-y-2">
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Berdiri: 2015</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Pemilik: Ibu Narti Wijaya</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">0817-6543-2109</span>
-                                </div>
-                                <div class="flex items-center text-sm">
-                                    <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
-                                    <span class="text-gray-600">Jl. Poros Km 21</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-orange-600 font-bold">Rp 15.000 - 35.000</span>
-                                <button class="bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 transition">
-                                    <i class="fas fa-phone-alt mr-1"></i>Hubungi
+                            <div class="flex items-center justify-between">
+                                <span class="text-red-600 font-bold text-sm">Rp 15-35rb</span>
+                                <button class="text-red-500 hover:text-red-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="text-center">
-                    <div class="bg-gradient-to-r from-orange-50 to-blue-50 rounded-2xl p-8 max-w-4xl mx-auto" data-aos="fade-up">
-                        <h3 class="text-2xl font-bold text-slate-900 mb-4">
-                            <i class="fas fa-handshake text-orange-500 mr-2"></i>
-                            Dukung UMKM Lokal Sungai Lekop
-                        </h3>
-                        <p class="text-slate-600 mb-6">Bergabunglah dalam mendukung perekonomian lokal dengan membeli produk-produk UMKM kami. Setiap pembelian Anda membantu meningkatkan kesejahteraan masyarakat Sungai Lekop.</p>
-                        <div class="flex justify-center">
-                            <a href="#galeri-kegiatan" class="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition inline-flex items-center justify-center">
-                                <i class="fas fa-images mr-2"></i> Lihat Galeri Produksi
-                            </a>
+                    <div class="text-center">
+                        <div class="bg-gradient-to-r from-orange-50 to-blue-50 rounded-2xl p-8 max-w-4xl mx-auto" data-aos="fade-up">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4">
+                                <i class="fas fa-handshake text-orange-500 mr-2"></i>
+                                Dukung UMKM Lokal Sungai Lekop
+                            </h3>
+                            <p class="text-slate-600 mb-6">Bergabunglah dalam mendukung perekonomian lokal dengan membeli produk-produk UMKM kami. Setiap pembelian Anda membantu meningkatkan kesejahteraan masyarakat Sungai Lekop.</p>
+                            <div class="flex justify-center">
+                                <a href="#galeri-kegiatan" class="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition inline-flex items-center justify-center">
+                                    <i class="fas fa-images mr-2"></i> Lihat Galeri Produksi
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1802,7 +1692,342 @@
             // --- INITIAL RENDER ---
             applyFiltersAndSearch();
         });
+
+        // --- UMKM MODAL FUNCTIONS ---
+        let currentImageIndex = 0;
+        let currentImages = [];
+
+        function openUMKMModal(umkmId) {
+            const modal = document.getElementById('umkmModal');
+            if (!modal) return;
+
+            const modalData = {
+                'kerupuk-pak-haji': {
+                    title: 'Kerupuk Pak Haji',
+                    category: 'Usaha Keluarga',
+                    images: [
+                        'https://placehold.co/400x300/f59e0b/FFFFFF?text=Kerupuk+Pak+Haji',
+                        'https://placehold.co/400x300/f59e0b/FFFFFF?text=Produksi+Kerupuk',
+                        'https://placehold.co/400x300/f59e0b/FFFFFF?text=Kemasan+Kerupuk'
+                    ],
+                    badge: '<i class="fas fa-fire mr-1"></i>Best Seller',
+                    badgeColor: 'bg-red-500',
+                    description: 'Kerupuk khas Bintan dengan resep turun temurun, kualitas premium dan rasa autentik',
+                    products: ['Kerupuk Ikan Tenggiri', 'Kerupuk Atom', 'Kerupuk Udang'],
+                    uniqueness: 'Resep turun temurun sejak 1985, menggunakan ikan segar pilihan tanpa pengawet, tekstur renyah tahan lama',
+                    established: '1985',
+                    owner: 'Bapak Haji Ahmad',
+                    phone: '0812-3456-7890',
+                    address: 'Jl. Korindo Km 20',
+                    price: 'Rp 25.000 - 60.000'
+                },
+                'ibu-sumi-snack': {
+                    title: "Ibu Sumi's Snack",
+                    category: 'Kuliner Rumahan',
+                    images: [
+                        'https://placehold.co/400x300/10b981/FFFFFF?text=Ibu+Sumi\'s+Snack',
+                        'https://placehold.co/400x300/10b981/FFFFFF?text=Kue+Kering',
+                        'https://placehold.co/400x300/10b981/FFFFFF?text=Donat+Kampung'
+                    ],
+                    badge: '<i class="fas fa-leaf mr-1"></i>Organik',
+                    badgeColor: 'bg-green-500',
+                    description: 'Makanan ringan homemade dengan bahan pilihan, tanpa pengawet dan pewarna buatan',
+                    products: ['Kue Kering', 'Pisang Goreng', 'Donat Kampung', 'Roti Bakar'],
+                    uniqueness: '100% bahan organik lokal, tanpa pewarna buatan, kemasan eco-friendly, resep keluarga sejak 1992',
+                    established: '1992',
+                    owner: 'Ibu Sumiati',
+                    phone: '0813-6789-0123',
+                    address: 'Perumahan Griya Indo Kencana',
+                    price: 'Rp 15.000 - 45.000'
+                },
+                'toko-rajawali': {
+                    title: 'Toko Rajawali',
+                    category: 'Kelontongan',
+                    images: [
+                        'https://placehold.co/400x300/3b82f6/FFFFFF?text=Toko+Rajawali',
+                        'https://placehold.co/400x300/3b82f6/FFFFFF?text=Rak+Sembako',
+                        'https://placehold.co/400x300/3b82f6/FFFFFF?text=Minuman+Segar'
+                    ],
+                    badge: '<i class="fas fa-star mr-1"></i>Terpercaya',
+                    badgeColor: 'bg-blue-500',
+                    description: 'Toko kelontong lengkap dengan harga bersaing, melayani antar jemput untuk warga sekitar',
+                    products: ['Sembako', 'Minuman', 'Pulsa & Token', 'Perlengkapan Rumah'],
+                    uniqueness: 'Layanan antar jemput gratis untuk radius 5km, stok selalu lengkap, harga grosir untuk reseller',
+                    established: '2005',
+                    owner: 'Bapak Budi Santoso',
+                    phone: '0821-2345-6789',
+                    address: 'Jl. Poros Km 22',
+                    price: 'Harga Bersaing'
+                },
+                'salon-ibu-rina': {
+                    title: 'Salon Ibu Rina',
+                    category: 'Kecantikan',
+                    images: [
+                        'https://placehold.co/400x300/a855f7/FFFFFF?text=Salon+Ibu+Rina',
+                        'https://placehold.co/400x300/a855f7/FFFFFF?text=Potong+Rambut',
+                        'https://placehold.co/400x300/a855f7/FFFFFF?text=Makeup+Service'
+                    ],
+                    badge: '<i class="fas fa-star mr-1"></i>Recommended',
+                    badgeColor: 'bg-purple-500',
+                    description: 'Salon kecantikan dengan harga terjangkau, pelayanan ramah dan hasil memuaskan',
+                    products: ['Potong Rambut', 'Creambath', 'Makeup', 'Hair Treatment'],
+                    uniqueness: 'Produk kosmetik herbal lokal, teknik potong modern, pelayanan VIP untuk pelanggan setia',
+                    established: '2010',
+                    owner: 'Ibu Rina Sari',
+                    phone: '0819-8765-4321',
+                    address: 'Kawasan Perumahan',
+                    price: 'Rp 25.000 - 150.000'
+                },
+                'bengkel-jaya-makmur': {
+                    title: 'Bengkel Jaya Makmur',
+                    category: 'Servis Motor',
+                    images: [
+                        'https://placehold.co/400x300/8b5cf6/FFFFFF?text=Bengkel+Jaya+Makmur',
+                        'https://placehold.co/400x300/8b5cf6/FFFFFF?text=Service+Motor',
+                        'https://placehold.co/400x300/8b5cf6/FFFFFF?text=Ganti+Oli'
+                    ],
+                    badge: '<i class="fas fa-wrench mr-1"></i>Jasa',
+                    badgeColor: 'bg-purple-500',
+                    description: 'Bengkel motor terpercaya, melayani service panggilan untuk wilayah Sungai Lekop',
+                    products: ['Service Motor', 'Ganti Oli', 'Tambal Ban', 'Sparepart'],
+                    uniqueness: 'Suku cadang original, garansi service 3 bulan, teknisi bersertifikat, siaga 24 jam',
+                    established: '2008',
+                    owner: 'Bapak Joko Prasetyo',
+                    phone: '0815-4321-9876',
+                    address: 'Jl. Korindo Km 18',
+                    price: 'Rp 20.000 - 200.000'
+                },
+                'warung-bu-narti': {
+                    title: 'Warung Bu Narti',
+                    category: 'Kuliner',
+                    images: [
+                        'https://placehold.co/400x300/ef4444/FFFFFF?text=Warung+Bu+Narti',
+                        'https://placehold.co/400x300/ef4444/FFFFFF?text=Nasi+Padang',
+                        'https://placehold.co/400x300/ef4444/FFFFFF?text=Ayam+Bakar'
+                    ],
+                    badge: '<i class="fas fa-utensils mr-1"></i>Enak',
+                    badgeColor: 'bg-red-500',
+                    description: 'Warung makan dengan menu rumahan yang lezat, harga terjangkau dan porsi besar',
+                    products: ['Nasi Padang', 'Ayam Bakar', 'Soto', 'Gulai'],
+                    uniqueness: 'Bumbu rahasia keluarga, rempah pilihan dari petani lokal, porsi jumbo harga kaki lima',
+                    established: '2015',
+                    owner: 'Ibu Narti Wijaya',
+                    phone: '0817-6543-2109',
+                    address: 'Jl. Poros Km 21',
+                    price: 'Rp 15.000 - 35.000'
+                }
+            };
+
+            const data = modalData[umkmId];
+            if (!data) return;
+
+            // Set current images and reset index
+            currentImages = data.images;
+            currentImageIndex = 0;
+
+            // Update modal content
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalCategory').textContent = data.category;
+            document.getElementById('modalBadge').innerHTML = data.badge;
+            document.getElementById('modalBadge').className = `absolute top-4 right-4 ${data.badgeColor} text-white px-3 py-1 rounded-full text-xs font-bold`;
+            document.getElementById('modalDescription').textContent = data.description;
+            document.getElementById('modalUniqueness').textContent = data.uniqueness;
+            document.getElementById('modalEstablished').textContent = data.established;
+            document.getElementById('modalOwner').textContent = data.owner;
+            document.getElementById('modalPhone').textContent = data.phone;
+            document.getElementById('modalAddress').textContent = data.address;
+            document.getElementById('modalPrice').textContent = data.price;
+
+            // Update products
+            const productsContainer = document.getElementById('modalProducts');
+            productsContainer.innerHTML = data.products.map(product =>
+                `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">${product}</span>`
+            ).join('');
+
+            // Setup image carousel
+            setupImageCarousel(data.images);
+
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function setupImageCarousel(images) {
+            const container = document.getElementById('modalImageContainer');
+            const prevBtn = document.getElementById('prevImage');
+            const nextBtn = document.getElementById('nextImage');
+            const dotsContainer = document.getElementById('imageDots');
+
+            // Clear existing content
+            container.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            // Create image elements
+            images.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Image ${index + 1}`;
+                img.className = `w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-300 ${index === 0 ? 'opacity-100' : 'opacity-0'}`;
+                container.appendChild(img);
+            });
+
+            // Create dots
+            images.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${index === 0 ? 'bg-white' : 'bg-white/50'}`;
+                dot.onclick = () => showImage(index);
+                dotsContainer.appendChild(dot);
+            });
+
+            // Show/hide navigation buttons based on image count
+            if (images.length > 1) {
+                prevBtn.classList.remove('opacity-0', 'pointer-events-none');
+                nextBtn.classList.remove('opacity-0', 'pointer-events-none');
+
+                prevBtn.onclick = () => showImage(currentImageIndex - 1);
+                nextBtn.onclick = () => showImage(currentImageIndex + 1);
+            } else {
+                prevBtn.classList.add('opacity-0', 'pointer-events-none');
+                nextBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function showImage(index) {
+            const images = document.querySelectorAll('#modalImageContainer img');
+            const dots = document.querySelectorAll('#imageDots button');
+
+            // Handle circular navigation
+            if (index < 0) index = images.length - 1;
+            if (index >= images.length) index = 0;
+
+            // Hide all images and reset dots
+            images.forEach(img => img.classList.remove('opacity-100'));
+            dots.forEach(dot => {
+                dot.classList.remove('bg-white');
+                dot.classList.add('bg-white/50');
+            });
+
+            // Show current image and update dot
+            images[index].classList.add('opacity-100');
+            dots[index].classList.remove('bg-white/50');
+            dots[index].classList.add('bg-white');
+
+            currentImageIndex = index;
+        }
+
+        function closeUMKMModal() {
+            const modal = document.getElementById('umkmModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('umkmModal');
+            if (modal && event.target === modal) {
+                closeUMKMModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeUMKMModal();
+            }
+        });
     </script>
+
+    <!-- UMKM Modal -->
+    <div id="umkmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-scroll">
+            <div class="relative">
+                <div class="h-64 overflow-hidden relative">
+                    <div id="modalImageContainer" class="relative h-full">
+                        <img id="modalImage" src="" alt="" class="w-full h-full object-cover">
+                        <!-- Additional images will be added here -->
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <button id="prevImage" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-2 hover:bg-white transition opacity-0 pointer-events-none">
+                        <i class="fas fa-chevron-left text-gray-700"></i>
+                    </button>
+                    <button id="nextImage" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-2 hover:bg-white transition opacity-0 pointer-events-none">
+                        <i class="fas fa-chevron-right text-gray-700"></i>
+                    </button>
+
+                    <!-- Dot Indicators -->
+                    <div id="imageDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                        <!-- Dots will be added dynamically -->
+                    </div>
+
+                    <div id="modalBadge" class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <!-- Badge content -->
+                    </div>
+                </div>
+                <button onclick="closeUMKMModal()" class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition z-10">
+                    <i class="fas fa-arrow-left text-gray-700"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-store text-orange-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalTitle" class="text-2xl font-bold text-slate-900"></h3>
+                        <p id="modalCategory" class="text-gray-500"></p>
+                    </div>
+                </div>
+
+                <p id="modalDescription" class="text-slate-600 mb-6"></p>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold text-slate-800 mb-2">Produk Unggulan:</h4>
+                    <div id="modalProducts" class="flex flex-wrap gap-2">
+                        <!-- Products will be inserted here -->
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold text-slate-800 mb-2">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i>Keunikan Produk:
+                    </h4>
+                    <p id="modalUniqueness" class="text-slate-600 text-sm"></p>
+                </div>
+
+                <div class="border-t pt-4 space-y-2">
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-calendar text-gray-400 mr-2 w-4"></i>
+                        <span class="text-gray-600">Berdiri: <span id="modalEstablished"></span></span>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-user text-gray-400 mr-2 w-4"></i>
+                        <span class="text-gray-600">Pemilik: <span id="modalOwner"></span></span>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
+                        <span class="text-gray-600">Telepon: <span id="modalPhone"></span></span>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <i class="fas fa-map-marker-alt text-gray-400 mr-2 w-4"></i>
+                        <span class="text-gray-600">Alamat: <span id="modalAddress"></span></span>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+                    <span id="modalPrice" class="text-orange-600 font-bold text-lg"></span>
+                    <button class="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition">
+                        <i class="fas fa-phone-alt mr-2"></i>Hubungi Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
