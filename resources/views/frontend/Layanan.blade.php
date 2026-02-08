@@ -690,87 +690,40 @@
                     {{-- UMKM 5: Bengkel Jaya Makmur --}}
                     <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="400" onclick="openUMKMModal('bengkel-jaya-makmur')">
                         <div class="relative">
-                            <div class="h-40 overflow-hidden">
+                            <div class="h-48 overflow-hidden">
                                 <img src="https://placehold.co/300x200/8b5cf6/FFFFFF?text=Bengkel+Jaya+Makmur" alt="Bengkel Jaya Makmur" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
                             <div class="absolute top-2 right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                                 <i class="fas fa-wrench mr-1"></i>Jasa
                             </div>
                         </div>
-                        <div class="p-4">
-                            <div class="flex items-center mb-2">
-                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-2">
-                                    <i class="fas fa-motorcycle text-purple-600 text-sm"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-slate-900">Bengkel Jaya Makmur</h3>
-                                    <p class="text-xs text-gray-500">Servis Motor</p>
-                                </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Jasa</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-purple-600 transition"></i>
                             </div>
-
-                            <div class="flex flex-wrap gap-1 mb-3">
-                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Service</span>
-                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Ganti Oli</span>
-                                <span class="text-gray-400 text-xs">+2</span>
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <span class="text-purple-600 font-bold text-sm">Rp 20-200rb</span>
-                                <button class="text-purple-500 hover:text-purple-600 transition">
-                                    <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Bengkel Jaya Makmur</h3>
+                            <p class="text-slate-600 text-sm mb-4">Servis motor profesional dengan layanan lengkap dan berkualitas.</p>
                         </div>
                     </div>
 
                     {{-- UMKM 6: Warung Bu Narti --}}
                     <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="500" onclick="openUMKMModal('warung-bu-narti')">
                         <div class="relative">
-                            <div class="h-40 overflow-hidden">
+                            <div class="h-48 overflow-hidden">
                                 <img src="https://placehold.co/300x200/ef4444/FFFFFF?text=Warung+Bu+Narti" alt="Warung Bu Narti" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             </div>
                             <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                                 <i class="fas fa-utensils mr-1"></i>Enak
                             </div>
                         </div>
-                        <div class="p-4">
-                            <div class="flex items-center mb-2">
-                                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-2">
-                                    <i class="fas fa-bowl-food text-red-600 text-sm"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-slate-900">Warung Bu Narti</h3>
-                                    <p class="text-xs text-gray-500">Kuliner</p>
-                                </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Kuliner</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-red-600 transition"></i>
                             </div>
-
-                            <div class="flex flex-wrap gap-1 mb-3">
-                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Nasi Padang</span>
-                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Ayam Bakar</span>
-                                <span class="text-gray-400 text-xs">+1</span>
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <span class="text-red-600 font-bold text-sm">Rp 15-35rb</span>
-                                <button class="text-red-500 hover:text-red-600 transition">
-                                    <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <div class="bg-gradient-to-r from-orange-50 to-blue-50 rounded-2xl p-8 max-w-4xl mx-auto" data-aos="fade-up">
-                            <h3 class="text-2xl font-bold text-slate-900 mb-4">
-                                <i class="fas fa-handshake text-orange-500 mr-2"></i>
-                                Dukung UMKM Lokal Sungai Lekop
-                            </h3>
-                            <p class="text-slate-600 mb-6">Bergabunglah dalam mendukung perekonomian lokal dengan membeli produk-produk UMKM kami. Setiap pembelian Anda membantu meningkatkan kesejahteraan masyarakat Sungai Lekop.</p>
-                            <div class="flex justify-center">
-                                <a href="#galeri-kegiatan" class="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition inline-flex items-center justify-center">
-                                    <i class="fas fa-images mr-2"></i> Lihat Galeri Produksi
-                                </a>
-                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Warung Bu Narti</h3>
+                            <p class="text-slate-600 text-sm mb-4">Masakan rumahan khas Nasi Padang dan Ayam Bakar dengan cita rasa autentik.</p>
                         </div>
                     </div>
                 </div>
@@ -778,7 +731,6 @@
         </section>
 
         {{-- 6. GALERI KEGIATAN --}}
-
         <div class="container mx-auto px-6">
             <section id="galeri-kegiatan" class="py-20 bg-white">
                 <div class="text-center mb-16" data-aos="fade-up">
@@ -981,47 +933,6 @@
                     </div>
                 </div>
         </div>
-        </section>
-
-        {{-- 8. STATISTIK / HIGHLIGHTS SECTION --}}
-        <section class="py-16 bg-blue-900 text-white">
-            <div class="container mx-auto px-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-blue-700/50">
-                    <div data-aos="fade-up">
-                        <div class="text-4xl font-bold mb-2 text-yellow-400">20+</div>
-                        <div class="text-sm text-blue-200 uppercase tracking-wide">UMKM Kerupuk</div>
-                    </div>
-                    <div data-aos="fade-up" data-aos-delay="100">
-                        <div class="text-4xl font-bold mb-2 text-yellow-400">Km 20</div>
-                        <div class="text-sm text-blue-200 uppercase tracking-wide">Pusat Jalan Poros</div>
-                    </div>
-                    <div data-aos="fade-up" data-aos-delay="200">
-                        <div class="text-4xl font-bold mb-2 text-yellow-400">2</div>
-                        <div class="text-sm text-blue-200 uppercase tracking-wide">Sekolah Dasar Utama</div>
-                    </div>
-                    <div data-aos="fade-up" data-aos-delay="300">
-                        <div class="text-4xl font-bold mb-2 text-yellow-400">1</div>
-                        <div class="text-sm text-blue-200 uppercase tracking-wide">Visi Desa Mandiri</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- 9. PETA / CALL TO ACTION --}}
-        <section class="py-20 bg-white">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-2xl font-bold text-slate-900 mb-6">Ingin Berkunjung atau Bekerjasama?</h2>
-                <p class="text-slate-600 mb-8 max-w-2xl mx-auto">Kami terbuka untuk kunjungan wisata edukasi industri kerupuk maupun kerjasama pengembangan desa.</p>
-
-                <div class="flex justify-center gap-4">
-                    <a href="https://maps.google.com/?q=Kelurahan+Sungai+Lekop+Bintan" target="_blank" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-lg">
-                        <i class="fas fa-map-marked-alt mr-2"></i> Lihat di Peta
-                    </a>
-                    <a href="/kontak" class="inline-flex items-center px-6 py-3 bg-white text-blue-600 border border-blue-200 font-medium rounded-lg hover:bg-blue-50 transition shadow-sm">
-                        Hubungi Kami
-                    </a>
-                </div>
-            </div>
         </section>
 
     </main>
