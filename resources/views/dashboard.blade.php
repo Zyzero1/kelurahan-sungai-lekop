@@ -23,15 +23,15 @@
         </a>
     </div>
 
-    {{-- LAYANAN --}}
+    {{-- JELAJAH LEKOP --}}
     <div class="bg-white rounded-xl shadow p-5">
-        <h3 class="text-lg font-semibold mb-2">Layanan</h3>
+        <h3 class="text-lg font-semibold mb-2">Jelajah Lekop</h3>
         <p class="text-3xl font-bold text-blue-600 mb-3">
-            {{ $totalLayanan ?? 0 }}
+            {{ $totalJelajahLekop ?? 0 }}
         </p>
-        <a href="{{ route('admin.layanan.index') }}"
+        <a href="{{ route('admin.jelajah-lekop.index') }}"
             class="text-blue-600 hover:underline">
-            Kelola Layanan →
+            Kelola Jelajah Lekop →
         </a>
     </div>
 

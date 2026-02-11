@@ -372,7 +372,7 @@
                             <i class="fas fa-sitemap text-4xl text-slate-300 mb-3"></i>
                             <p class="text-slate-500">Gambar struktur belum diunggah.</p>
                         </div>
-                        @endif
+                        @endif+
                     </section>
 
                     <section id="lokasi" class="bg-white rounded-xl shadow-md p-8 border border-slate-100 mb-8" data-aos="fade-up">

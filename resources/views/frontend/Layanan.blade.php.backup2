@@ -1,0 +1,969 @@
+@extends('frontend.layouts.app')
+
+@section('title', 'Jelajah Lekop - Kelurahan Sungai Lekop')
+
+@section('content')
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelajah Lekop - Kelurahan Sungai Lekop</title>
+
+    {{-- Library Pihak Ketiga --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --primary-900: #1e3a8a;
+            --primary-600: #2563eb;
+            --accent-500: #f59e0b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Header Asli */
+        .modern-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .modern-header.scrolled {
+            background: var(--primary-900) !important;
+            backdrop-filter: none !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom Styles */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #1e3a8a, #2563eb);
+        }
+
+        /* Custom Scrollbar for Modal */
+        .modal-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .modal-scroll::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .modal-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Floating Animation for Photos */
+        @keyframes float-up {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes float-down {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        .float-up {
+            animation: float-up 4s ease-in-out infinite;
+        }
+
+        .float-down {
+            animation: float-down 4s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        /* Override for positioned elements */
+        .transform.translate-y-12 {
+            animation: float-down-positioned 4s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        @keyframes float-down-positioned {
+
+            0%,
+            100% {
+                transform: translateY(48px);
+            }
+
+            50% {
+                transform: translateY(58px);
+            }
+        }
+
+        .photo-card {
+            transition: all 0.7s ease;
+        }
+
+        .photo-card:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased text-slate-800">
+
+    {{-- Memanggil Navigasi --}}
+    @include('frontend.layouts.navigation')
+
+    <main class="min-h-screen">
+
+        {{-- 1. HERO SECTION --}}
+        <section class="relative h-[600px] overflow-hidden">
+            <div class="absolute inset-0">
+                @if($heroData && $heroData->hero_image)
+                <img src="{{ $heroData->hero_image_url }}" alt="{{ $heroData->nama }}" class="w-full h-full object-cover" style="object-position: center;">
+                @else
+                <img src="{{ asset('images/kantor.png') }}" alt="Kantor Kelurahan Sungai Lekop" class="w-full h-full object-cover" style="object-position: center;">
+                @endif
+                <div class="absolute inset-0 bg-gradient-to-b from-black/90 via-blue-950/80 via-blue-900/60 to-blue-800/40"></div>
+            </div>
+
+            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-12">
+                <div class="text-center max-w-4xl" data-aos="fade-up">
+                    <div style="transform: translateY(-20px)">
+                        <span class="inline-block py-1 px-3 rounded-full bg-blue-600/80 text-white text-xs font-bold tracking-wider mb-4 border border-blue-400/30 backdrop-blur-sm">
+                            EXPLORE BINTAN TIMUR
+                        </span>
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
+                            @if($heroData)
+                            {!! $heroData->nama !!}
+                            @else
+                            Jelajah <span class="text-blue-200">Sungai Lekop</span>
+                            @endif
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto font-light">
+                            @if($heroData && $heroData->hero_content)
+                            {!! $heroData->hero_content !!}
+                            @else
+                            Menelusuri denyut nadi ekonomi kreatif, keramahan warga, dan potensi wilayah di gerbang Bintan Timur.
+                            @endif
+                        </p>
+                    </div>
+                    <a href="#sentra-industri" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-blue-900 bg-blue-100/80 rounded-full hover:bg-blue-200/90 transition duration-300 shadow-lg" style="transform: translateY(80px)">
+                        Mulai Menjelajah <i class="fas fa-arrow-down ml-2 animate-bounce"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 z-20" style="transform: translateY(85px)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#f8fafc" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                </svg>
+            </div>
+        </section>
+
+        {{-- 2. NAVIGASI SUB-MENU --}}
+        <section class="sticky top-20 z-40 bg-white shadow-md border-b border-gray-200">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-wrap justify-center gap-2 py-4">
+                    <a href="#sentra-industri" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-industry mr-2"></i>Sentra Industri
+                    </a>
+                    <a href="#sudut-unik-fasilitas" class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition">
+                        <i class="fas fa-th mr-2"></i>Sudut Unik & Fasilitas
+                    </a>
+                    <a href="#umkm-lokal" class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition">
+                        <i class="fas fa-store mr-2"></i>UMKM Lokal
+                    </a>
+                    <a href="#galeri-kegiatan" class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition">
+                        <i class="fas fa-images mr-2"></i>Galeri Kegiatan
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        {{-- 3. INTRODUCTION SECTION --}}
+        <section class="py-16 bg-slate-50 relative">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Wajah Baru Desa Mandiri</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto mb-8 rounded-full"></div>
+                    <p class="text-lg text-slate-600 leading-relaxed italic">
+                        "Selamat datang di Sungai Lekop. Bukan sekadar pemukiman, kelurahan kami adalah rumah bagi <strong class="text-blue-700">Sentra Industri Kerupuk Ikan</strong> terbesar di Bintan. Dari Kampung Purwodadi hingga Griya Indo Kencana, kami menyambut Anda dengan inovasi UMKM dan kehangatan masyarakat yang harmonis."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        {{-- 4. PRIMADONA WILAYAH (SENTRA KERUPUK) --}}
+        <section id="sentra-industri" class="py-20 bg-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                @if($sentraIndustri->count() > 0)
+                @foreach($sentraIndustri as $index => $sentra)
+                <div class="flex flex-col lg:flex-row items-center gap-12 {{ $index > 0 ? 'mt-16' : '' }}">
+                    <div class="lg:w-1/2 order-2 lg:order-1" data-aos="fade-right">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-certificate text-yellow-500 text-xl"></i>
+                            <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Produk Unggulan Daerah</span>
+                        </div>
+                        <h2 class="text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                            {!! $sentra->nama !!}
+                        </h2>
+                        <div class="text-slate-600 mb-6 leading-relaxed">
+                            {!! $sentra->deskripsi !!}
+                        </div>
+
+                        @php
+                        $detailSpesifik = $sentra->getDetailSpesifik();
+                        @endphp
+
+                        @if(!empty($detailSpesifik['highlight']))
+                        <ul class="space-y-4 mb-8">
+                            @if(is_array($detailSpesifik['highlight']))
+                            @foreach($detailSpesifik['highlight'] as $highlight)
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-3">
+                                    <i class="fas fa-check text-green-600 text-xs"></i>
+                                </div>
+                                <span class="text-slate-700">{!! $highlight !!}</span>
+                            </li>
+                            @endforeach
+                            @else
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-3">
+                                    <i class="fas fa-check text-green-600 text-xs"></i>
+                                </div>
+                                <span class="text-slate-700">{!! $detailSpesifik['highlight'] !!}</span>
+                            </li>
+                            @endif
+                        </ul>
+                        @endif
+
+                        @if($sentra->lokasi)
+                        <div class="p-4 bg-blue-50 border-l-4 border-blue-600 rounded-r-lg">
+                            <p class="text-sm text-blue-800 font-medium">
+                                <i class="fas fa-map-marker-alt mr-2"></i> Lokasi: {!! $sentra->lokasi !!}
+                            </p>
+                        </div>
+                        @endif
+                    </div>
+
+                    <div class="lg:w-1/2 order-1 lg:order-2" data-aos="fade-left">
+                        <div class="grid grid-cols-2 gap-4">
+                            @if($sentra->gambar)
+                            <div class="relative group photo-card float-up">
+                                <img src="{{ $sentra->gambar_url }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                    <div class="p-4 text-white">
+                                        <p class="text-sm font-semibold">{{ $sentra->nama }}</p>
+                                        <p class="text-xs opacity-90">{{ $detailSpesifik['lokasi_spesifik'] ?? 'Sentra Industri Sungai Lekop' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($sentra->galeri && count($sentra->galeri) > 0)
+                            @foreach($sentra->galeri as $index => $gambar)
+                            @if($index < 2)
+                                <div class="relative group photo-card {{ $index % 2 == 0 ? 'float-up' : 'float-down transform translate-y-12' }}">
+                                <img src="{{ asset('uploads/jelajah-lekop/' . $gambar) }}" alt="{{ $sentra->nama }} {{ $index + 1 }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl {{ $index % 2 == 1 ? 'group-hover:-translate-y-2' : '' }}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                    <div class="p-4 text-white">
+                                        <p class="text-sm font-semibold">{{ $sentra->nama }}</p>
+                                        <p class="text-xs opacity-90">Galeri {{ $index + 1 }}</p>
+                                    </div>
+                                </div>
+                        </div>
+                        @endif
+                        @endforeach
+                        @else
+                        @if(!$sentra->gambar)
+                        <div class="relative group photo-card float-up">
+                            <img src="https://placehold.co/400x500/f3f4f6/333333?text=Produksi+Kerupuk" alt="Proses Pembuatan Kerupuk" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                <div class="p-4 text-white">
+                                    <p class="text-sm font-semibold">Proses Pembuatan Kerupuk</p>
+                                    <p class="text-xs opacity-90">Tradisi turun-temurun</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative group photo-card float-down transform translate-y-12">
+                            <img src="https://placehold.co/400x500/e5e7eb/333333?text=Tugu+Kerupuk" alt="Tugu Kerupuk Bintan" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl group-hover:-translate-y-2">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                <div class="p-4 text-white">
+                                    <p class="text-sm font-semibold">Tugu Kerupuk Bintan</p>
+                                    <p class="text-xs opacity-90">Ikon khas Sungai Lekop</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            @else
+            <!-- Default content jika tidak ada data -->
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2 order-2 lg:order-1" data-aos="fade-right">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-certificate text-yellow-500 text-xl"></i>
+                        <span class="text-blue-600 font-bold uppercase tracking-wider text-sm">Produk Unggulan Daerah</span>
+                    </div>
+                    <h2 class="text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                        Kampung Kerupuk:<br>
+                        <span class="text-gradient">Legenda Rasa dari Bintan</span>
+                    </h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Sungai Lekop dikenal luas sebagai pusat produksi <strong>Kerupuk Ikan & Atom</strong> berbahan dasar Ikan Tenggiri dan Tamban segar. Terpusat di kawasan <strong>Perumahan Griya Indo Kencana</strong> dan sepanjang <strong>Jl. Korindo</strong>, industri rumahan ini telah menembus pasar ekspor.
+                    </p>
+
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-3">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <span class="text-slate-700"><strong>Tugu Kerupuk:</strong> Ikon landmark yang wajib dikunjungi di simpang Jl. Korindo.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-3">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <span class="text-slate-700"><strong>Oleh-oleh Khas:</strong> Pilihan utama wisatawan saat berkunjung ke Bintan Timur.</span>
+                        </li>
+                    </ul>
+
+                    <div class="p-4 bg-blue-50 border-l-4 border-blue-600 rounded-r-lg">
+                        <p class="text-sm text-blue-800 font-medium">
+                            <i class="fas fa-map-marker-alt mr-2"></i> Lokasi Sentra: Kawasan Korindo & Griya Indo Kencana
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 order-1 lg:order-2" data-aos="fade-left">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative group photo-card float-up">
+                            <img src="https://placehold.co/400x500/f3f4f6/333333?text=Produksi+Kerupuk" alt="Proses Pembuatan Kerupuk" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                <div class="p-4 text-white">
+                                    <p class="text-sm font-semibold">Proses Pembuatan Kerupuk</p>
+                                    <p class="text-xs opacity-90">Tradisi turun-temurun</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative group photo-card float-down transform translate-y-12">
+                            <img src="https://placehold.co/400x500/e5e7eb/333333?text=Tugu+Kerupuk" alt="Tugu Kerupuk Bintan" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl group-hover:-translate-y-2">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                                <div class="p-4 text-white">
+                                    <p class="text-sm font-semibold">Tugu Kerupuk Bintan</p>
+                                    <p class="text-xs opacity-90">Ikon khas Sungai Lekop</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            </div>
+        </section>
+
+        {{-- 5. KEUNIKAN & FASILITAS (GRID CARDS) --}}
+        <section id="sudut-unik-fasilitas" class="py-20 bg-slate-100">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-slate-900">Sudut Unik & Fasilitas</h2>
+                    <p class="text-slate-600 mt-2">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
+                </div>
+
+                {{-- Category Filter Buttons --}}
+                <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="100">
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all duration-300 shadow-md border border-blue-700" data-filter="all">
+                        <i class="fas fa-th mr-2"></i>Semua
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="puskesmas">
+                        <i class="fas fa-hospital mr-2"></i>Puskesmas
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="posyandu">
+                        <i class="fas fa-baby mr-2"></i>Posyandu
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="sd">
+                        <i class="fas fa-school mr-2"></i>SD
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="smp">
+                        <i class="fas fa-graduation-cap mr-2"></i>SMP
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="sma">
+                        <i class="fas fa-university mr-2"></i>SMA/SMK/MAN
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="masjid">
+                        <i class="fas fa-mosque mr-2"></i>Masjid
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="surau">
+                        <i class="fas fa-pray mr-2"></i>Surau
+                    </button>
+                    <button class="category-filter px-6 py-2.5 rounded-full bg-white text-gray-700 text-sm font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-gray-200" data-filter="tpa">
+                        <i class="fas fa-book-open mr-2"></i>TPA/TPQ
+                    </button>
+                </div>
+
+                {{-- Search Bar --}}
+                <div class="max-w-2xl mx-auto mb-10" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative">
+                        <input type="text" id="facility-search" placeholder="Cari fasilitas..." class="w-full px-12 py-3 rounded-full border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all duration-300 shadow-sm">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <button id="clear-search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="facilities-grid" class="grid md:grid-cols-3 gap-8">
+                    @if($fasilitas->count() > 0)
+                    @foreach($fasilitas as $index => $fasilitas)
+                    @php
+                    $detailSpesifik = $fasilitas->getDetailSpesifik();
+                    @endphp
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer"
+                        data-aos="fade-up"
+                        data-aos-delay="{{ 100 + ($index * 100) }}"
+                        data-category="{{ $fasilitas->kategori }}"
+                        onclick="openModal('fasilitas-{{ $fasilitas->id }}')">
+                        <div class="h-48 overflow-hidden">
+                            @if($fasilitas->gambar)
+                            <img src="{{ $fasilitas->gambar_url }}" alt="{{ $fasilitas->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            @else
+                            <img src="https://placehold.co/600x400/f3f4f6/333333?text={{ urlencode($fasilitas->nama) }}" alt="{{ $fasilitas->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            @endif
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                @if($fasilitas->kategori)
+                                <span class="{{ $detailSpesifik['warna_label'] ?? 'bg-blue-100 text-blue-800' }} text-xs font-semibold px-2.5 py-0.5 rounded">
+                                    {{ $fasilitas->label_kategori }}
+                                </span>
+                                @else
+                                <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">Umum</span>
+                                @endif
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $fasilitas->nama }}</h3>
+                            <p class="text-slate-600 text-sm mb-4">{{ Str::limit($fasilitas->deskripsi, 100) }}</p>
+                            @if($fasilitas->lokasi)
+                            <p class="text-xs text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-1"></i>{{ $fasilitas->lokasi }}
+                            </p>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                    @else
+                    <!-- Default content jika tidak ada data -->
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="100" data-category="puskesmas" onclick="openModal('puskesmas')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/ef4444/FFFFFF?text=Puskesmas" alt="Puskesmas" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Kesehatan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-red-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Puskesmas Pembantu</h3>
+                            <p class="text-slate-600 text-sm mb-4">Fasilitas kesehatan utama melayani kebutuhan medis dasar warga Sungai Lekop.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="200" data-category="posyandu" onclick="openModal('posyandu')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu" alt="Posyandu" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Kesehatan Anak</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-green-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Posyandu Melati</h3>
+                            <p class="text-slate-600 text-sm mb-4">Pelayanan kesehatan ibu dan balita, pemantauan tumbuh kembang anak.</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="300" data-category="sd" onclick="openModal('sd')">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://placehold.co/600x400/3b82f6/FFFFFF?text=SDN+011" alt="SDN 011" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Pendidikan</span>
+                                <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">SDN 011 Bintan Timur</h3>
+                            <p class="text-slate-600 text-sm mb-4">Sekolah dasar unggulan di Km 20, mencetak generasi berkualitas dan berprestasi.</p>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </section>
+
+        {{-- 6. UMKM LOKAL --}}
+        <section id="umkm-lokal" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">
+                        <i class="fas fa-store text-orange-500 mr-2"></i>UMKM Lokal
+                    </h2>
+                    <p class="text-slate-600 max-w-2xl mx-auto">Dukung produk-produk unggulan Usaha Mikro Kecil Menengah khas Sungai Lekop, Bintan</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+                    @if($umkm->count() > 0)
+                    @foreach($umkm as $index => $item)
+                    @php
+                    $detailSpesifik = $item->getDetailSpesifik();
+                    @endphp
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer"
+                        data-aos="fade-up"
+                        data-aos-delay="{{ $index * 100 }}"
+                        onclick="openUMKMModal('umkm-{{ $item->id }}')">
+                        <div class="relative">
+                            <div class="h-40 overflow-hidden">
+                                @if($item->gambar)
+                                <img src="{{ $item->gambar_url }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                @else
+                                <img src="https://placehold.co/300x200/f59e0b/FFFFFF?text={{ urlencode($item->nama) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                @endif
+                            </div>
+
+                            @if(!empty($detailSpesifik['badge']))
+                            <div class="absolute top-2 right-2 {{ $detailSpesifik['badge_color'] ?? 'bg-orange-500' }} text-white px-2 py-1 rounded-full text-xs font-bold">
+                                @if(!empty($detailSpesifik['ikon']))
+                                <i class="fas {{ $detailSpesifik['ikon'] }} mr-1"></i>
+                                @endif
+                                {{ $detailSpesifik['badge'] }}
+                            </div>
+                            @endif
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-store text-orange-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">{{ $item->nama }}</h3>
+                                    @if(!empty($detailSpesifik['pemilik']))
+                                    <p class="text-xs text-gray-500">{{ $detailSpesifik['pemilik'] }}</p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            @if(!empty($detailSpesifik['produk']) && is_array($detailSpesifik['produk']))
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                @foreach($detailSpesifik['produk'] as $index => $produk)
+                                @if($index < 2)
+                                    <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">{{ $produk }}</span>
+                                    @endif
+                                    @endforeach
+                                    @if(count($detailSpesifik['produk']) > 2)
+                                    <span class="text-gray-400 text-xs">+{{ count($detailSpesifik['produk']) - 2 }}</span>
+                                    @endif
+                            </div>
+                            @endif
+
+                            <div class="flex items-center justify-between">
+                                @if(!empty($detailSpesifik['harga']))
+                                <span class="text-orange-600 font-bold text-sm">{{ $detailSpesifik['harga'] }}</span>
+                                @endif
+                                <button class="text-orange-500 hover:text-orange-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @else
+                    <!-- Default content jika tidak ada data -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" onclick="openUMKMModal('kerupuk-pak-haji')">
+                        <div class="relative">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/f59e0b/FFFFFF?text=Kerupuk+Pak+Haji" alt="Kerupuk Pak Haji" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            </div>
+                            <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-fire mr-1"></i>Best Seller
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-store text-orange-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">Kerupuk Pak Haji</h3>
+                                    <p class="text-xs text-gray-500">Usaha Keluarga</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Ikan</span>
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Kerupuk Atom</span>
+                                <span class="text-gray-400 text-xs">+1</span>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span class="text-orange-600 font-bold text-sm">Rp 25-60rb</span>
+                                <button class="text-orange-500 hover:text-orange-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="100" onclick="openUMKMModal('ibu-sumi-snack')">
+                        <div class="relative">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/10b981/FFFFFF?text=Ibu+Sumi's+Snack" alt="Ibu Sumi's Snack" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            </div>
+                            <div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-leaf mr-1"></i>Organik
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-cookie-bite text-green-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">Ibu Sumi's Snack</h3>
+                                    <p class="text-xs text-gray-500">Kuliner Rumahan</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Kue Tradisional</span>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Snack</span>
+                                <span class="text-gray-400 text-xs">+2</span>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span class="text-green-600 font-bold text-sm">Rp 15-45rb</span>
+                                <button class="text-green-500 hover:text-green-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="200" onclick="openUMKMModal('toko-rajawali')">
+                        <div class="relative">
+                            <div class="h-40 overflow-hidden">
+                                <img src="https://placehold.co/300x200/3b82f6/FFFFFF?text=Toko+Rajawali" alt="Toko Rajawali" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            </div>
+                            <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                <i class="fas fa-star mr-1"></i>Terpercaya
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-shopping-basket text-blue-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">Toko Rajawali</h3>
+                                    <p class="text-xs text-gray-500">Kelontongan</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Sembako</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Minuman</span>
+                                <span class="text-gray-400 text-xs">+2</span>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span class="text-blue-600 font-bold text-sm">Rp 5-50rb</span>
+                                <button class="text-blue-500 hover:text-blue-600 transition">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </section>
+
+        {{-- 7. GALERI KEGIATAN --}}
+        <section id="galeri-kegiatan" class="py-20 bg-slate-100">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">
+                        <i class="fas fa-images text-purple-500 mr-2"></i>Galeri Kegiatan
+                    </h2>
+                    <p class="text-slate-600 max-w-2xl mx-auto">Dokumentasi kegiatan kemasyarakatan dan pembangunan di Sungai Lekop</p>
+                </div>
+
+                <div class="flex justify-center mb-8" data-aos="fade-up">
+                    <div class="bg-gray-100 rounded-lg p-1 inline-flex">
+                        <button onclick="showGallery('semua')" class="gallery-tab px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium transition">Semua</button>
+                        <button onclick="showGallery('pemerintahan')" class="gallery-tab px-4 py-2 rounded-md text-gray-600 hover:text-gray-900 text-sm font-medium transition">Pemerintahan</button>
+                        <button onclick="showGallery('kemasyarakatan')" class="gallery-tab px-4 py-2 rounded-md text-gray-600 hover:text-gray-900 text-sm font-medium transition">Kemasyarakatan</button>
+                        <button onclick="showGallery('pembangunan')" class="gallery-tab px-4 py-2 rounded-md text-gray-600 hover:text-gray-900 text-sm font-medium transition">Pembangunan</button>
+                        <button onclick="showGallery('umkm')" class="gallery-tab px-4 py-2 rounded-md text-gray-600 hover:text-gray-900 text-sm font-medium transition">UMKM</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
+                    @if($galeriKegiatan->count() > 0)
+                    @foreach($galeriKegiatan as $index => $item)
+                    @php
+                    $detailSpesifik = $item->getDetailSpesifik();
+                    $kategoriGaleri = $detailSpesifik['kategori_galeri'] ?? 'umum';
+                    @endphp
+                    <div class="gallery-item {{ $kategoriGaleri }}" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            @if($item->gambar)
+                            <img src="{{ $item->gambar_url }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            @else
+                            <img src="https://placehold.co/400x300/8b5cf6/FFFFFF?text={{ urlencode($item->nama) }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            @endif
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-images text-2xl mb-2"></i>
+                                    <p class="text-sm font-semibold">{{ $item->nama }}</p>
+                                    @if(!empty($detailSpesifik['deskripsi_singkat']))
+                                    <p class="text-xs opacity-90">{{ $detailSpesifik['deskripsi_singkat'] }}</p>
+                                    @endif
+                                    @if(!empty($detailSpesifik['tanggal']))
+                                    <p class="text-xs opacity-75">{{ $detailSpesifik['tanggal'] }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @else
+                    <!-- Default content jika tidak ada data -->
+                    <div class="gallery-item pemerintahan" data-aos="fade-up">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            <img src="https://placehold.co/400x300/3b82f6/FFFFFF?text=Rapat+Desa" alt="Rapat Desa" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-users text-2xl mb-2"></i>
+                                    <p class="text-sm">Rapat Desa</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item pemerintahan" data-aos="fade-up" data-aos-delay="100">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            <img src="https://placehold.co/400x300/3b82f6/FFFFFF?text=Musrenbang" alt="Musrenbang" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-chart-line text-2xl mb-2"></i>
+                                    <p class="text-sm">Musrenbang</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item kemasyarakatan" data-aos="fade-up" data-aos-delay="200">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            <img src="https://placehold.co/400x300/10b981/FFFFFF?text=Gotong+Royong" alt="Gotong Royong" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-hands-helping text-2xl mb-2"></i>
+                                    <p class="text-sm">Gotong Royong</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item kemasyarakatan" data-aos="fade-up" data-aos-delay="300">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            <img src="https://placehold.co/400x300/10b981/FFFFFF?text=Pengajian" alt="Pengajian" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-mosque text-2xl mb-2"></i>
+                                    <p class="text-sm">Pengajian</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item pembangunan" data-aos="fade-up" data-aos-delay="400">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            <img src="https://placehold.co/400x300/f59e0b/FFFFFF?text=Pembangunan+Jalan" alt="Pembangunan Jalan" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-road text-2xl mb-2"></i>
+                                    <p class="text-sm">Pembangunan Jalan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item umkm" data-aos="fade-up" data-aos-delay="500">
+                        <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer">
+                            <img src="https://placehold.co/400x300/ef4444/FFFFFF?text=Bazaar+UMKM" alt="Bazaar UMKM" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <i class="fas fa-store text-2xl mb-2"></i>
+                                    <p class="text-sm">Bazaar UMKM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.modern-header');
+            if (header) {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+        });
+
+        // Gallery filter functionality
+        function showGallery(category) {
+            const items = document.querySelectorAll('.gallery-item');
+            const tabs = document.querySelectorAll('.gallery-tab');
+
+            // Update tab styles
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-blue-600', 'text-white');
+                tab.classList.add('text-gray-600', 'hover:text-gray-900');
+            });
+
+            event.target.classList.remove('text-gray-600', 'hover:text-gray-900');
+            event.target.classList.add('bg-blue-600', 'text-white');
+
+            // Filter gallery items
+            items.forEach(item => {
+                if (category === 'semua') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = item.classList.contains(category) ? 'block' : 'none';
+                }
+            });
+        }
+
+        // Facility search functionality
+        const searchInput = document.getElementById('facility-search');
+        const clearButton = document.getElementById('clear-search');
+        const facilityCards = document.querySelectorAll('.facility-card');
+
+        if (searchInput && clearButton) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+
+                clearButton.classList.toggle('hidden', searchTerm === '');
+
+                facilityCards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+                });
+            });
+
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                this.classList.add('hidden');
+                facilityCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+            });
+        }
+
+        // Category filter functionality
+        const categoryButtons = document.querySelectorAll('.category-filter');
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+
+                // Update button styles
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('bg-white', 'text-gray-700');
+                });
+
+                this.classList.remove('bg-white', 'text-gray-700');
+                this.classList.add('bg-blue-600', 'text-white');
+
+                // Filter facility cards
+                facilityCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const category = card.getAttribute('data-category');
+                        card.style.display = category === filter ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
+@endsection

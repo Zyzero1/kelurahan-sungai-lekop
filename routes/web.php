@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProfilController;
-use App\Http\Controllers\Admin\LayananController;
+use App\Http\Controllers\Admin\JelajahLekopController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomeContentController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProfilController as FrontProfil;
-use App\Http\Controllers\Frontend\LayananController as FrontLayanan;
+use App\Http\Controllers\Frontend\JelajahLekopController as FrontJelajahLekop;
 use App\Http\Controllers\Frontend\BeritaController as FrontBerita;
 use App\Http\Controllers\Admin\KontakController;
 use App\Http\Controllers\Admin\SocialMediaController;
@@ -60,10 +60,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/home-content', [HomeContentController::class, 'update'])
         ->name('home-content.update');
 
-    // === LAYANAN & BERITA ===
-    Route::resource('layanan', LayananController::class);
-    Route::put('layanan/{layanan}/toggle-status', [LayananController::class, 'toggleStatus'])
-        ->name('layanan.toggle-status');
+    // === JELAJAH LEKOP ===
+    Route::resource('jelajah-lekop', JelajahLekopController::class);
+    Route::put('jelajah-lekop/{jelajahLekop}/toggle-status', [JelajahLekopController::class, 'toggleStatus'])
+        ->name('jelajah-lekop.toggle-status');
     Route::resource('berita', BeritaController::class)
         ->parameters(['berita' => 'berita']);
 
@@ -88,7 +88,7 @@ Route::get('/profil-test', function () {
 Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('home');
 
 Route::get('/profil', [FrontProfil::class, 'index'])->name('profil');
-Route::get('/layanan', [FrontLayanan::class, 'index'])->name('layanan');
+Route::get('/layanan', [FrontJelajahLekop::class, 'index'])->name('layanan');
 
 Route::get('/berita', [FrontBerita::class, 'index'])->name('berita');
 Route::get('/berita/{slug}', [FrontBerita::class, 'show'])->name('berita.show');

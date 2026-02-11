@@ -5,8 +5,7 @@
             {{-- LOGO --}}
             <a href="{{ url('/') }}" class="flex items-center gap-3 group">
                 {{-- Ganti src dengan logo asli --}}
-                <img src="https://tpikotakel.tanjungpinangkota.go.id/img/logo-tpi.182f9638.png"
-                     alt="Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain  transition-transform">
+                <img src="{{ asset('images/Bintan-Logo.png') }}" class="h-12" alt="Logo Kelurahan Sungai Lekop">
                 <div class="text-white flex flex-col">
                     <span class="text-xs font-medium uppercase tracking-widest opacity-90">Kelurahan</span>
                     <span class="text-lg md:text-xl font-bold leading-none tracking-wide">Sungai Lekop</span>

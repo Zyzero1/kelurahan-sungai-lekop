@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Profil;
-use App\Models\Layanan;
+use App\Models\JelajahLekop;
 use App\Models\Berita;
 use App\Models\Kontak;
 
@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         return view('dashboard', [
             'totalProfil' => Profil::count(),
-            'totalLayanan' => Layanan::count(),
+            'totalJelajahLekop' => JelajahLekop::count(),
             'totalBerita' => Berita::count(),
             'totalKontak' => Kontak::count(),
         ]);

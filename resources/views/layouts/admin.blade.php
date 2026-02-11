@@ -59,8 +59,8 @@
                     <span>Profil</span>
                 </a>
 
-                <a href="{{ route('admin.layanan.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <span>Layanan</span>
+                <a href="{{ route('admin.jelajah-lekop.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <span>Jelajah Lekop</span>
                 </a>
 
                 <a href="{{ route('admin.berita.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">

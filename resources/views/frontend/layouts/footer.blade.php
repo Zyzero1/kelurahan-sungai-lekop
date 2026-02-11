@@ -1,40 +1,39 @@
-<footer class="bg-slate-900 text-white pt-16 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-6 pb-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<footer class="bg-slate-900 text-white pt-16 border-t border-white/10 w-full">
+    <div class="w-full px-6 pb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 max-w-7xl mx-auto">
 
             {{-- KOLOM 1: TENTANG --}}
-            <div class="md:col-span-1">
+            <div class="md:col-span-1 ml-4 md:ml-8">
                 <div class="flex items-center gap-3 mb-6">
-                    <img src="https://tpikotakel.tanjungpinangkota.go.id/img/logo-tpi.182f9638.png" class="h-10" alt="Logo">
-                    <h3 class="font-bold text-lg leading-tight">Kelurahan<br>Sungai Lekop</h3>
+                    <img src="{{ asset('images/Bintan-Logo.png') }}" class="h-10" alt="Logo Kelurahan Sungai Lekop">
+                    <div>
+                        <span class="text-xs font-medium uppercase tracking-widest opacity-90">Kelurahan</span>
+                        <div class="text-lg md:text-xl font-bold leading-none tracking-wide">Sungai Lekop</div>
+                    </div>
                 </div>
                 <p class="text-sm leading-relaxed text-gray-400 mb-6">
                     Website resmi Kelurahan Sungai Lekop sebagai pusat informasi dan pelayanan masyarakat yang transparan, cepat, dan akurat.
                 </p>
                 <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-blue-600 transition">
+                    <a href="http://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-blue-600 transition">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-pink-600 transition">
+                    <a href="http://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-pink-600 transition">
                         <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-red-600 transition">
-                        <i class="fab fa-youtube"></i>
                     </a>
                 </div>
             </div>
 
             {{-- KOLOM 2: TAUTAN --}}
-            <div>
+            <div class="pl-8 md:pl-16">
                 <h3 class="font-bold text-lg mb-6 relative inline-block">
                     Tautan Cepat
-                    <span class="absolute bottom-0 left-0 w-1/2 h-1 bg-yellow-400 rounded"></span>
                 </h3>
                 <ul class="text-sm text-gray-400 space-y-3">
                     <li><a href="{{ url('/') }}" class="hover:text-yellow-400 transition block">Beranda</a></li>
                     <li><a href="{{ url('/profil') }}" class="hover:text-yellow-400 transition block">Profil</a></li>
-                    <li><a href="{{ url('/berita') }}" class="hover:text-yellow-400 transition block">Berita Terkini</a></li>
-                    <li><a href="{{ url('/layanan') }}" class="hover:text-yellow-400 transition block">Layanan</a></li>
+                    <li><a href="{{ url('/berita') }}" class="hover:text-yellow-400 transition block">Berita</a></li>
+                    <li><a href="{{ url('/layanan') }}" class="hover:text-yellow-400 transition block">Jelajah Lekop</a></li>
                 </ul>
             </div>
 
@@ -42,20 +41,18 @@
             <div>
                 <h3 class="font-bold text-lg mb-6 relative inline-block">
                     Layanan
-                    <span class="absolute bottom-0 left-0 w-1/2 h-1 bg-yellow-400 rounded"></span>
                 </h3>
                 <ul class="text-sm text-gray-400 space-y-3">
-                    <li><a href="#" class="hover:text-yellow-400 transition block">Administrasi Kependudukan</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 transition block">Surat Keterangan</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 transition block">Pelayanan Perizinan</a></li>
+                    <li><a href="{{ url('/layanan') }}#administrasi" class="hover:text-yellow-400 transition block">Administrasi Kependudukan</a></li>
+                    <li><a href="{{ url('/layanan') }}#surat-keterangan" class="hover:text-yellow-400 transition block">Surat Keterangan</a></li>
+                    <li><a href="{{ url('/layanan') }}#pelayanan-perizinan" class="hover:text-yellow-400 transition block">Pelayanan Perizinan</a></li>
                 </ul>
             </div>
 
             {{-- KOLOM 4: KONTAK --}}
-            <div>
+            <div class="-ml-4 md:-ml-8">
                 <h3 class="font-bold text-lg mb-6 relative inline-block">
                     Kontak Kami
-                    <span class="absolute bottom-0 left-0 w-1/2 h-1 bg-yellow-400 rounded"></span>
                 </h3>
                 <ul class="space-y-4 text-sm text-gray-400">
                     <li class="flex items-start gap-3">
