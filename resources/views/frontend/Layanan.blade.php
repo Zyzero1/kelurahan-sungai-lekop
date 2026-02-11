@@ -494,7 +494,7 @@
 
 
                     <div class="lg:w-1/2 order-1 lg:order-2" data-aos="fade-left">
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <!-- Gambar utama selalu ditampilkan pertama -->
                             <div class="relative group photo-card">
                                 <img src="{{ $sentra->gambar_url ?? 'https://placehold.co/400x500/f3f4f6/333333?text=' . urlencode($sentra->nama) }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
@@ -506,10 +506,17 @@
                                 </div>
                             </div>
                             <!-- Galeri tambahan -->
+                            {{-- Debug: Show galeri data --}}
+                            {{-- {{ dd($sentra->galeri) }} --}}
                             @if($sentra->galeri && count($sentra->galeri) > 0)
                             @foreach($sentra->galeri as $galeriItem)
-                            <div class="relative group photo-card translate-y-8">
-                                <img src="{{ asset('uploads/jelajah-lekop/' . $galeriItem) }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
+                            @php
+                            $imagePath = 'uploads/jelajah-lekop/' . $galeriItem;
+                            $fullPath = public_path('uploads/jelajah-lekop/' . $galeriItem);
+                            $finalSrc = file_exists($fullPath) ? asset($imagePath) : asset('images/default-galeri.jpg');
+                            @endphp
+                            <div class="relative group photo-card">
+                                <img src="{{ $finalSrc }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
                                     <div class="p-4 text-white">
                                         <p class="text-sm font-semibold">{{ $sentra->nama }}</p>
@@ -520,7 +527,7 @@
                             @endforeach
                             @else
                             <!-- Placeholder jika tidak ada galeri -->
-                            <div class="relative group photo-card translate-y-8">
+                            <div class="relative group photo-card">
                                 <img src="https://placehold.co/400x500/f3f4f6/333333?text={{ urlencode('Galeri ' . $sentra->nama) }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
                                     <div class="p-4 text-white">
@@ -563,6 +570,22 @@
 
                     <p class="text-slate-600 mt-2">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
 
+                </div>
+
+                {{-- Search Bar for Fasilitas --}}
+                <div class="max-w-2xl mx-auto mb-8" data-aos="fade-up">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="fasilitas-search"
+                            placeholder="Cari fasilitas berdasarkan nama, deskripsi, atau lokasi..."
+                            class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm"
+                            onkeyup="searchFasilitas(this.value)">
+                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-search text-xl"></i>
+                        </div>
+                    </div>
+                    <div id="fasilitas-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
                 </div>
 
 
@@ -624,6 +647,22 @@
 
                 </div>
 
+                {{-- Search Bar for UMKM --}}
+                <div class="max-w-2xl mx-auto mb-8" data-aos="fade-up">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="umkm-search"
+                            placeholder="Cari UMKM berdasarkan nama, produk, pemilik, atau deskripsi..."
+                            class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-300 shadow-sm"
+                            onkeyup="searchUMKM(this.value)">
+                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-search text-xl"></i>
+                        </div>
+                    </div>
+                    <div id="umkm-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
+                </div>
+
                 @if($umkm->count() > 0)
                 <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
                     @foreach($umkm as $index => $umkmItem)
@@ -631,6 +670,7 @@
                         data-name="{{ $umkmItem->nama }}"
                         data-category="{{ $umkmItem->detail['kategori'] ?? 'UMKM' }}"
                         data-image="{{ $umkmItem->gambar_url ?? asset('images/default-umkm.jpg') }}"
+                        data-gallery='@json($umkmItem->galeri_urls ?? [$umkmItem->gambar_url ?? asset(' images/default-umkm.jpg')])'
                         data-description="{{ $umkmItem->deskripsi ?? 'Deskripsi tidak tersedia' }}"
                         data-produk="{{ isset($umkmItem->detail['produk']) && is_array($umkmItem->detail['produk']) ? implode(', ', $umkmItem->detail['produk']) : ($umkmItem->detail['produk'] ?? '') }}"
                         data-harga="{{ $umkmItem->detail['harga'] ?? 'Hubungi' }}"
@@ -700,14 +740,8 @@
 
                     <section id="galeri-kegiatan" class="py-20 bg-white">
 
-                        <div class="text-center mb-16" data-aos="fade-up">
-
-                            <h2 class="text-3xl font-bold text-slate-900 mb-4">
-                                <i class="fas fa-images text-purple-500 mr-2"></i>Galeri Kegiatan
-                            </h2>
-
-                            <p class="text-slate-600 max-w-2xl mx-auto">Dokumentasi kegiatan kemasyarakatan dan pembangunan di Sungai Lekop</p>
-
+                        <div class="flex justify-between items-end mb-8" data-aos="fade-up">
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800"><i class="fas fa-images text-blue-800 mr-2"></i> Galeri Kegiatan</h2>
                         </div>
 
                         @if($galeriKegiatan->count() > 0)
@@ -724,34 +758,78 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="gallery-grid">
                             @foreach($galeriKegiatan as $index => $galeriItem)
-                            <div class="gallery-item {{ $galeriItem->detail['kategori_galeri'] ?? 'umum' }}" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-                                <div class="relative group overflow-hidden rounded-lg shadow-md cursor-pointer" onclick="openGalleryViewer('{{ $galeriItem->id }}')">
-                                    @if($galeriItem->galeri && count($galeriItem->galeri) > 0)
-                                    <img src="{{ asset('uploads/jelajah-lekop/' . $galeriItem->galeri[0]) }}" alt="{{ $galeriItem->nama }}" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
-                                    @else
-                                    <img src="{{ $galeriItem->gambar_url ?? asset('images/default-galeri.jpg') }}" alt="{{ $galeriItem->nama }}" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
-                                    @endif
-                                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                        <div class="text-white text-center">
-                                            <i class="fas fa-{{ $galeriItem->detail['ikon'] ?? 'images' }} text-2xl mb-2"></i>
-                                            <p class="text-sm">{{ $galeriItem->nama }}</p>
-                                            @if($galeriItem->detail['tanggal'] ?? false)
-                                            <p class="text-xs opacity-75">{{ $galeriItem->detail['tanggal'] }}</p>
-                                            @endif
-                                        </div>
+                            <div class="gallery-item {{ $galeriItem->detail['kategori_galeri'] ?? 'umum' }} relative h-48 rounded-xl overflow-hidden group cursor-pointer"
+                                data-item-id="{{ $galeriItem->id }}"
+                                data-item-name="{{ $galeriItem->nama }}"
+                                data-galeri="{{ json_encode($galeriItem->galeri ?? []) }}"
+                                data-category="{{ $galeriItem->detail['kategori_galeri'] ?? 'umum' }}"
+                                onclick="openGalleryViewer('{{ $galeriItem->id }}')">
+                                @php
+                                // Get image URL with fallback
+                                $gambarUrl = null;
+                                if ($galeriItem->gambar) {
+                                $gambarSrc = 'uploads/jelajah-lekop/' . $galeriItem->gambar;
+                                $fullPath = public_path(str_replace('/', DIRECTORY_SEPARATOR, $gambarSrc));
+                                if (file_exists($fullPath)) {
+                                $gambarUrl = asset($gambarSrc);
+                                }
+                                }
+
+                                // Fallback to first gallery image or default
+                                if (!$gambarUrl && $galeriItem->galeri && count($galeriItem->galeri) > 0) {
+                                $gambarSrc = 'uploads/jelajah-lekop/' . $galeriItem->galeri[0];
+                                $fullPath = public_path(str_replace('/', DIRECTORY_SEPARATOR, $gambarSrc));
+                                if (file_exists($fullPath)) {
+                                $gambarUrl = asset($gambarSrc);
+                                }
+                                }
+
+                                if (!$gambarUrl) {
+                                $gambarUrl = asset('images/default-galeri.jpg');
+                                }
+                                @endphp
+                                <img src="{{ $gambarUrl }}" alt="{{ $galeriItem->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
+                                    <div class="text-center">
+                                        <i class="fas fa-images text-2xl mb-2"></i>
+                                        <p>{{ $galeriItem->nama }}</p>
                                     </div>
                                 </div>
                             </div>
                             @endforeach
                         </div>
                         @else
-                        <!-- Fallback jika tidak ada data -->
-                        <div class="text-center py-12">
-                            <i class="fas fa-images text-6xl text-gray-300 mb-4"></i>
-                            <h3 class="text-xl font-semibold text-gray-600 mb-2">Belum Ada Data Galeri</h3>
-                            <p class="text-gray-500">Dokumentasi kegiatan akan segera tersedia setelah ditambahkan melalui admin panel.</p>
+                        {{-- Fallback items jika tidak ada data --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            <div class="gallery-item pemerintahan relative h-48 rounded-xl overflow-hidden group cursor-pointer" onclick="openGalleryViewer('pemerintahan')">
+                                <img src="https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
+                                    <div class="text-center">
+                                        <i class="fas fa-users text-2xl mb-2"></i>
+                                        <p>Rapat Desa</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-item kemasyarakatan relative h-48 rounded-xl overflow-hidden group cursor-pointer" onclick="openGalleryViewer('kemasyarakatan')">
+                                <img src="https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
+                                    <div class="text-center">
+                                        <i class="fas fa-hands-helping text-2xl mb-2"></i>
+                                        <p>Gotong Royong</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gallery-item pembangunan relative h-48 rounded-xl overflow-hidden group cursor-pointer" onclick="openGalleryViewer('pembangunan')">
+                                <img src="https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
+                                    <div class="text-center">
+                                        <i class="fas fa-road text-2xl mb-2"></i>
+                                        <p>Pembangunan Jalan</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         @endif
 
@@ -953,695 +1031,610 @@
 
 
                 {{-- Advanced Gallery Viewer Modal --}}
-
                 <div id="galleryViewerModal" class="hidden fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm">
-
                     <div class="relative w-full h-full p-4 md:p-8 flex flex-col lg:flex-row">
-
                         <!-- Header Controls -->
-
                         <div class="absolute top-4 left-4 right-4 flex justify-between items-start z-50">
-
                             <h2 id="galleryViewerAlbumTitle" class="text-white text-xl md:text-2xl font-bold bg-black/50 px-4 py-2 rounded-lg backdrop-blur-sm"></h2>
-
                             <button id="galleryViewerClose" class="text-white text-4xl hover:text-gray-300 transition-colors">
-
                                 <i class="fas fa-times"></i>
-
                             </button>
-
                         </div>
-
-
 
                         <!-- Main Image Area -->
-
                         <div id="galleryViewerMain" class="flex-grow h-full flex flex-col justify-center items-center relative lg:mr-4">
-
                             <h3 id="galleryViewerTitle" class="text-white text-lg md:text-xl font-normal mb-4 text-center"></h3>
 
-
-
                             <div id="galleryViewerMainImageContainer" class="relative w-full flex-grow flex items-center justify-center overflow-hidden">
-
                                 <img id="galleryViewerMainImage" src="" alt="" class="max-w-full max-h-full object-contain transition-opacity duration-300">
 
-
-
                                 <!-- Loading Spinner -->
-
                                 <div id="galleryViewerLoader" class="absolute inset-0 flex items-center justify-center bg-black/50 hidden">
-
                                     <div class="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-
                                 </div>
-
                             </div>
-
-
 
                             <!-- Navigation Buttons -->
-
                             <button id="galleryViewerPrev" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white w-12 h-12 rounded-full text-2xl flex items-center justify-center transition-all duration-300 hover:scale-110">
-
                                 <i class="fas fa-chevron-left"></i>
-
                             </button>
-
                             <button id="galleryViewerNext" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white w-12 h-12 rounded-full text-2xl flex items-center justify-center transition-all duration-300 hover:scale-110">
-
                                 <i class="fas fa-chevron-right"></i>
-
                             </button>
-
-
 
                             <!-- Image Counter -->
-
                             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full">
-
                                 <span id="galleryViewerCounter" class="text-white text-sm font-medium"></span>
-
                             </div>
-
                         </div>
-
-
 
                         <!-- Thumbnails Sidebar -->
-
                         <div id="galleryViewerThumbnails" class="lg:w-48 xl:w-56 flex-shrink-0 h-full overflow-y-auto flex lg:flex-col gap-3 pr-2 pt-20 pb-4 lg:pt-20 lg:pb-4">
-
                             <!-- Thumbnails will be dynamically added here -->
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </section>
-        
+
         {{-- Memanggil Footer --}}
         @include('frontend.layouts.footer')
 
-                <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-                <script>
-                    AOS.init({
+        <script>
+            AOS.init({
 
-                        duration: 800,
+                duration: 800,
 
-                        once: true,
+                once: true,
 
-                        offset: 100
+                offset: 100
 
-                    });
+            });
 
 
 
-                    // Header Scroll Effect
+            // Header Scroll Effect
 
-                    const header = document.querySelector(".modern-header");
+            const header = document.querySelector(".modern-header");
 
-                    if (header) {
+            if (header) {
 
-                        window.addEventListener("scroll", () => {
+                window.addEventListener("scroll", () => {
 
-                            if (window.scrollY > 50) header.classList.add("scrolled");
+                    if (window.scrollY > 50) header.classList.add("scrolled");
 
-                            else header.classList.remove("scrolled");
+                    else header.classList.remove("scrolled");
 
-                        });
+                });
 
-                    }
+            }
 
 
 
-                    // Gallery Data
+            // Gallery Data from PHP
+            let viewerCurrentImages = [];
+            let viewerCurrentIndex = 0;
+            let galleryData = {};
 
-                    const galleryData = {
+            // Initialize gallery data from galeri kegiatan
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('=== INITIALIZING GALLERY DATA ===');
 
-                        pemerintahan: {
+                // Collect gallery data from all gallery items
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                console.log('Found gallery items:', galleryItems.length);
 
-                            title: 'Kegiatan Pemerintahan',
+                galleryItems.forEach((item, index) => {
+                    const onclickAttr = item.getAttribute('onclick');
+                    if (onclickAttr && onclickAttr.includes('openGalleryViewer')) {
+                        const match = onclickAttr.match(/openGalleryViewer\('(\d+)'\)/);
+                        if (match && match[1]) {
+                            const itemId = match[1];
+                            const img = item.querySelector('img');
+                            const category = item.getAttribute('data-category') || 'umum';
+                            const itemName = item.getAttribute('data-item-name') || item.querySelector('p')?.textContent || `Galeri ${itemId}`;
+                            const galeriDataAttr = item.getAttribute('data-galeri');
 
-                            images: [{
+                            console.log('=== DEBUG GALERI ITEM ===');
+                            console.log('Item ID:', itemId);
+                            console.log('Category:', category);
+                            console.log('Item Name:', itemName);
+                            console.log('Galeri Attribute (raw):', galeriDataAttr);
 
-                                    src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg',
-
-                                    caption: 'Rapat Desa'
-
-                                },
-
-                                {
-
-                                    src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954056_d8ad3ecfe0494c04463f.jpg',
-
-                                    caption: 'Musrenbang'
-
-                                },
-
-                                {
-
-                                    src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954022_0bf4e65d09285d943a44.jpg',
-
-                                    caption: 'Pembahasan APBDes'
-
-                                }
-
-                            ]
-
-                        },
-
-                        kemasyarakatan: {
-
-                            title: 'Kegiatan Kemasyarakatan',
-
-                            images: [{
-
-                                    src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg',
-
-                                    caption: 'Gotong Royong'
-
-                                },
-
-                                {
-
-                                    src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Pengajian',
-
-                                    caption: 'Pengajian Rutin'
-
-                                },
-
-                                {
-
-                                    src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu',
-
-                                    caption: 'Kegiatan Posyandu'
-
-                                }
-
-                            ]
-
-                        },
-
-                        pembangunan: {
-
-                            title: 'Kegiatan Pembangunan',
-
-                            images: [{
-
-                                    src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa',
-
-                                    caption: 'Pembangunan Jalan Desa'
-
-                                },
-
-                                {
-
-                                    src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Drainase',
-
-                                    caption: 'Perbaikan Drainase'
-
-                                },
-
-                                {
-
-                                    src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=MCK',
-
-                                    caption: 'Pembangunan MCK'
-
-                                }
-
-                            ]
-
-                        }
-
-                    };
-
-
-
-                    // Gallery Filter Function
-
-                    function showGallery(category) {
-
-                        const items = document.querySelectorAll('.gallery-item');
-
-                        const tabs = document.querySelectorAll('.gallery-tab');
-
-
-
-                        // Update tab styles
-
-                        tabs.forEach(tab => {
-
-                            tab.classList.remove('bg-blue-600', 'text-white');
-
-                            tab.classList.add('text-gray-600');
-
-                        });
-
-                        event.target.classList.remove('text-gray-600');
-
-                        event.target.classList.add('bg-blue-600', 'text-white');
-
-
-
-                        // Filter gallery items
-
-                        items.forEach(item => {
-
-                            if (category === 'semua') {
-
-                                item.style.display = 'block';
-
-                            } else {
-
-                                item.style.display = item.classList.contains(category) ? 'block' : 'none';
-
-                            }
-
-                        });
-
-                    }
-
-
-
-                    // Gallery Viewer Functions
-
-                    const viewerModal = document.getElementById('galleryViewerModal');
-
-                    const viewerMainImage = document.getElementById('galleryViewerMainImage');
-
-                    const viewerImageTitle = document.getElementById('galleryViewerTitle');
-
-                    const viewerAlbumTitle = document.getElementById('galleryViewerAlbumTitle');
-
-                    const viewerThumbnailsContainer = document.getElementById('galleryViewerThumbnails');
-
-                    const viewerPrevBtn = document.getElementById('galleryViewerPrev');
-
-                    const viewerNextBtn = document.getElementById('galleryViewerNext');
-
-                    const viewerCloseBtn = document.getElementById('galleryViewerClose');
-
-                    const viewerCounter = document.getElementById('galleryViewerCounter');
-
-                    const viewerLoader = document.getElementById('galleryViewerLoader');
-
-
-
-                    let viewerCurrentImages = [];
-
-                    let viewerCurrentIndex = 0;
-
-
-
-                    function openGalleryViewer(category) {
-
-                        const album = galleryData[category];
-
-                        if (!album || !album.images || album.images.length === 0) {
-
-                            console.error("Album not found or is empty:", category);
-
-                            return;
-
-                        }
-
-
-
-                        viewerCurrentImages = album.images;
-
-                        viewerCurrentIndex = 0;
-
-
-
-                        viewerAlbumTitle.textContent = album.title;
-
-
-
-                        // Generate thumbnails
-
-                        viewerThumbnailsContainer.innerHTML = '';
-
-                        album.images.forEach((img, index) => {
-
-                            const thumb = document.createElement('img');
-
-                            thumb.src = img.src;
-
-                            thumb.alt = img.caption;
-
-                            thumb.className = 'viewer-thumbnail w-full h-24 object-cover rounded-lg cursor-pointer opacity-60 hover:opacity-100 transition-opacity duration-300 border-2 border-transparent hover:border-white';
-
-                            thumb.dataset.index = index;
-
-                            viewerThumbnailsContainer.appendChild(thumb);
-
-                        });
-
-
-
-                        updateGalleryView();
-
-                        viewerModal.classList.remove('hidden');
-
-                        document.body.style.overflow = 'hidden';
-
-                    }
-
-
-
-                    function closeGalleryViewer() {
-
-                        viewerModal.classList.add('hidden');
-
-                        document.body.style.overflow = 'auto';
-
-                    }
-
-
-
-                    function updateGalleryView() {
-
-                        if (viewerCurrentImages.length === 0) return;
-
-
-
-                        const image = viewerCurrentImages[viewerCurrentIndex];
-
-
-
-                        // Show loader
-
-                        viewerLoader.classList.remove('hidden');
-
-                        viewerMainImage.style.opacity = '0';
-
-
-
-                        // Load new image
-
-                        const tempImg = new Image();
-
-                        tempImg.onload = function() {
-
-                            viewerMainImage.src = image.src;
-
-                            viewerMainImage.alt = image.caption;
-
-                            viewerImageTitle.textContent = image.caption;
-
-                            viewerMainImage.style.opacity = '1';
-
-                            viewerLoader.classList.add('hidden');
-
-
-
-                            // Update counter
-
-                            viewerCounter.textContent = `${viewerCurrentIndex + 1} / ${viewerCurrentImages.length}`;
-
-                        };
-
-                        tempImg.src = image.src;
-
-
-
-                        // Update thumbnails
-
-                        document.querySelectorAll('.viewer-thumbnail').forEach(thumb => {
-
-                            thumb.classList.toggle('opacity-100', parseInt(thumb.dataset.index) === viewerCurrentIndex);
-
-                            thumb.classList.toggle('opacity-60', parseInt(thumb.dataset.index) !== viewerCurrentIndex);
-
-                            thumb.classList.toggle('border-white', parseInt(thumb.dataset.index) === viewerCurrentIndex);
-
-                            thumb.classList.toggle('border-transparent', parseInt(thumb.dataset.index) !== viewerCurrentIndex);
-
-                        });
-
-
-
-                        // Scroll active thumbnail into view
-
-                        const activeThumbnail = document.querySelector(`.viewer-thumbnail[data-index='${viewerCurrentIndex}']`);
-
-                        if (activeThumbnail) {
-
-                            activeThumbnail.scrollIntoView({
-
-                                behavior: 'smooth',
-
-                                block: 'center'
-
-                            });
-
-                        }
-
-                    }
-
-
-
-                    function showNextGalleryImage() {
-
-                        viewerCurrentIndex = (viewerCurrentIndex + 1) % viewerCurrentImages.length;
-
-                        updateGalleryView();
-
-                    }
-
-
-
-                    function showPrevGalleryImage() {
-
-                        viewerCurrentIndex = (viewerCurrentIndex - 1 + viewerCurrentImages.length) % viewerCurrentImages.length;
-
-                        updateGalleryView();
-
-                    }
-
-
-
-                    // Gallery click handlers
-
-                    document.addEventListener('click', (e) => {
-
-                        const galleryItem = e.target.closest('.gallery-item');
-
-                        if (galleryItem) {
-
-                            e.preventDefault();
-
-                            const category = Array.from(galleryItem.classList).find(cls => ['pemerintahan', 'kemasyarakatan', 'pembangunan'].includes(cls));
-
-                            if (category) {
-
-                                openGalleryViewer(category);
-
-                            }
-
-                        }
-
-                    });
-
-
-
-                    // Gallery viewer controls
-
-                    viewerThumbnailsContainer.addEventListener('click', (e) => {
-
-                        if (e.target.matches('.viewer-thumbnail')) {
-
-                            viewerCurrentIndex = parseInt(e.target.dataset.index);
-
-                            updateGalleryView();
-
-                        }
-
-                    });
-
-
-
-                    viewerPrevBtn.addEventListener('click', showPrevGalleryImage);
-
-                    viewerNextBtn.addEventListener('click', showNextGalleryImage);
-
-                    viewerCloseBtn.addEventListener('click', closeGalleryViewer);
-
-
-
-                    viewerModal.addEventListener('click', (e) => {
-
-                        if (e.target === viewerModal) {
-
-                            closeGalleryViewer();
-
-                        }
-
-                    });
-
-
-
-                    document.addEventListener('keydown', (e) => {
-
-                        if (viewerModal.classList.contains('hidden')) return;
-
-                        if (e.key === 'ArrowRight') showNextGalleryImage();
-
-                        if (e.key === 'ArrowLeft') showPrevGalleryImage();
-
-                        if (e.key === 'Escape') closeGalleryViewer();
-
-                    });
-
-
-
-                    // Active navigation highlighting
-
-                    const sections = document.querySelectorAll('section[id]');
-
-                    const navLinks = document.querySelectorAll('.sticky a[href^="#"]');
-
-
-
-                    window.addEventListener('scroll', () => {
-
-                        let current = '';
-
-                        const scrollPosition = window.scrollY + 80;
-
-
-
-                        sections.forEach(section => {
-
-                            const sectionTop = section.offsetTop;
-
-                            const sectionHeight = section.offsetHeight;
-
-
-
-                            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-
-                                current = section.getAttribute('id');
-
-                            }
-
-                        });
-
-
-
-                        navLinks.forEach(link => {
-
-                            link.classList.remove('bg-blue-600', 'text-white');
-
-                            link.classList.add('bg-gray-100', 'text-gray-700');
-
-                            if (link.getAttribute('href') === '#' + current) {
-
-                                link.classList.remove('bg-gray-100', 'text-gray-700');
-
-                                link.classList.add('bg-blue-600', 'text-white');
-
-                            }
-
-                        });
-
-                    });
-
-
-
-                    // Smooth scroll
-
-                    navLinks.forEach(link => {
-
-                        link.addEventListener('click', function(e) {
-
-                            e.preventDefault();
-
-                            const targetId = this.getAttribute('href').substring(1);
-
-                            const targetSection = document.getElementById(targetId);
-
-
-
-                            if (targetSection) {
-
-                                const headerHeight = document.querySelector('.modern-header')?.offsetHeight || 80;
-
-                                const stickyNavHeight = document.querySelector('.sticky')?.offsetHeight || 60;
-
-                                const totalOffset = headerHeight + stickyNavHeight;
-
-
-
-                                const targetPosition = targetSection.offsetTop - totalOffset;
-
-
-
-                                window.scrollTo({
-
-                                    top: targetPosition,
-
-                                    behavior: 'smooth'
-
-                                });
-
-                            }
-
-                        });
-
-                    });
-
-                    // Modal Functions
-
-                    function openModal(facilityId) {
-                        const modal = document.getElementById('facilityModal');
-                        const modalContent = document.getElementById('modalContent');
-
-                        if (!modal || !modalContent) {
-                            console.error('Modal elements not found');
-                            return;
-                        }
-
-                        // Find facility data from page
-                        const facilityCard = document.querySelector(`[onclick*="openModal('${facilityId}')"]`);
-                        if (!facilityCard) {
-                            console.error('Facility card not found');
-                            return;
-                        }
-
-                        // Extract data from card with fallbacks
-                        const facilityName = facilityCard.querySelector('h3')?.textContent || 'Tidak ada nama';
-                        const facilityDesc = facilityCard.querySelector('p')?.textContent || 'Tidak ada deskripsi';
-                        const facilityImg = facilityCard.querySelector('img')?.src || '{{ asset("images/default-fasilitas.jpg") }}';
-                        const facilityKategori = facilityCard.querySelector('span')?.textContent || 'Tidak ada kategori';
-
-                        // Get gallery images from data attribute or use single image
-                        let galleryImages = [];
-                        const galleryData = facilityCard.getAttribute('data-gallery');
-                        if (galleryData) {
+                            let galeriData = [];
                             try {
-                                galleryImages = JSON.parse(galleryData);
+                                galeriData = JSON.parse(galeriDataAttr || '[]');
+                                console.log('Galeri Data (parsed):', galeriData);
+                                console.log('Galeri Data Length:', galeriData.length);
                             } catch (e) {
-                                galleryImages = [facilityImg];
+                                console.error('Error parsing galeri data:', e);
+                                galeriData = [];
                             }
-                        } else {
-                            galleryImages = [facilityImg];
+
+                            console.log('Image src:', img ? img.src : 'No image found');
+
+                            // Get all images for this item (including multiple images from galeri)
+                            let images = [];
+
+                            // Add main image
+                            if (img && img.src) {
+                                images.push({
+                                    id: itemId,
+                                    src: img.src,
+                                    alt: img.alt || itemName,
+                                    caption: itemName
+                                });
+                                console.log('Added main image:', img.src);
+                            }
+
+                            // Add additional images from galeri data
+                            if (galeriData && galeriData.length > 0) {
+                                console.log('Processing', galeriData.length, 'additional images from galeri');
+                                galeriData.forEach((galeriItem, galeriIndex) => {
+                                    const galeriImageUrl = 'uploads/jelajah-lekop/' + galeriItem;
+                                    // Use full URL that works both online and offline
+                                    const fullImageUrl = window.location.origin + '/' + galeriImageUrl;
+
+                                    console.log('Galeri image', galeriIndex, ':', galeriItem, '→', fullImageUrl);
+
+                                    images.push({
+                                        id: itemId + '-' + galeriIndex,
+                                        src: fullImageUrl,
+                                        alt: `${itemName} - Gambar ${galeriIndex + 1}`,
+                                        caption: `${itemName} - Gambar ${galeriIndex + 1}`
+                                    });
+                                });
+                            } else {
+                                console.log('No additional galeri images found');
+                            }
+
+                            console.log('Item', itemId, 'final images:', images);
+                            // Add to galleryData by category
+                            if (!galleryData[category]) {
+                                galleryData[category] = {
+                                    title: ucfirst(category),
+                                    images: []
+                                };
+                            }
+                            galleryData[category].images.push(...images);
+
+                            console.log('Gallery data after adding to', category, ':', galleryData[category].images.length, 'images');
                         }
+                    }
+                });
 
-                        // Store current gallery and index for navigation
-                        window.currentFacilityGallery = galleryImages;
-                        window.currentFacilityIndex = 0;
+                console.log('Final galleryData:', galleryData);
 
-                        // Build modal content with dynamic layout
-                        let imageSection = '';
-                        if (galleryImages.length === 1) {
-                            // Single image layout
-                            imageSection = `
+                // Setup gallery viewer controls
+                const thumbnailsContainer = document.getElementById('galleryViewerThumbnails');
+                const prevBtn = document.getElementById('galleryViewerPrev');
+                const nextBtn = document.getElementById('galleryViewerNext');
+                const closeBtn = document.getElementById('galleryViewerClose');
+
+                if (thumbnailsContainer) {
+                    thumbnailsContainer.addEventListener('click', (e) => {
+                        if (e.target.closest('.viewer-thumbnail')) {
+                            viewerCurrentIndex = parseInt(e.target.closest('.viewer-thumbnail').dataset.index);
+                            updateGalleryView();
+                        }
+                    });
+                }
+
+                if (prevBtn) prevBtn.addEventListener('click', showPrevGalleryImage);
+                if (nextBtn) nextBtn.addEventListener('click', showNextGalleryImage);
+                if (closeBtn) closeBtn.addEventListener('click', closeGalleryViewer);
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    const modal = document.getElementById('galleryViewerModal');
+                    if (modal && !modal.classList.contains('hidden')) {
+                        if (e.key === 'ArrowRight') showNextGalleryImage();
+                        if (e.key === 'ArrowLeft') showPrevGalleryImage();
+                        if (e.key === 'Escape') closeGalleryViewer();
+                    }
+                });
+            });
+
+            // Helper function to capitalize first letter
+            function ucfirst(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            function openGalleryViewer(itemId) {
+                console.log('=== OPENING GALLERY VIEWER ===');
+                console.log('Item ID:', itemId);
+                console.log('galleryData available:', galleryData);
+                console.log('galleryData keys:', Object.keys(galleryData));
+
+                try {
+                    // Check if galleryData exists
+                    if (!galleryData || Object.keys(galleryData).length === 0) {
+                        console.warn('Gallery data not initialized, retrying...');
+                        // Try to reinitialize gallery data
+                        initializeGalleryData();
+                        return;
+                    }
+
+                    // Find item by ID across all categories
+                    let foundItem = null;
+                    let foundCategory = null;
+                    let foundIndex = 0;
+
+                    for (const [category, album] of Object.entries(galleryData)) {
+                        console.log('Checking category:', category, 'with', album.images.length, 'images');
+                        const itemIndex = album.images.findIndex(img => img.id == itemId);
+                        if (itemIndex !== -1) {
+                            foundItem = album.images[itemIndex];
+                            foundCategory = category;
+                            foundIndex = itemIndex;
+                            console.log('Found item in category', category, 'at index', itemIndex);
+                            break;
+                        }
+                    }
+
+                    if (!foundItem) {
+                        console.error("Item not found:", itemId);
+                        alert('Gambar tidak ditemukan dalam galeri. Silakan refresh halaman.');
+                        return;
+                    }
+
+                    console.log('Found item:', foundItem);
+                    console.log('Found category:', foundCategory);
+                    console.log('Found index:', foundIndex);
+
+                    // Set current viewing data
+                    viewerCurrentImages = galleryData[foundCategory].images;
+                    viewerCurrentIndex = foundIndex;
+
+                    // Update album title
+                    const albumTitle = document.getElementById('galleryViewerAlbumTitle');
+                    if (albumTitle) {
+                        albumTitle.textContent = galleryData[foundCategory].title || ucfirst(foundCategory);
+                    }
+
+                    // Update modal content
+                    updateGalleryView();
+
+                    // Show modal
+                    const modal = document.getElementById('galleryViewerModal');
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                        console.log('Modal should be visible now');
+                    } else {
+                        console.error('Modal not found!');
+                    }
+                } catch (error) {
+                    console.error('Error opening gallery viewer:', error);
+                    alert('Terjadi kesalahan saat membuka galeri. Silakan coba lagi.');
+                }
+            }
+
+            // Separate function to initialize gallery data
+            function initializeGalleryData() {
+                console.log('=== INITIALIZING GALLERY DATA (MANUAL) ===');
+                galleryData = {};
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                console.log('Found gallery items:', galleryItems.length);
+
+                galleryItems.forEach((item, index) => {
+                    const onclickAttr = item.getAttribute('onclick');
+                    if (onclickAttr && onclickAttr.includes('openGalleryViewer')) {
+                        const match = onclickAttr.match(/openGalleryViewer\('(\d+)'\)/);
+                        if (match && match[1]) {
+                            const itemId = match[1];
+                            const img = item.querySelector('img');
+                            const category = item.getAttribute('data-category') || 'umum';
+                            const itemName = item.getAttribute('data-item-name') || item.querySelector('p')?.textContent || `Galeri ${itemId}`;
+                            const galeriDataAttr = item.getAttribute('data-galeri');
+
+                            console.log('Processing item:', itemId, 'category:', category, 'name:', itemName);
+                            console.log('Galeri Attribute (raw):', galeriDataAttr);
+
+                            let galeriData = [];
+                            try {
+                                galeriData = JSON.parse(galeriDataAttr || '[]');
+                                console.log('Galeri Data (parsed):', galeriData);
+                                console.log('Galeri Data Length:', galeriData.length);
+                            } catch (e) {
+                                console.error('Error parsing galeri data:', e);
+                                galeriData = [];
+                            }
+
+                            console.log('Image src:', img ? img.src : 'No image found');
+
+                            // Get all images for this item (including multiple images from galeri)
+                            let images = [];
+
+                            // Add main image
+                            if (img && img.src) {
+                                images.push({
+                                    id: itemId,
+                                    src: img.src,
+                                    alt: img.alt || itemName,
+                                    caption: itemName
+                                });
+                                console.log('Added main image:', img.src);
+                            }
+
+                            // Add additional images from galeri data
+                            if (galeriData && galeriData.length > 0) {
+                                console.log('Processing', galeriData.length, 'additional images from galeri');
+                                galeriData.forEach((galeriItem, galeriIndex) => {
+                                    const galeriImageUrl = 'uploads/jelajah-lekop/' + galeriItem;
+                                    const fullImageUrl = window.location.origin + '/' + galeriImageUrl;
+
+                                    console.log('Galeri image', galeriIndex, ':', galeriItem, '→', fullImageUrl);
+
+                                    images.push({
+                                        id: itemId + '-' + galeriIndex,
+                                        src: fullImageUrl,
+                                        alt: `${itemName} - Gambar ${galeriIndex + 1}`,
+                                        caption: `${itemName} - Gambar ${galeriIndex + 1}`
+                                    });
+                                });
+                            } else {
+                                console.log('No additional galeri images found');
+                            }
+
+                            console.log('Item', itemId, 'final images:', images);
+                            // Add to galleryData by category
+                            if (!galleryData[category]) {
+                                galleryData[category] = {
+                                    title: ucfirst(category),
+                                    images: []
+                                };
+                            }
+                            galleryData[category].images.push(...images);
+
+                            console.log('Gallery data after adding to', category, ':', galleryData[category].images.length, 'images');
+                        }
+                    }
+                });
+            }
+
+            function closeGalleryViewer() {
+                const modal = document.getElementById('galleryViewerModal');
+                if (modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            }
+
+            function updateGalleryView() {
+                if (viewerCurrentImages.length === 0) return;
+
+                const image = viewerCurrentImages[viewerCurrentIndex];
+                const mainImage = document.getElementById('galleryViewerMainImage');
+                const title = document.getElementById('galleryViewerTitle');
+                const loader = document.getElementById('galleryViewerLoader');
+                const counter = document.getElementById('galleryViewerCounter');
+
+                // Show loader
+                if (loader) loader.classList.remove('hidden');
+                if (mainImage) mainImage.style.opacity = '0';
+
+                // Load new image
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    if (mainImage) {
+                        mainImage.src = image.src;
+                        mainImage.alt = image.alt || image.caption || '';
+                        mainImage.style.opacity = '1';
+                    }
+                    if (title) title.textContent = image.caption || image.alt || '';
+                    if (loader) loader.classList.add('hidden');
+
+                    // Update counter
+                    if (counter) counter.textContent = `${viewerCurrentIndex + 1} / ${viewerCurrentImages.length}`;
+
+                    // Update thumbnails
+                    updateThumbnails();
+                };
+                tempImg.src = image.src;
+            }
+
+            function updateThumbnails() {
+                const thumbnailsContainer = document.getElementById('galleryViewerThumbnails');
+                if (!thumbnailsContainer || viewerCurrentImages.length === 0) return;
+
+                // Clear existing thumbnails
+                thumbnailsContainer.innerHTML = '';
+
+                // Create thumbnail for each image
+                viewerCurrentImages.forEach((image, index) => {
+                    const thumbnail = document.createElement('div');
+                    thumbnail.className = `viewer-thumbnail relative group cursor-pointer rounded-lg overflow-hidden transition-all duration-300 ${
+                        index === viewerCurrentIndex ? 'ring-2 ring-white' : 'opacity-70 hover:opacity-100'
+                    }`;
+                    thumbnail.dataset.index = index;
+
+                    const img = document.createElement('img');
+                    img.src = image.src;
+                    img.alt = image.alt || image.caption || '';
+                    img.className = 'w-full h-20 object-cover';
+
+                    thumbnail.appendChild(img);
+                    thumbnailsContainer.appendChild(thumbnail);
+                });
+            }
+
+            function showNextGalleryImage() {
+                if (viewerCurrentImages.length === 0) return;
+                viewerCurrentIndex = (viewerCurrentIndex + 1) % viewerCurrentImages.length;
+                updateGalleryView();
+            }
+
+            function showPrevGalleryImage() {
+                if (viewerCurrentImages.length === 0) return;
+                viewerCurrentIndex = (viewerCurrentIndex - 1 + viewerCurrentImages.length) % viewerCurrentImages.length;
+                updateGalleryView();
+            }
+
+
+
+
+
+
+
+            // Gallery viewer modal events
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('galleryViewerModal');
+                if (modal) {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            closeGalleryViewer();
+                        }
+                    });
+                }
+            });
+
+
+
+            // Active navigation highlighting
+
+            const sections = document.querySelectorAll('section[id]');
+
+            const navLinks = document.querySelectorAll('.sticky a[href^="#"]');
+
+
+
+            window.addEventListener('scroll', () => {
+
+                let current = '';
+
+                const scrollPosition = window.scrollY + 80;
+
+
+
+                sections.forEach(section => {
+
+                    const sectionTop = section.offsetTop;
+
+                    const sectionHeight = section.offsetHeight;
+
+
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+
+                        current = section.getAttribute('id');
+
+                    }
+
+                });
+
+
+
+                navLinks.forEach(link => {
+
+                    link.classList.remove('bg-blue-600', 'text-white');
+
+                    link.classList.add('bg-gray-100', 'text-gray-700');
+
+                    if (link.getAttribute('href') === '#' + current) {
+
+                        link.classList.remove('bg-gray-100', 'text-gray-700');
+
+                        link.classList.add('bg-blue-600', 'text-white');
+
+                    }
+
+                });
+
+            });
+
+
+
+            // Smooth scroll
+
+            navLinks.forEach(link => {
+
+                link.addEventListener('click', function(e) {
+
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href').substring(1);
+
+                    const targetSection = document.getElementById(targetId);
+
+
+
+                    if (targetSection) {
+
+                        const headerHeight = document.querySelector('.modern-header')?.offsetHeight || 80;
+
+                        const stickyNavHeight = document.querySelector('.sticky')?.offsetHeight || 60;
+
+                        const totalOffset = headerHeight + stickyNavHeight;
+
+
+
+                        const targetPosition = targetSection.offsetTop - totalOffset;
+
+
+
+                        window.scrollTo({
+
+                            top: targetPosition,
+
+                            behavior: 'smooth'
+
+                        });
+
+                    }
+
+                });
+
+            });
+
+            // Modal Functions
+
+            function openModal(facilityId) {
+                const modal = document.getElementById('facilityModal');
+                const modalContent = document.getElementById('modalContent');
+
+                if (!modal || !modalContent) {
+                    console.error('Modal elements not found');
+                    return;
+                }
+
+                // Find facility data from page
+                const facilityCard = document.querySelector(`[onclick*="openModal('${facilityId}')"]`);
+                if (!facilityCard) {
+                    console.error('Facility card not found');
+                    return;
+                }
+
+                // Extract data from card with fallbacks
+                const facilityName = facilityCard.querySelector('h3')?.textContent || 'Tidak ada nama';
+                const facilityDesc = facilityCard.querySelector('p')?.textContent || 'Tidak ada deskripsi';
+                const facilityImg = facilityCard.querySelector('img')?.src || '{{ asset("images/default-fasilitas.jpg") }}';
+                const facilityKategori = facilityCard.querySelector('span')?.textContent || 'Tidak ada kategori';
+
+                // Get gallery images from data attribute or use single image
+                let galleryImages = [];
+                const galleryData = facilityCard.getAttribute('data-gallery');
+                if (galleryData) {
+                    try {
+                        galleryImages = JSON.parse(galleryData);
+                    } catch (e) {
+                        galleryImages = [facilityImg];
+                    }
+                } else {
+                    galleryImages = [facilityImg];
+                }
+
+                // Store current gallery and index for navigation
+                window.currentFacilityGallery = galleryImages;
+                window.currentFacilityIndex = 0;
+
+                // Build modal content with dynamic layout
+                let imageSection = '';
+                if (galleryImages.length === 1) {
+                    // Single image layout
+                    imageSection = `
                                 <div class="relative rounded-xl overflow-hidden shadow-lg max-w-2xl mx-auto group">
                                     <img src="${galleryImages[0]}" alt="${facilityName}" class="w-full h-96 object-cover transition duration-700">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
@@ -1656,9 +1649,9 @@
                                     </div>
                                 </div>
                             `;
-                        } else if (galleryImages.length === 2) {
-                            // Two images side by side layout
-                            imageSection = `
+                } else if (galleryImages.length === 2) {
+                    // Two images side by side layout
+                    imageSection = `
                                 <div class="grid grid-cols-2 gap-4 rounded-xl overflow-hidden shadow-lg max-w-4xl mx-auto">
                                     <div class="relative group rounded-xl overflow-hidden">
                                         <img src="${galleryImages[0]}" alt="${facilityName} - Gambar 1" class="w-full h-80 object-cover transition duration-700">
@@ -1680,9 +1673,9 @@
                                     </div>
                                 </div>
                             `;
-                        } else {
-                            // Three or more images with carousel navigation
-                            imageSection = `
+                } else {
+                    // Three or more images with carousel navigation
+                    imageSection = `
                                 <div class="relative rounded-xl overflow-hidden shadow-lg max-w-4xl mx-auto">
                                     <div class="relative h-96">
                                         <img id="facilityCarouselImage" src="${galleryImages[0]}" alt="${facilityName}" class="w-full h-full object-cover transition duration-700">
@@ -1712,10 +1705,10 @@
                                     </div>
                                 </div>
                             `;
-                        }
+                }
 
-                        // Build modal content
-                        modalContent.innerHTML = `
+                // Build modal content
+                modalContent.innerHTML = `
                             <div class="text-center">
                                 <h2 class="text-3xl font-bold text-slate-900 border-b-2 border-blue-500 inline-block pb-2 mb-8">${facilityName}</h2>
                                 <div class="relative group">
@@ -1729,322 +1722,586 @@
                             </div>
                         `;
 
-                        modal.classList.remove('hidden');
-                        modal.classList.add('flex');
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    function closeModal() {
-                        const modal = document.getElementById('facilityModal');
-                        if (modal) {
-                            modal.classList.add('hidden');
-                            modal.classList.remove('flex');
-                            document.body.style.overflow = 'auto';
-                        }
-                    }
-
-                    // Facility gallery navigation functions
-                    function navigateFacilityGallery(direction) {
-                        if (!window.currentFacilityGallery || window.currentFacilityGallery.length <= 2) return;
-
-                        window.currentFacilityIndex += direction;
-                        if (window.currentFacilityIndex < 0) {
-                            window.currentFacilityIndex = window.currentFacilityGallery.length - 1;
-                        } else if (window.currentFacilityIndex >= window.currentFacilityGallery.length) {
-                            window.currentFacilityIndex = 0;
-                        }
-
-                        updateFacilityCarouselImage();
-                    }
-
-                    function goToFacilityImage(index) {
-                        if (!window.currentFacilityGallery || window.currentFacilityGallery.length <= 2) return;
-
-                        window.currentFacilityIndex = index;
-                        updateFacilityCarouselImage();
-                    }
-
-                    function updateFacilityCarouselImage() {
-                        const carouselImage = document.getElementById('facilityCarouselImage');
-                        if (carouselImage && window.currentFacilityGallery) {
-                            carouselImage.src = window.currentFacilityGallery[window.currentFacilityIndex];
-
-                            // Update indicators
-                            const indicators = document.querySelectorAll('[onclick^="goToFacilityImage"]');
-                            indicators.forEach((indicator, index) => {
-                                indicator.className = `w-2 h-2 rounded-full transition ${index === window.currentFacilityIndex ? 'bg-white' : 'bg-white/50'}`;
-                            });
-                        }
-                    }
-
-                    // --- UMKM MODAL FUNCTIONS ---
-
-                    let currentImageIndex = 0;
-
-                    let currentImages = [];
-
-                    let currentUMKMPhone = '';
-
-                    function contactUMKM() {
-                        if (currentUMKMPhone && currentUMKMPhone !== 'Informasi tidak tersedia') {
-                            // Remove non-digit characters for WhatsApp
-                            const cleanPhone = currentUMKMPhone.replace(/\D/g, '');
-
-                            // Try to open WhatsApp first
-                            const whatsappUrl = `https://wa.me/${cleanPhone}`;
-                            window.open(whatsappUrl, '_blank');
-                        } else {
-                            // Fallback: show alert
-                            alert('Maaf, nomor telepon tidak tersedia untuk UMKM ini.');
-                        }
-                    }
-
-                    function openUMKMModal(umkmId) {
-
-                        const modal = document.getElementById('umkmModal');
-
-                        if (!modal) {
-
-                            console.error('UMKM Modal not found');
-
-                            return;
-
-                        }
-
-
-
-
-                        // Find UMKM data from page
-
-                        const umkmCard = document.querySelector(`[onclick*="openUMKMModal('${umkmId}')"]`);
-
-                        if (!umkmCard) {
-
-                            console.error('UMKM card not found');
-
-                            return;
-
-                        }
-
-
-
-                        // Extract data from card using data attributes
-
-                        const umkmName = umkmCard.dataset.name || 'Tidak ada nama';
-
-                        const umkmCategory = umkmCard.dataset.category || 'UMKM';
-
-                        const umkmImg = umkmCard.dataset.image || '{{ asset("images/default-umkm.jpg") }}';
-
-                        const umkmDesc = umkmCard.dataset.description || 'Deskripsi tidak tersedia';
-
-                        const umkmProduk = umkmCard.dataset.produk || '';
-
-                        const umkmHarga = umkmCard.dataset.harga || 'Hubungi';
-
-                        const umkmPemilik = umkmCard.dataset.pemilik || 'Informasi tidak tersedia';
-
-                        const umkmTelepon = umkmCard.dataset.telepon || 'Informasi tidak tersedia';
-
-                        const umkmTahunBerdiri = umkmCard.dataset.tahunBerdiri || 'Informasi tidak tersedia';
-
-                        const umkmKeunikan = umkmCard.dataset.keunikan || 'Produk berkualitas dengan bahan lokal pilihan';
-
-                        const umkmLokasi = umkmCard.dataset.lokasi || 'Sungai Lekop, Bintan';
-
-                        const umkmBadge = umkmCard.dataset.badge || '';
-
-                        const umkmBadgeColor = umkmCard.dataset.badgeColor || 'bg-red-500';
-
-
-
-                        // Store phone number for contact function
-
-                        currentUMKMPhone = umkmTelepon;
-
-
-
-                        // Update modal elements directly
-
-                        document.getElementById('modalTitle').textContent = umkmName;
-
-                        document.getElementById('modalCategory').textContent = umkmCategory;
-
-                        document.getElementById('modalImage').src = umkmImg;
-
-                        document.getElementById('modalImage').alt = umkmName;
-
-                        document.getElementById('modalDescription').textContent = umkmDesc;
-
-
-
-                        // Update additional UMKM details
-
-                        const modalProducts = document.getElementById('modalProducts');
-
-                        const modalUniqueness = document.getElementById('modalUniqueness');
-
-                        const modalEstablished = document.getElementById('modalEstablished');
-
-                        const modalOwner = document.getElementById('modalOwner');
-
-                        const modalPhone = document.getElementById('modalPhone');
-
-                        const modalAddress = document.getElementById('modalAddress');
-
-                        const modalPrice = document.getElementById('modalPrice');
-
-                        const modalBadge = document.getElementById('modalBadge');
-
-
-
-                        // Set products
-
-                        if (modalProducts) {
-
-                            if (umkmProduk) {
-
-                                const produkArray = umkmProduk.split(',').map(p => p.trim());
-
-                                modalProducts.innerHTML = produkArray.map(produk =>
-
-                                    `<span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">${produk}</span>`
-
-                                ).join('');
-
-                            } else {
-
-                                modalProducts.innerHTML = '<span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Produk Lokal</span>';
-
-                            }
-
-                        }
-
-
-
-                        // Set other fields
-
-                        if (modalUniqueness) {
-
-                            modalUniqueness.textContent = umkmKeunikan;
-
-                        }
-
-                        if (modalEstablished) {
-
-                            modalEstablished.textContent = umkmTahunBerdiri;
-
-                        }
-
-                        if (modalOwner) {
-
-                            modalOwner.textContent = umkmPemilik;
-
-                        }
-
-                        if (modalPhone) {
-
-                            modalPhone.textContent = umkmTelepon;
-
-                        }
-
-                        if (modalAddress) {
-
-                            modalAddress.textContent = umkmLokasi;
-
-                        }
-
-                        if (modalPrice) {
-
-                            modalPrice.textContent = umkmHarga;
-
-                        }
-
-                        if (modalBadge) {
-
-                            if (umkmBadge) {
-
-                                let badgeIcon = '';
-
-                                if (umkmBadge === 'Best Seller') {
-
-                                    badgeIcon = '<i class="fas fa-fire mr-1"></i>';
-
-                                } else if (umkmBadge === 'Organik') {
-
-                                    badgeIcon = '<i class="fas fa-leaf mr-1"></i>';
-
-                                }
-
-                                modalBadge.className = `absolute top-4 right-4 ${umkmBadgeColor} text-white px-3 py-1 rounded-full text-xs font-bold`;
-
-                                modalBadge.innerHTML = badgeIcon + umkmBadge;
-
-                            } else {
-
-                                modalBadge.style.display = 'none';
-
-                            }
-
-                        }
-
-
-
-                        modal.classList.remove('hidden');
-
-                        modal.classList.add('flex');
-
-                        document.body.style.overflow = 'hidden';
-
-                    }
-
-                    function showImage(index) {
-                        currentImageIndex = index;
-                        const mainImg = document.querySelector('#modalContent img');
-                        if (mainImg) {
-                            mainImg.src = currentImages[index];
-                        }
-                    }
-
-                    function closeUMKMModal() {
-
-                        const modal = document.getElementById('umkmModal');
-
-                        if (modal) {
-
-                            modal.classList.add('hidden');
-
-                            modal.classList.remove('flex');
-
-                            document.body.style.overflow = 'auto';
-
-                        }
-
-                    }
-
-                    // Close modal with Escape key
-                    document.addEventListener('keydown', function(e) {
-                        if (e.key === 'Escape') {
-                            closeModal();
-                            closeGalleryViewer();
-                            closeUMKMModal();
-                        }
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                const modal = document.getElementById('facilityModal');
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    document.body.style.overflow = 'auto';
+                }
+            }
+
+            // Facility gallery navigation functions
+            function navigateFacilityGallery(direction) {
+                if (!window.currentFacilityGallery || window.currentFacilityGallery.length <= 2) return;
+
+                window.currentFacilityIndex += direction;
+                if (window.currentFacilityIndex < 0) {
+                    window.currentFacilityIndex = window.currentFacilityGallery.length - 1;
+                } else if (window.currentFacilityIndex >= window.currentFacilityGallery.length) {
+                    window.currentFacilityIndex = 0;
+                }
+
+                updateFacilityCarouselImage();
+            }
+
+            function goToFacilityImage(index) {
+                if (!window.currentFacilityGallery || window.currentFacilityGallery.length <= 2) return;
+
+                window.currentFacilityIndex = index;
+                updateFacilityCarouselImage();
+            }
+
+            function updateFacilityCarouselImage() {
+                const carouselImage = document.getElementById('facilityCarouselImage');
+                if (carouselImage && window.currentFacilityGallery) {
+                    carouselImage.src = window.currentFacilityGallery[window.currentFacilityIndex];
+
+                    // Update indicators
+                    const indicators = document.querySelectorAll('[onclick^="goToFacilityImage"]');
+                    indicators.forEach((indicator, index) => {
+                        indicator.className = `w-2 h-2 rounded-full transition ${index === window.currentFacilityIndex ? 'bg-white' : 'bg-white/50'}`;
                     });
+                }
+            }
 
-                    // Close modal when clicking outside
-                    document.addEventListener('click', function(event) {
-                        const facilityModal = document.getElementById('facilityModal');
-                        const umkmModal = document.getElementById('umkmModal');
+            // --- UMKM MODAL FUNCTIONS ---
 
-                        if (facilityModal && event.target === facilityModal) {
-                            closeModal();
+            let currentImageIndex = 0;
+
+            let currentImages = [];
+
+            let currentUMKMPhone = '';
+
+            let currentUMKMGallery = [];
+
+            let currentUMKMIndex = 0;
+
+            function contactUMKM() {
+                if (currentUMKMPhone && currentUMKMPhone !== 'Informasi tidak tersedia') {
+                    // Remove non-digit characters for WhatsApp
+                    const cleanPhone = currentUMKMPhone.replace(/\D/g, '');
+
+                    // Try to open WhatsApp first
+                    const whatsappUrl = `https://wa.me/${cleanPhone}`;
+                    window.open(whatsappUrl, '_blank');
+                } else {
+                    // Fallback: show alert
+                    alert('Maaf, nomor telepon tidak tersedia untuk UMKM ini.');
+                }
+            }
+
+            function setupUMKMGallery(galleryImages, umkmName) {
+                console.log('=== SETTING UP UMKM GALLERY ===');
+                console.log('Gallery images:', galleryImages);
+                console.log('UMKM Name:', umkmName);
+
+                // Store gallery data globally
+                currentUMKMGallery = galleryImages || [];
+                currentUMKMIndex = 0;
+
+                // Get modal elements with null checks
+                const modalImageContainer = document.getElementById('modalImageContainer');
+                const prevButton = document.getElementById('prevImage');
+                const nextButton = document.getElementById('nextImage');
+                const dotsContainer = document.getElementById('imageDots');
+
+                console.log('Modal elements found:');
+                console.log('modalImageContainer:', modalImageContainer);
+                console.log('prevButton:', prevButton);
+                console.log('nextButton:', nextButton);
+                console.log('dotsContainer:', dotsContainer);
+
+                if (!galleryImages || galleryImages.length === 0) {
+                    console.warn('No gallery images found for UMKM:', umkmName);
+                    // Fallback to single image if no gallery
+                    const modalImage = document.getElementById('modalImage');
+                    if (modalImage) {
+                        modalImage.style.display = 'block';
+                    }
+                    return;
+                }
+
+                // Hide the default single image
+                const modalImage = document.getElementById('modalImage');
+                if (modalImage) {
+                    modalImage.style.display = 'none';
+                }
+
+                // Clear existing content
+                if (modalImageContainer) {
+                    modalImageContainer.innerHTML = '';
+                }
+                if (dotsContainer) {
+                    dotsContainer.innerHTML = '';
+                }
+
+                // Create image carousel
+                galleryImages.forEach((imageUrl, index) => {
+                    // Create image element
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = `${umkmName} - Gambar ${index + 1}`;
+                    img.className = `w-full h-full object-cover transition-opacity duration-300 ${index === 0 ? 'opacity-100' : 'opacity-0 absolute inset-0'}`;
+                    img.id = `umkmImage-${index}`;
+                    if (modalImageContainer) {
+                        modalImageContainer.appendChild(img);
+                    }
+
+                    // Create dot indicator
+                    if (dotsContainer) {
+                        const dot = document.createElement('button');
+                        dot.className = `w-2 h-2 rounded-full transition ${index === 0 ? 'bg-white' : 'bg-white/50'}`;
+                        dot.onclick = () => goToUMKMImage(index);
+                        dotsContainer.appendChild(dot);
+                    }
+                });
+
+                // Show/hide navigation based on image count
+                if (prevButton && nextButton) {
+                    if (galleryImages.length > 1) {
+                        prevButton.classList.remove('opacity-0', 'pointer-events-none');
+                        nextButton.classList.remove('opacity-0', 'pointer-events-none');
+                    } else {
+                        prevButton.classList.add('opacity-0', 'pointer-events-none');
+                        nextButton.classList.add('opacity-0', 'pointer-events-none');
+                    }
+
+                    // Add navigation event listeners
+                    prevButton.onclick = () => navigateUMKMGallery(-1);
+                    nextButton.onclick = () => navigateUMKMGallery(1);
+                }
+            }
+
+            function navigateUMKMGallery(direction) {
+                if (!currentUMKMGallery || currentUMKMGallery.length <= 1) return;
+
+                currentUMKMIndex += direction;
+                if (currentUMKMIndex < 0) {
+                    currentUMKMIndex = currentUMKMGallery.length - 1;
+                } else if (currentUMKMIndex >= currentUMKMGallery.length) {
+                    currentUMKMIndex = 0;
+                }
+
+                updateUMKMCarouselImage();
+            }
+
+            function goToUMKMImage(index) {
+                if (!currentUMKMGallery || currentUMKMGallery.length <= 1) return;
+
+                currentUMKMIndex = index;
+                updateUMKMCarouselImage();
+            }
+
+            function updateUMKMCarouselImage() {
+                const images = document.querySelectorAll('#modalImageContainer img');
+                const dots = document.querySelectorAll('#imageDots button');
+
+                // Hide all images
+                images.forEach((img, index) => {
+                    if (index === currentUMKMIndex) {
+                        img.classList.remove('opacity-0');
+                        img.classList.add('opacity-100');
+                    } else {
+                        img.classList.remove('opacity-100');
+                        img.classList.add('opacity-0');
+                    }
+                });
+
+                // Update dots
+                dots.forEach((dot, index) => {
+                    if (index === currentUMKMIndex) {
+                        dot.classList.remove('bg-white/50');
+                        dot.classList.add('bg-white');
+                    } else {
+                        dot.classList.remove('bg-white');
+                        dot.classList.add('bg-white/50');
+                    }
+                });
+            }
+
+            function openUMKMModal(umkmId) {
+
+                console.log('=== OPENING UMKM MODAL ===');
+                console.log('UMKM ID:', umkmId);
+
+                const modal = document.getElementById('umkmModal');
+
+                console.log('Modal element:', modal);
+
+                if (!modal) {
+
+                    console.error('UMKM Modal not found');
+
+                    return;
+
+                }
+
+                console.log('Modal classes before:', modal ? modal.className : 'MODAL NULL');
+
+                // Find UMKM data from page
+
+                const umkmCard = document.querySelector(`[onclick*="openUMKMModal('${umkmId}')"]`);
+
+                console.log('UMKM Card found:', umkmCard);
+
+                if (!umkmCard) {
+
+                    console.error('UMKM card not found');
+
+                    return;
+
+                }
+
+                console.log('Current global state before open:');
+                console.log('currentUMKMGallery:', typeof currentUMKMGallery !== 'undefined' ? currentUMKMGallery : 'UNDEFINED');
+                console.log('currentUMKMIndex:', typeof currentUMKMIndex !== 'undefined' ? currentUMKMIndex : 'UNDEFINED');
+                console.log('currentUMKMPhone:', typeof currentUMKMPhone !== 'undefined' ? currentUMKMPhone : 'UNDEFINED');
+
+
+
+                // Extract data from card using data attributes
+
+                const umkmName = umkmCard.dataset.name || 'Tidak ada nama';
+
+                const umkmCategory = umkmCard.dataset.category || 'UMKM';
+
+                const umkmImg = umkmCard.dataset.image || '{{ asset("images/default-umkm.jpg") }}';
+
+                const umkmGallery = JSON.parse(umkmCard.dataset.gallery || '[]');
+
+                const umkmDesc = umkmCard.dataset.description || 'Deskripsi tidak tersedia';
+
+                const umkmProduk = umkmCard.dataset.produk || '';
+
+                const umkmHarga = umkmCard.dataset.harga || 'Hubungi';
+
+                const umkmPemilik = umkmCard.dataset.pemilik || 'Informasi tidak tersedia';
+
+                const umkmTelepon = umkmCard.dataset.telepon || 'Informasi tidak tersedia';
+
+                const umkmTahunBerdiri = umkmCard.dataset.tahunBerdiri || 'Informasi tidak tersedia';
+
+                const umkmKeunikan = umkmCard.dataset.keunikan || 'Produk berkualitas dengan bahan lokal pilihan';
+
+                const umkmLokasi = umkmCard.dataset.lokasi || 'Sungai Lekop, Bintan';
+
+                const umkmBadge = umkmCard.dataset.badge || '';
+
+                const umkmBadgeColor = umkmCard.dataset.badgeColor || 'bg-red-500';
+
+
+
+                // Store phone number for contact function
+
+                currentUMKMPhone = umkmTelepon;
+
+
+
+                // Update modal elements directly
+                console.log('Updating modal elements...');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalCategory = document.getElementById('modalCategory');
+                const modalImage = document.getElementById('modalImage');
+                const modalDescription = document.getElementById('modalDescription');
+
+                if (modalTitle) {
+                    modalTitle.textContent = umkmName;
+                }
+                if (modalCategory) {
+                    modalCategory.textContent = umkmCategory;
+                }
+                if (modalImage) {
+                    modalImage.src = umkmImg;
+                    modalImage.alt = umkmName;
+                    console.log('Modal image updated:', umkmImg);
+                } else {
+                    console.warn('Modal image element not found');
+                }
+                if (modalDescription) {
+                    modalDescription.textContent = umkmDesc;
+                }
+
+
+
+                // Setup UMKM Gallery Carousel
+                setupUMKMGallery(umkmGallery, umkmName);
+
+
+
+                // Update additional UMKM details
+                console.log('Updating additional UMKM details...');
+                const modalProducts = document.getElementById('modalProducts');
+                const modalUniqueness = document.getElementById('modalUniqueness');
+                const modalEstablished = document.getElementById('modalEstablished');
+                const modalOwner = document.getElementById('modalOwner');
+                const modalPhone = document.getElementById('modalPhone');
+                const modalAddress = document.getElementById('modalAddress');
+                const modalPrice = document.getElementById('modalPrice');
+                const modalBadge = document.getElementById('modalBadge');
+
+                if (modalProducts) {
+                    if (umkmProduk) {
+                        const produkArray = umkmProduk.split(',').map(p => p.trim());
+                        modalProducts.innerHTML = produkArray.map(produk =>
+                            `<span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">${produk}</span>`
+                        ).join('');
+                    } else {
+                        modalProducts.innerHTML = '<span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Produk Lokal</span>';
+                    }
+                }
+                if (modalUniqueness) {
+                    modalUniqueness.textContent = umkmKeunikan;
+                }
+                if (modalEstablished) {
+                    modalEstablished.textContent = umkmTahunBerdiri;
+                }
+                if (modalOwner) {
+                    modalOwner.textContent = umkmPemilik;
+                }
+                if (modalPhone) {
+                    modalPhone.textContent = umkmTelepon;
+                }
+                if (modalAddress) {
+                    modalAddress.textContent = umkmLokasi;
+                }
+                if (modalPrice) {
+                    modalPrice.textContent = umkmHarga;
+                }
+                if (modalBadge) {
+                    if (umkmBadge) {
+                        let badgeIcon = '';
+                        if (umkmBadge === 'Best Seller') {
+                            badgeIcon = '<i class="fas fa-fire mr-1"></i>';
+                        } else if (umkmBadge === 'Organik') {
+                            badgeIcon = '<i class="fas fa-leaf mr-1"></i>';
                         }
+                        modalBadge.className = `absolute top-4 right-4 ${umkmBadgeColor} text-white px-3 py-1 rounded-full text-xs font-bold`;
+                        modalBadge.innerHTML = badgeIcon + umkmBadge;
+                    } else {
+                        modalBadge.style.display = 'none';
+                    }
+                }
 
-                        if (umkmModal && event.target === umkmModal) {
-                            closeUMKMModal();
-                        }
-                    });
-                </script>
+
+
+                // Show modal
+
+                console.log('Showing modal with classes:');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+                    console.log('Modal classes after show:', modal.className);
+                } else {
+                    console.error('Cannot show modal - modal is null');
+                }
+                console.log('=== UMKM MODAL OPENED ===');
+
+            }
+
+            function showImage(index) {
+                currentImageIndex = index;
+                const mainImg = document.querySelector('#modalContent img');
+                if (mainImg) {
+                    mainImg.src = currentImages[index];
+                }
+            }
+
+            function closeUMKMModal() {
+
+                console.log('=== CLOSING UMKM MODAL ===');
+
+                const modal = document.getElementById('umkmModal');
+
+                console.log('Modal element:', modal);
+
+                if (modal) {
+
+                    console.log('Modal classes before close:', modal ? modal.className : 'MODAL NULL');
+
+                    modal.classList.add('hidden');
+
+                    modal.classList.remove('flex');
+
+                    document.body.style.overflow = 'auto';
+
+                    console.log('Modal classes after close:', modal ? modal.className : 'MODAL NULL');
+
+                    // Reset UMKM gallery state
+                    currentUMKMGallery = [];
+                    currentUMKMIndex = 0;
+                    currentUMKMPhone = '';
+
+                    console.log('Global state after reset:');
+                    console.log('currentUMKMGallery:', typeof currentUMKMGallery !== 'undefined' ? currentUMKMGallery : 'UNDEFINED');
+                    console.log('currentUMKMIndex:', typeof currentUMKMIndex !== 'undefined' ? currentUMKMIndex : 'UNDEFINED');
+
+                }
+
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    closeGalleryViewer();
+                    closeUMKMModal();
+                }
+            });
+
+            // Close modal when clicking outside
+            document.addEventListener('click', function(event) {
+                const facilityModal = document.getElementById('facilityModal');
+                const umkmModal = document.getElementById('umkmModal');
+                const galleryModal = document.getElementById('galleryViewerModal');
+
+                if (facilityModal && event.target === facilityModal) {
+                    closeModal();
+                }
+
+                if (umkmModal && event.target === umkmModal) {
+                    closeUMKMModal();
+                }
+
+                if (galleryModal && event.target === galleryModal) {
+                    closeGalleryViewer();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    closeUMKMModal();
+                }
+            });
+        </script>
+
+        <script>
+            // Gallery Category Filter Function
+            function showGallery(category) {
+                console.log('=== FILTERING GALLERY ===');
+                console.log('Selected category:', category);
+
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                const tabs = document.querySelectorAll('.gallery-tab');
+
+                // Update tab styles
+                tabs.forEach(tab => {
+                    tab.classList.remove('bg-blue-600', 'text-white');
+                    tab.classList.add('text-gray-600', 'hover:text-gray-900');
+                });
+
+                // Highlight active tab
+                event.target.classList.remove('text-gray-600', 'hover:text-gray-900');
+                event.target.classList.add('bg-blue-600', 'text-white');
+
+                // Filter gallery items
+                galleryItems.forEach(item => {
+                    const itemCategory = item.getAttribute('data-category') || 'umum';
+
+                    if (category === 'semua' || itemCategory === category) {
+                        item.style.display = 'block';
+                        // Add fade-in animation
+                        item.style.animation = 'fadeIn 0.3s ease-in-out';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                console.log('Gallery filtering completed for category:', category);
+            }
+
+            // Search Functions
+            function searchFasilitas(query) {
+                const searchResults = document.getElementById('fasilitas-search-results');
+                const facilityCards = document.querySelectorAll('.facility-card');
+                let visibleCount = 0;
+
+                // Convert query to lowercase for case-insensitive search
+                const searchQuery = query.toLowerCase().trim();
+
+                facilityCards.forEach(card => {
+                    // Get searchable content
+                    const name = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+                    const location = card.querySelector('.fa-map-marker-alt')?.parentElement?.textContent.toLowerCase() || '';
+                    const category = card.querySelector('span')?.textContent.toLowerCase() || '';
+
+                    // Combine all searchable text
+                    const searchableText = `${name} ${description} ${location} ${category}`;
+
+                    // Check if any word in query matches
+                    const queryWords = searchQuery.split(' ').filter(word => word.length > 0);
+                    const hasMatch = queryWords.length === 0 || queryWords.some(word => searchableText.includes(word));
+
+                    if (hasMatch) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.3s ease-in-out';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Update search results message
+                if (searchQuery.length > 0) {
+                    searchResults.innerHTML = `Ditemukan <span class="font-semibold text-blue-600">${visibleCount}</span> fasilitas untuk "${query}"`;
+                } else {
+                    searchResults.innerHTML = '';
+                }
+            }
+
+            function searchUMKM(query) {
+                const searchResults = document.getElementById('umkm-search-results');
+                const umkmCards = document.querySelectorAll('#umkm-lokal .bg-white.rounded-xl');
+                let visibleCount = 0;
+
+                // Convert query to lowercase for case-insensitive search
+                const searchQuery = query.toLowerCase().trim();
+
+                umkmCards.forEach(card => {
+                    // Get searchable content from data attributes
+                    const name = card.getAttribute('data-name')?.toLowerCase() || '';
+                    const description = card.getAttribute('data-description')?.toLowerCase() || '';
+                    const produk = card.getAttribute('data-produk')?.toLowerCase() || '';
+                    const pemilik = card.getAttribute('data-pemilik')?.toLowerCase() || '';
+                    const category = card.getAttribute('data-category')?.toLowerCase() || '';
+
+                    // Also get text content from elements
+                    const nameElement = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const produkElements = Array.from(card.querySelectorAll('.bg-orange-100')).map(el => el.textContent.toLowerCase()).join(' ');
+
+                    // Combine all searchable text
+                    const searchableText = `${name} ${nameElement} ${description} ${produk} ${produkElements} ${pemilik} ${category}`;
+
+                    // Check if any word in query matches
+                    const queryWords = searchQuery.split(' ').filter(word => word.length > 0);
+                    const hasMatch = queryWords.length === 0 || queryWords.some(word => searchableText.includes(word));
+
+                    if (hasMatch) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.3s ease-in-out';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Update search results message
+                if (searchQuery.length > 0) {
+                    searchResults.innerHTML = `Ditemukan <span class="font-semibold text-orange-600">${visibleCount}</span> UMKM untuk "${query}"`;
+                } else {
+                    searchResults.innerHTML = '';
+                }
+            }
+        </script>
 
 </body>
 

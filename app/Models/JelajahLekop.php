@@ -25,6 +25,12 @@ class JelajahLekop extends Model
         'hero_content',
     ];
 
+    protected $hidden = [
+        'original_gambar',
+        'original_galeri',
+        'original_hero_image',
+    ];
+
     protected $casts = [
         'galeri' => 'array',
         'detail' => 'array',
@@ -73,9 +79,8 @@ class JelajahLekop extends Model
     public function hasGambar()
     {
         if ($this->gambar) {
-            $path = public_path('uploads/jelajah-lekop/' . $this->gambar);
-            $normalizedPath = str_replace('/', DIRECTORY_SEPARATOR, $path);
-            return file_exists($normalizedPath);
+            $path = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $this->gambar);
+            return file_exists($path);
         }
         return false;
     }
@@ -95,7 +100,7 @@ class JelajahLekop extends Model
     }
 
     // Accessor untuk galeri URLs
-    protected function galeriUrls(): Attribute
+    public function galeriUrls(): Attribute
     {
         return Attribute::make(
             get: function ($value) {
@@ -189,7 +194,7 @@ class JelajahLekop extends Model
     {
         // Hapus gambar utama lama jika ada dan berbeda dengan yang baru
         if ($this->gambar && $this->gambar !== $gambarBaru) {
-            $pathLama = public_path('uploads/jelajah-lekop/' . $this->gambar);
+            $pathLama = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $this->gambar);
             if (file_exists($pathLama)) {
                 unlink($pathLama);
             }
@@ -199,7 +204,7 @@ class JelajahLekop extends Model
         if ($this->galeri && is_array($this->galeri)) {
             foreach ($this->galeri as $gambarLama) {
                 if ($gambarBaru && is_array($gambarBaru) && !in_array($gambarLama, $gambarBaru)) {
-                    $pathLama = public_path('uploads/jelajah-lekop/' . $gambarLama);
+                    $pathLama = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $gambarLama);
                     if (file_exists($pathLama)) {
                         unlink($pathLama);
                     }
@@ -211,7 +216,7 @@ class JelajahLekop extends Model
     // Method untuk membersihkan gambar yang tidak terpakai
     public static function bersihkanGambarTidakTerpakai()
     {
-        $path = public_path('uploads/jelajah-lekop/');
+        $path = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR);
         $files = glob($path . '*');
 
         // Dapatkan semua gambar yang terpakai di database
@@ -246,7 +251,7 @@ class JelajahLekop extends Model
 
         // Event saat update
         static::updating(function ($model) {
-            // Simpan data lama sebelum update
+            // Simpan data lama sebelum update (tidak disimpan ke database)
             $model->original_gambar = $model->getOriginal('gambar');
             $model->original_galeri = $model->getOriginal('galeri');
             $model->original_hero_image = $model->getOriginal('hero_image');
@@ -256,7 +261,7 @@ class JelajahLekop extends Model
         static::updated(function ($model) {
             // Hapus gambar lama jika berubah
             if ($model->original_gambar && $model->original_gambar !== $model->gambar) {
-                $pathLama = public_path('uploads/jelajah-lekop/' . $model->original_gambar);
+                $pathLama = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $model->original_gambar);
                 if (file_exists($pathLama)) {
                     unlink($pathLama);
                 }
@@ -267,7 +272,7 @@ class JelajahLekop extends Model
                 $galeriBaru = $model->galeri ?? [];
                 foreach ($model->original_galeri as $gambarLama) {
                     if (!in_array($gambarLama, $galeriBaru)) {
-                        $pathLama = public_path('uploads/jelajah-lekop/' . $gambarLama);
+                        $pathLama = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $gambarLama);
                         if (file_exists($pathLama)) {
                             unlink($pathLama);
                         }
@@ -277,7 +282,7 @@ class JelajahLekop extends Model
 
             // Hapus hero image lama jika berubah
             if ($model->original_hero_image && $model->original_hero_image !== $model->hero_image) {
-                $pathLama = public_path('uploads/jelajah-lekop/' . $model->original_hero_image);
+                $pathLama = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $model->original_hero_image);
                 if (file_exists($pathLama)) {
                     unlink($pathLama);
                 }
@@ -288,7 +293,7 @@ class JelajahLekop extends Model
         static::deleting(function ($model) {
             // Hapus semua gambar terkait
             if ($model->gambar) {
-                $path = public_path('uploads/jelajah-lekop/' . $model->gambar);
+                $path = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $model->gambar);
                 if (file_exists($path)) {
                     unlink($path);
                 }
@@ -296,7 +301,7 @@ class JelajahLekop extends Model
 
             if ($model->galeri && is_array($model->galeri)) {
                 foreach ($model->galeri as $gambar) {
-                    $path = public_path('uploads/jelajah-lekop/' . $gambar);
+                    $path = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $gambar);
                     if (file_exists($path)) {
                         unlink($path);
                     }
@@ -304,11 +309,16 @@ class JelajahLekop extends Model
             }
 
             if ($model->hero_image) {
-                $path = public_path('uploads/jelajah-lekop/' . $model->hero_image);
+                $path = public_path('uploads' . DIRECTORY_SEPARATOR . 'jelajah-lekop' . DIRECTORY_SEPARATOR . $model->hero_image);
                 if (file_exists($path)) {
                     unlink($path);
                 }
             }
         });
     }
+
+    // Properties untuk menyimpan data original (tidak disimpan ke database)
+    protected $original_gambar;
+    protected $original_galeri;
+    protected $original_hero_image;
 }

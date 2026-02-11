@@ -461,7 +461,6 @@
             <div class="hidden md:flex social-vertical">
                 <a href="{{ $homeContent->social_facebook ?? '#' }}" class="social-btn group"><i class="fab fa-facebook-f text-lg"></i></a>
                 <a href="{{ $homeContent->social_instagram ?? '#' }}" class="social-btn group"><i class="fab fa-instagram text-lg"></i></a>
-                <a href="{{ $homeContent->social_youtube ?? '#' }}" class="social-btn group"><i class="fab fa-youtube text-lg"></i></a>
             </div>
 
             {{-- Gambar lokal untuk hero slide --}}
@@ -513,7 +512,6 @@
                 <div class="flex md:hidden gap-4 mt-8 justify-center">
                     <a href="{{ $homeContent->social_facebook ?? '#' }}" class="social-btn"><i class="fab fa-facebook-f"></i></a>
                     <a href="{{ $homeContent->social_instagram ?? '#' }}" class="social-btn"><i class="fab fa-instagram"></i></a>
-                    <a href="{{ $homeContent->social_youtube ?? '#' }}" class="social-btn"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
 
@@ -820,8 +818,49 @@
                         <a href="{{ route('layanan') }}#galeri-kegiatan" class="px-5 py-2 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition text-sm font-medium">Lihat Semua</a>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        {{-- Item Galeri 1 - Pemerintahan --}}
-                        <div class="gallery-item pemerintahan relative h-64 rounded-xl overflow-hidden group cursor-pointer">
+                        @if($galeriKegiatan->count() > 0)
+                        @foreach($galeriKegiatan as $index => $galeriItem)
+                        <div class="gallery-item {{ $galeriItem->detail['kategori_galeri'] ?? 'umum' }} relative h-64 rounded-xl overflow-hidden group cursor-pointer"
+                            data-item-id="{{ $galeriItem->id }}"
+                            data-item-name="{{ $galeriItem->nama }}"
+                            data-galeri="{{ json_encode($galeriItem->galeri ?? []) }}"
+                            onclick="openGalleryViewer('{{ $galeriItem->id }}')">
+                            @php
+                            // Get image URL with fallback
+                            $gambarUrl = null;
+                            if ($galeriItem->gambar) {
+                            $gambarSrc = 'uploads/jelajah-lekop/' . $galeriItem->gambar;
+                            $fullPath = public_path(str_replace('/', DIRECTORY_SEPARATOR, $gambarSrc));
+                            if (file_exists($fullPath)) {
+                            $gambarUrl = asset($gambarSrc);
+                            }
+                            }
+
+                            // Fallback to first gallery image or default
+                            if (!$gambarUrl && $galeriItem->galeri && count($galeriItem->galeri) > 0) {
+                            $gambarSrc = 'uploads/jelajah-lekop/' . $galeriItem->galeri[0];
+                            $fullPath = public_path(str_replace('/', DIRECTORY_SEPARATOR, $gambarSrc));
+                            if (file_exists($fullPath)) {
+                            $gambarUrl = asset($gambarSrc);
+                            }
+                            }
+
+                            if (!$gambarUrl) {
+                            $gambarUrl = asset('images/default-galeri.jpg');
+                            }
+                            @endphp
+                            <img src="{{ $gambarUrl }}" alt="{{ $galeriItem->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
+                                <div class="text-center">
+                                    <i class="fas fa-images text-2xl mb-2"></i>
+                                    <p>{{ $galeriItem->nama }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        @else
+                        {{-- Fallback items jika tidak ada data --}}
+                        <div class="gallery-item pemerintahan relative h-64 rounded-xl overflow-hidden group cursor-pointer" onclick="openGalleryViewer('pemerintahan')">
                             <img src="https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
                                 <div class="text-center">
@@ -830,8 +869,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Item Galeri 2 - Kemasyarakatan --}}
-                        <div class="gallery-item kemasyarakatan relative h-64 rounded-xl overflow-hidden group cursor-pointer">
+                        <div class="gallery-item kemasyarakatan relative h-64 rounded-xl overflow-hidden group cursor-pointer" onclick="openGalleryViewer('kemasyarakatan')">
                             <img src="https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
                                 <div class="text-center">
@@ -840,8 +878,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Item Galeri 3 - Pembangunan --}}
-                        <div class="gallery-item pembangunan relative h-64 rounded-xl overflow-hidden group cursor-pointer">
+                        <div class="gallery-item pembangunan relative h-64 rounded-xl overflow-hidden group cursor-pointer" onclick="openGalleryViewer('pembangunan')">
                             <img src="https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold">
                                 <div class="text-center">
@@ -850,6 +887,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </section>
 
@@ -1141,57 +1179,110 @@
             });
         }
 
-        // Gallery Data
-        const galleryData = {
-            pemerintahan: {
-                title: 'Kegiatan Pemerintahan',
-                images: [{
-                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg',
-                        caption: 'Rapat Desa'
-                    },
-                    {
-                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954056_d8ad3ecfe0494c04463f.jpg',
-                        caption: 'Musrenbang'
-                    },
-                    {
-                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954022_0bf4e65d09285d943a44.jpg',
-                        caption: 'Pembahasan APBDes'
+        // Gallery Data - Dynamic from database with fallback
+        let galleryData = {};
+
+        // Collect gallery data from page elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const galleryItems = document.querySelectorAll('.gallery-item[data-item-id]');
+
+            galleryItems.forEach((item, index) => {
+                const itemId = item.getAttribute('data-item-id');
+                const itemName = item.getAttribute('data-item-name');
+                const galeriData = item.getAttribute('data-galeri');
+
+                if (itemId && itemName) {
+                    galleryData[itemId] = {
+                        title: itemName,
+                        images: []
+                    };
+
+                    // Parse gallery images
+                    if (galeriData) {
+                        try {
+                            const galeriArray = JSON.parse(galeriData);
+                            if (Array.isArray(galeriArray) && galeriArray.length > 0) {
+                                galeriArray.forEach((imageName, imgIndex) => {
+                                    const imagePath = 'uploads/jelajah-lekop/' + imageName;
+                                    const fullImageUrl = window.location.origin + '/' + imagePath;
+                                    galleryData[itemId].images.push({
+                                        src: fullImageUrl,
+                                        caption: itemName + ' - Gambar ' + (imgIndex + 1)
+                                    });
+                                });
+                            }
+                        } catch (e) {
+                            console.error('Error parsing gallery data:', e);
+                        }
                     }
-                ]
-            },
-            kemasyarakatan: {
-                title: 'Kegiatan Kemasyarakatan',
-                images: [{
-                        src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg',
-                        caption: 'Gotong Royong'
-                    },
-                    {
-                        src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Pengajian',
-                        caption: 'Pengajian Rutin'
-                    },
-                    {
-                        src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu',
-                        caption: 'Kegiatan Posyandu'
+
+                    // If no gallery images, try to get the main image
+                    if (galleryData[itemId].images.length === 0) {
+                        const mainImg = item.querySelector('img');
+                        if (mainImg) {
+                            galleryData[itemId].images.push({
+                                src: mainImg.src,
+                                caption: itemName
+                            });
+                        }
                     }
-                ]
-            },
-            pembangunan: {
-                title: 'Kegiatan Pembangunan',
-                images: [{
-                        src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa',
-                        caption: 'Pembangunan Jalan Desa'
+                }
+            });
+
+            // Fallback hardcoded data if no dynamic data
+            if (Object.keys(galleryData).length === 0) {
+                galleryData = {
+                    pemerintahan: {
+                        title: 'Kegiatan Pemerintahan',
+                        images: [{
+                                src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954074_bcd67607ce3600415d76.jpg',
+                                caption: 'Rapat Desa'
+                            },
+                            {
+                                src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954056_d8ad3ecfe0494c04463f.jpg',
+                                caption: 'Musrenbang'
+                            },
+                            {
+                                src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954022_0bf4e65d09285d943a44.jpg',
+                                caption: 'Pembahasan APBDes'
+                            }
+                        ]
                     },
-                    {
-                        src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Drainase',
-                        caption: 'Perbaikan Drainase'
+                    kemasyarakatan: {
+                        title: 'Kegiatan Kemasyarakatan',
+                        images: [{
+                                src: 'https://icms.tanjungpinangkota.go.id/image/posting/galeri/7243000000/original/1718954005_f747783895551781b02e.jpg',
+                                caption: 'Gotong Royong'
+                            },
+                            {
+                                src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Pengajian',
+                                caption: 'Pengajian Rutin'
+                            },
+                            {
+                                src: 'https://placehold.co/600x400/10b981/FFFFFF?text=Posyandu',
+                                caption: 'Kegiatan Posyandu'
+                            }
+                        ]
                     },
-                    {
-                        src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=MCK',
-                        caption: 'Pembangunan MCK'
+                    pembangunan: {
+                        title: 'Kegiatan Pembangunan',
+                        images: [{
+                                src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Jalan+Desa',
+                                caption: 'Pembangunan Jalan Desa'
+                            },
+                            {
+                                src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=Drainase',
+                                caption: 'Perbaikan Drainase'
+                            },
+                            {
+                                src: 'https://placehold.co/600x400/f59e0b/FFFFFF?text=MCK',
+                                caption: 'Pembangunan MCK'
+                            }
+                        ]
                     }
-                ]
+                };
             }
-        };
+        });
 
         // Gallery Viewer Functions
         const viewerModal = document.getElementById('galleryViewerModal');
@@ -1208,10 +1299,10 @@
         let viewerCurrentImages = [];
         let viewerCurrentIndex = 0;
 
-        function openGalleryViewer(category) {
-            const album = galleryData[category];
+        function openGalleryViewer(itemId) {
+            const album = galleryData[itemId];
             if (!album || !album.images || album.images.length === 0) {
-                console.error("Album not found or is empty:", category);
+                console.error("Album not found or is empty:", itemId);
                 return;
             }
 
@@ -1261,10 +1352,7 @@
                 viewerCounter.textContent = `${viewerCurrentIndex + 1} / ${viewerCurrentImages.length}`;
 
                 // Update thumbnails
-                const thumbnails = viewerThumbnailsContainer.querySelectorAll('.viewer-thumbnail');
-                thumbnails.forEach(thumb => {
-                    thumb.classList.toggle('border-transparent', parseInt(thumb.dataset.index) !== viewerCurrentIndex);
-                });
+                updateThumbnails();
 
                 // Scroll active thumbnail into view
                 const activeThumbnail = document.querySelector(`.viewer-thumbnail[data-index='${viewerCurrentIndex}']`);
@@ -1282,12 +1370,38 @@
             tempImg.src = image.src;
         }
 
+        function updateThumbnails() {
+            if (!viewerThumbnailsContainer || viewerCurrentImages.length === 0) return;
+
+            // Clear existing thumbnails
+            viewerThumbnailsContainer.innerHTML = '';
+
+            // Create thumbnail for each image
+            viewerCurrentImages.forEach((image, index) => {
+                const thumbnail = document.createElement('div');
+                thumbnail.className = `viewer-thumbnail relative group cursor-pointer rounded-lg overflow-hidden transition-all duration-300 ${
+                    index === viewerCurrentIndex ? 'ring-2 ring-white' : 'opacity-70 hover:opacity-100'
+                }`;
+                thumbnail.dataset.index = index;
+
+                const img = document.createElement('img');
+                img.src = image.src;
+                img.alt = image.alt || image.caption || '';
+                img.className = 'w-full h-20 object-cover';
+
+                thumbnail.appendChild(img);
+                viewerThumbnailsContainer.appendChild(thumbnail);
+            });
+        }
+
         function showNextGalleryImage() {
+            if (viewerCurrentImages.length === 0) return;
             viewerCurrentIndex = (viewerCurrentIndex + 1) % viewerCurrentImages.length;
             updateGalleryView();
         }
 
         function showPrevGalleryImage() {
+            if (viewerCurrentImages.length === 0) return;
             viewerCurrentIndex = (viewerCurrentIndex - 1 + viewerCurrentImages.length) % viewerCurrentImages.length;
             updateGalleryView();
         }
@@ -1297,9 +1411,15 @@
             const galleryItem = e.target.closest('.gallery-item');
             if (galleryItem) {
                 e.preventDefault();
-                const category = Array.from(galleryItem.classList).find(cls => ['pemerintahan', 'kemasyarakatan', 'pembangunan'].includes(cls));
-                if (category) {
-                    openGalleryViewer(category);
+                const itemId = galleryItem.getAttribute('data-item-id');
+                if (itemId) {
+                    openGalleryViewer(itemId);
+                } else {
+                    // Fallback untuk hardcoded items
+                    const category = Array.from(galleryItem.classList).find(cls => ['pemerintahan', 'kemasyarakatan', 'pembangunan'].includes(cls));
+                    if (category) {
+                        openGalleryViewer(category);
+                    }
                 }
             }
         });
@@ -1405,7 +1525,17 @@
 
         // Close on ESC
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeServiceModal();
+            if (e.key === 'Escape') {
+                closeServiceModal();
+                closeGalleryViewer();
+            }
+
+            // Gallery keyboard navigation
+            const modal = document.getElementById('galleryViewerModal');
+            if (modal && !modal.classList.contains('hidden')) {
+                if (e.key === 'ArrowRight') showNextGalleryImage();
+                if (e.key === 'ArrowLeft') showPrevGalleryImage();
+            }
         });
     </script>
 </body>

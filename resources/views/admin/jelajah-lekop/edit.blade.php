@@ -71,13 +71,16 @@
             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <div class="flex items-center mb-4">
                     <i class="fas fa-images text-blue-600 text-lg mr-2"></i>
-                    <label class="block text-sm font-medium text-gray-700">Galeri / Album Foto (Multiple)</label>
+                    <label class="block text-sm font-medium text-gray-700">
+                        Galeri / Album Foto
+                        <span id="galleryTypeLabel" class="text-gray-500 font-normal"></span>
+                    </label>
                 </div>
 
                 <!-- Upload Input -->
                 <div class="mb-4">
                     <input type="file" name="galeri[]" accept="image/*" multiple class="w-full border rounded-lg px-3 py-2 bg-white" id="galleryInput">
-                    <p class="text-xs text-gray-500 mt-2">
+                    <p class="text-xs text-gray-500 mt-2" id="galleryHelpText">
                         <i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)
                     </p>
                 </div>
@@ -91,7 +94,7 @@
                         <div class="relative group">
                             <img src="{{ asset('uploads/jelajah-lekop/' . $image) }}" alt="Gallery {{ $index + 1 }}" class="w-full h-32 object-cover rounded-lg border border-gray-300">
                             <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition rounded-lg flex items-center justify-center">
-                                <button type="button" onclick="removeGalleryImage('{{ $image }}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-medium transition">
+                                <button type="button" onclick="removeGalleryImage('{{ $image }}', event)" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-medium transition">
                                     <i class="fas fa-trash mr-1"></i>Hapus
                                 </button>
                             </div>
@@ -130,14 +133,14 @@
                 <!-- Title/Nama -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Hero</label>
-                    <input type="text" id="heroTitleInput" value="{{ $jelajahLekop->nama }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
+                    <input type="text" id="heroTitleInput" name="nama" value="{{ $jelajahLekop->nama }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
                     <p class="text-xs text-gray-500 mt-1">Judul utama yang ditampilkan di banner</p>
                 </div>
 
                 <!-- Subtitle/Deskripsi -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Subjudul / Deskripsi Hero</label>
-                    <textarea id="heroSubtitleInput" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ $jelajahLekop->deskripsi }}</textarea>
+                    <textarea id="heroSubtitleInput" name="deskripsi" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ $jelajahLekop->deskripsi }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Teks deskripsi yang muncul di hero banner</p>
                 </div>
 
@@ -151,10 +154,7 @@
         </div>
 
         <!-- Hidden inputs for nama dan deskripsi when hero type - ONLY for hero type -->
-        @if($jelajahLekop->tipe === 'hero')
-        <input type="hidden" id="hiddenNamaInput" name="nama">
-        <input type="hidden" id="hiddenDeskripsiInput" name="deskripsi">
-        @endif
+        <!-- Removed: Using direct name attributes on hero fields instead -->
 
         <!-- Dynamic Detail Fields Based on Tipe -->
         <div id="detailFields" class="mb-6" @if($jelajahLekop->tipe === 'hero') style="display: none" @endif>
@@ -176,7 +176,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Produk Unggulan (comma separated)</label>
-                        <input type="text" name="detail[produk_unggulan]" value="{{ implode(', ', $jelajahLekop->detail['produk_unggulan'] ?? []) }}" class="w-full border rounded-lg px-3 py-2" placeholder="Kerupuk Ikan, Kerupuk Atom">
+                        <input type="text" name="detail[produk_unggulan]" value="{{ isset($jelajahLekop->detail['produk_unggulan']) ? (is_array($jelajahLekop->detail['produk_unggulan']) ? implode(', ', $jelajahLekop->detail['produk_unggulan']) : $jelajahLekop->detail['produk_unggulan']) : '' }}" class="w-full border rounded-lg px-3 py-2" placeholder="Kerupuk Ikan, Kerupuk Atom">
                     </div>
                 </div>
             </div>
@@ -208,6 +208,18 @@
                         <input type="text" name="detail[jam_operasional]" value="{{ $jelajahLekop->detail['jam_operasional'] ?? '' }}" class="w-full border rounded-lg px-3 py-2" placeholder="08:00 - 16:00">
                     </div>
                 </div>
+
+                <!-- Fasilitas Gallery Notice -->
+                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-yellow-600 mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="text-sm font-semibold text-yellow-800 mb-1">Upload Foto Fasilitas</h4>
+                            <p class="text-xs text-yellow-700 mb-2">Gunakan field "Galeri / Album Foto" di bawah untuk upload foto fasilitas. Maksimal 2 foto untuk tipe Fasilitas.</p>
+                            <p class="text-xs text-yellow-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Perhatian: Upload foto baru akan mengganti semua foto yang ada.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- UMKM Fields -->
@@ -234,7 +246,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Produk (comma separated)</label>
-                        <input type="text" name="detail[produk]" value="{{ implode(', ', $jelajahLekop->detail['produk'] ?? []) }}" class="w-full border rounded-lg px-3 py-2" placeholder="Kerupuk Ikan, Kerupuk Atom">
+                        <input type="text" name="detail[produk]" value="{{ isset($jelajahLekop->detail['produk']) ? (is_array($jelajahLekop->detail['produk']) ? implode(', ', $jelajahLekop->detail['produk']) : $jelajahLekop->detail['produk']) : '' }}" class="w-full border rounded-lg px-3 py-2" placeholder="Kerupuk Ikan, Kerupuk Atom">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
@@ -356,8 +368,46 @@
             }
         }
 
+        // Update gallery settings based on type
+        updateGallerySettings(tipe);
+
         // Update kategori options
         updateKategoriOptions(tipe);
+    }
+
+    function updateGallerySettings(tipe) {
+        const galleryInput = document.getElementById('galleryInput');
+        const galleryTypeLabel = document.getElementById('galleryTypeLabel');
+        const galleryHelpText = document.getElementById('galleryHelpText');
+        const newGalleryPreview = document.getElementById('newGalleryPreview');
+
+        if (tipe === 'fasilitas') {
+            // Set max 2 files for fasilitas
+            if (galleryInput) {
+                galleryInput.max = '2';
+            }
+            if (galleryTypeLabel) {
+                galleryTypeLabel.textContent = '(Maks 2 foto)';
+            }
+            if (galleryHelpText) {
+                if (tipe === 'fasilitas') {
+                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih 1 atau 2 foto untuk fasilitas (Format: JPG, PNG, GIF | Max: 10MB per file)<br><span class="text-orange-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Upload foto baru akan mengganti semua foto yang ada</span>';
+                } else {
+                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)';
+                }
+            }
+        } else {
+            // No limit for other types
+            if (galleryInput) {
+                galleryInput.removeAttribute('max');
+            }
+            if (galleryTypeLabel) {
+                galleryTypeLabel.textContent = '(Multiple)';
+            }
+            if (galleryHelpText) {
+                galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)';
+            }
+        }
     }
 
     function updateKategoriOptions(tipe) {
@@ -452,46 +502,82 @@
     document.addEventListener('DOMContentLoaded', function() {
         updateFormFields('{{ $jelajahLekop->tipe }}');
 
-        // Add form submission handler
+        // Add form submission handler - removed sync function as it's no longer needed
         const form = document.querySelector('form');
         if (form) {
-            form.addEventListener('submit', function() {
-                syncHeroFieldsBeforeSubmit();
+            form.addEventListener('submit', function(e) {
+                console.log('Form submission detected');
+                console.log('Form data before submit:', new FormData(form));
+
+                // Debug: Log hero fields specifically
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                console.log('Current tipe:', tipe);
+
+                if (tipe === 'hero') {
+                    const heroTitle = document.getElementById('heroTitleInput')?.value;
+                    const heroSubtitle = document.getElementById('heroSubtitleInput')?.value;
+                    console.log('Hero Title:', heroTitle);
+                    console.log('Hero Subtitle:', heroSubtitle);
+                }
+
+                // Debug: Log gallery fields
+                const removeImagesInput = document.getElementById('removeImages');
+                if (removeImagesInput) {
+                    console.log('Remove images value:', removeImagesInput.value);
+                }
+
+                const galleryInput = document.getElementById('galleryInput');
+                if (galleryInput && galleryInput.files.length > 0) {
+                    console.log('Gallery files to upload:', galleryInput.files.length);
+                    for (let i = 0; i < galleryInput.files.length; i++) {
+                        console.log('File ' + i + ':', galleryInput.files[i].name);
+                    }
+                } else {
+                    console.log('No new gallery files to upload');
+                }
+
+                // Validate fasilitas gallery limit
+                if (tipe === 'fasilitas' && galleryInput && galleryInput.files.length > 2) {
+                    alert('Maksimal 2 foto untuk fasilitas. Silakan pilih ulang.');
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Let the form submit normally
+                return true;
             });
         }
     });
 
-    // Sync fields to hidden inputs before form submission
-    function syncHeroFieldsBeforeSubmit() {
-        const tipe = document.querySelector('select[name="tipe"]').value;
-
-        if (tipe === 'hero') {
-            // For hero type, sync from hero input fields to hidden inputs
-            const heroTitle = document.getElementById('heroTitleInput')?.value || '';
-            const heroSubtitle = document.getElementById('heroSubtitleInput')?.value || '';
-
-            const hiddenNama = document.getElementById('hiddenNamaInput');
-            const hiddenDeskripsi = document.getElementById('hiddenDeskripsiInput');
-
-            if (hiddenNama) hiddenNama.value = heroTitle;
-            if (hiddenDeskripsi) hiddenDeskripsi.value = heroSubtitle;
-        }
-        // For other types (UMKM, fasilitas, etc), visible inputs are used directly
-    }
-
     // Handle gallery image removal
-    function removeGalleryImage(imageName) {
+    function removeGalleryImage(imageName, event) {
+        console.log('Removing gallery image:', imageName);
+        console.log('Event:', event);
+
         const removeImagesInput = document.getElementById('removeImages');
+        if (!removeImagesInput) {
+            console.error('removeImages input not found');
+            return;
+        }
+
         const currentValue = removeImagesInput.value;
         const imagesToRemove = currentValue ? currentValue.split(',') : [];
+        console.log('Current images to remove:', imagesToRemove);
 
         if (!imagesToRemove.includes(imageName)) {
             imagesToRemove.push(imageName);
             removeImagesInput.value = imagesToRemove.join(',');
+            console.log('Updated remove_images value:', removeImagesInput.value);
         }
 
-        // Hide the image from view
-        event.target.closest('.relative').style.display = 'none';
+        // Hide image from view with better error handling
+        const imageContainer = event ? event.target.closest('.relative') : document.querySelector(`img[src*="${imageName}"]`).closest('.relative');
+        if (imageContainer) {
+            imageContainer.style.display = 'none';
+            console.log('Hidden image container for:', imageName);
+        } else {
+            console.error('Could not find image container to hide');
+        }
     }
 
     // Handle gallery file input preview
@@ -502,15 +588,29 @@
                 const preview = document.getElementById('newGalleryPreview');
                 preview.innerHTML = '';
 
-                Array.from(this.files).forEach((file, index) => {
+                // Get current tipe
+                const tipe = document.querySelector('select[name="tipe"]').value;
+
+                // Limit to 2 files for fasilitas
+                let files = Array.from(this.files);
+                if (tipe === 'fasilitas' && files.length > 2) {
+                    files = files.slice(0, 2);
+                    alert('Maksimal 2 foto untuk fasilitas. Hanya 2 foto pertama yang akan diupload.');
+                }
+
+                files.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = function(event) {
                         const div = document.createElement('div');
                         div.className = 'relative group';
+                        const borderColor = tipe === 'fasilitas' ? 'border-green-400' : 'border-blue-400';
+                        const badgeColor = tipe === 'fasilitas' ? 'bg-green-500' : 'bg-blue-500';
+                        const badgeText = tipe === 'fasilitas' ? `Foto ${index + 1}` : 'New';
+
                         div.innerHTML = `
-                            <img src="${event.target.result}" alt="New Gallery ${index + 1}" class="w-full h-32 object-cover rounded-lg border-2 border-blue-400">
-                            <div class="absolute top-1 right-1 bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">
-                                New
+                            <img src="${event.target.result}" alt="${tipe === 'fasilitas' ? 'Fasilitas ' + (index + 1) : 'New Gallery ' + (index + 1)}" class="w-full h-32 object-cover rounded-lg border-2 ${borderColor}">
+                            <div class="absolute top-1 right-1 ${badgeColor} text-white px-2 py-1 rounded text-xs font-bold">
+                                ${badgeText}
                             </div>
                         `;
                         preview.appendChild(div);
@@ -519,6 +619,55 @@
                 });
             });
         }
+    });
+</script>
+
+<!-- Gallery Modal -->
+<div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center">
+    <div class="relative max-w-4xl max-h-[90vh] mx-4">
+        <button onclick="closeGalleryModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-3xl font-bold">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="galleryModalImage" src="" alt="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
+    </div>
+</div>
+
+<script>
+    function openGalleryModal(imageSrc) {
+        const modal = document.getElementById('galleryModal');
+        const modalImage = document.getElementById('galleryModalImage');
+        if (modal && modalImage) {
+            modalImage.src = imageSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeGalleryModal() {
+        const modal = document.getElementById('galleryModal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Add click handlers for existing gallery images
+    document.addEventListener('DOMContentLoaded', function() {
+        const galleryImages = document.querySelectorAll('[onclick*="removeGalleryImage"]');
+        galleryImages.forEach(img => {
+            const container = img.closest('.relative');
+            if (container) {
+                container.style.cursor = 'pointer';
+                container.addEventListener('click', function(e) {
+                    if (!e.target.closest('button')) {
+                        const img = this.querySelector('img');
+                        if (img && img.src) {
+                            openGalleryModal(img.src);
+                        }
+                    }
+                });
+            }
+        });
     });
 </script>
 @endpush

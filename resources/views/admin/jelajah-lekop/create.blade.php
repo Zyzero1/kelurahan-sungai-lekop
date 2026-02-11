@@ -63,13 +63,16 @@
             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <div class="flex items-center mb-4">
                     <i class="fas fa-images text-blue-600 text-lg mr-2"></i>
-                    <label class="block text-sm font-medium text-gray-700">Galeri / Album Foto (Multiple)</label>
+                    <label class="block text-sm font-medium text-gray-700">
+                        Galeri / Album Foto
+                        <span id="galleryTypeLabel" class="text-gray-500 font-normal"></span>
+                    </label>
                 </div>
 
                 <!-- Upload Input -->
                 <div class="mb-4">
                     <input type="file" name="galeri[]" accept="image/*" multiple class="w-full border rounded-lg px-3 py-2 bg-white" id="galleryInput">
-                    <p class="text-xs text-gray-500 mt-2">
+                    <p class="text-xs text-gray-500 mt-2" id="galleryHelpText">
                         <i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)
                     </p>
                 </div>
@@ -171,6 +174,18 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Jam Operasional</label>
                         <input type="text" name="detail[jam_operasional]" class="w-full border rounded-lg px-3 py-2" placeholder="08:00 - 16:00">
+                    </div>
+                </div>
+
+                <!-- Fasilitas Gallery Notice -->
+                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-yellow-600 mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="text-sm font-semibold text-yellow-800 mb-1">Upload Foto Fasilitas</h4>
+                            <p class="text-xs text-yellow-700 mb-2">Gunakan field "Galeri / Album Foto" di bawah untuk upload foto fasilitas. Maksimal 2 foto untuk tipe Fasilitas.</p>
+                            <p class="text-xs text-yellow-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Perhatian: Upload foto baru akan mengganti semua foto yang ada.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -318,8 +333,46 @@
             }
         }
 
+        // Update gallery settings based on type
+        updateGallerySettings(tipe);
+
         // Update kategori options
         updateKategoriOptions(tipe);
+    }
+
+    function updateGallerySettings(tipe) {
+        const galleryInput = document.getElementById('galleryInput');
+        const galleryTypeLabel = document.getElementById('galleryTypeLabel');
+        const galleryHelpText = document.getElementById('galleryHelpText');
+        const newGalleryPreview = document.getElementById('newGalleryPreview');
+
+        if (tipe === 'fasilitas') {
+            // Set max 2 files for fasilitas
+            if (galleryInput) {
+                galleryInput.max = '2';
+            }
+            if (galleryTypeLabel) {
+                galleryTypeLabel.textContent = '(Maks 2 foto)';
+            }
+            if (galleryHelpText) {
+                if (tipe === 'fasilitas') {
+                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih 1 atau 2 foto untuk fasilitas (Format: JPG, PNG, GIF | Max: 10MB per file)<br><span class="text-orange-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Upload foto baru akan mengganti semua foto yang ada</span>';
+                } else {
+                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)';
+                }
+            }
+        } else {
+            // No limit for other types
+            if (galleryInput) {
+                galleryInput.removeAttribute('max');
+            }
+            if (galleryTypeLabel) {
+                galleryTypeLabel.textContent = '(Multiple)';
+            }
+            if (galleryHelpText) {
+                galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)';
+            }
+        }
     }
 
     function updateKategoriOptions(tipe) {
@@ -410,6 +463,14 @@
         if (form) {
             form.addEventListener('submit', function() {
                 syncHeroFieldsBeforeSubmit();
+
+                // Validate fasilitas gallery limit
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                const galleryInput = document.getElementById('galleryInput');
+                if (tipe === 'fasilitas' && galleryInput && galleryInput.files.length > 2) {
+                    alert('Maksimal 2 foto untuk fasilitas. Silakan pilih ulang.');
+                    return false;
+                }
             });
         }
     });
@@ -437,15 +498,29 @@ galleryInput.addEventListener('change', function(e) {
 const preview = document.getElementById('newGalleryPreview');
 preview.innerHTML = '';
 
-Array.from(this.files).forEach((file, index) => {
+// Get current tipe
+const tipe = document.querySelector('select[name="tipe"]').value;
+
+// Limit to 2 files for fasilitas
+let files = Array.from(this.files);
+if (tipe === 'fasilitas' && files.length > 2) {
+files = files.slice(0, 2);
+alert('Maksimal 2 foto untuk fasilitas. Hanya 2 foto pertama yang akan diupload.');
+}
+
+files.forEach((file, index) => {
 const reader = new FileReader();
 reader.onload = function(event) {
 const div = document.createElement('div');
 div.className = 'relative group';
+const borderColor = tipe === 'fasilitas' ? 'border-green-400' : 'border-blue-400';
+const badgeColor = tipe === 'fasilitas' ? 'bg-green-500' : 'bg-blue-500';
+const badgeText = tipe === 'fasilitas' ? `Foto ${index + 1}` : 'New';
+
 div.innerHTML = `
-<img src="${event.target.result}" alt="New Gallery ${index + 1}" class="w-full h-32 object-cover rounded-lg border-2 border-blue-400">
-<div class="absolute top-1 right-1 bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">
-    New
+<img src="${event.target.result}" alt="${tipe === 'fasilitas' ? 'Fasilitas ' + (index + 1) : 'New Gallery ' + (index + 1)}" class="w-full h-32 object-cover rounded-lg border-2 ${borderColor}">
+<div class="absolute top-1 right-1 ${badgeColor} text-white px-2 py-1 rounded text-xs font-bold">
+    ${badgeText}
 </div>
 `;
 preview.appendChild(div);
