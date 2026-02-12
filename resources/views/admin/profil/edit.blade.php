@@ -47,13 +47,6 @@
                 <div class="text-sm text-red-600 mt-1">{{ $message }}</div>
                 @enderror
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Telepon/WA</label>
-                <input type="text" name="telepon" value="{{ old('telepon', $profil->telepon) }}" class="w-full border rounded p-2">
-                @error('telepon')
-                <div class="text-sm text-red-600 mt-1">{{ $message }}</div>
-                @enderror
-            </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Motto Lurah</label>
                 <textarea name="motto_lurah" rows="3" class="w-full border rounded p-2">{{ old('motto_lurah', $profil->motto_lurah) }}</textarea>
@@ -126,7 +119,7 @@
 
     <div class="bg-white rounded-xl shadow p-6">
         <h2 class="text-lg font-semibold mb-4">Demografi</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Laki-laki</label>
                 <input type="number" min="0" name="jumlah_laki_laki" value="{{ old('jumlah_laki_laki', $profil->jumlah_laki_laki) }}" class="w-full border rounded p-2">
@@ -148,7 +141,14 @@
                 <div class="text-sm text-red-600 mt-1">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="md:col-span-3">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Penduduk</label>
+                <input type="number" min="0" name="jumlah_penduduk" value="{{ old('jumlah_penduduk', $profil->jumlah_penduduk) }}" class="w-full border rounded p-2">
+                @error('jumlah_penduduk')
+                <div class="text-sm text-red-600 mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="lg:col-span-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Demografi</label>
                 <textarea name="demografi_deskripsi" rows="4" class="w-full border rounded p-2">{{ old('demografi_deskripsi', $profil->demografi_deskripsi) }}</textarea>
                 @error('demografi_deskripsi')

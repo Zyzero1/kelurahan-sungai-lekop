@@ -74,6 +74,10 @@
                 <a href="{{ route('admin.social-media.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
                     <span>Media Sosial</span>
                 </a>
+
+                <a href="{{ route('admin.footer.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <span>Footer</span>
+                </a>
             </nav>
 
             <div class="pt-8">

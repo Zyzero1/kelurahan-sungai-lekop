@@ -65,7 +65,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Banner Image 1</label>
                     <input type="file" name="hero_banner_image_1" accept="image/*"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">Maks: 10MB (JPG, PNG)</p>
+                    <p class="text-sm text-gray-500 mt-1">Maks: 2MB (JPG, PNG)</p>
                     @if($homeContent->hero_banner_image_1)
                     <div class="mt-2">
                         <img src="{{ asset('uploads/hero/'.$homeContent->hero_banner_image_1) }}" alt="Banner 1" class="h-20 rounded border border-gray-300">
@@ -76,7 +76,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Banner Image 2</label>
                     <input type="file" name="hero_banner_image_2" accept="image/*"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">Maks: 10MB (JPG, PNG)</p>
+                    <p class="text-sm text-gray-500 mt-1">Maks: 2MB (JPG, PNG)</p>
                     @if($homeContent->hero_banner_image_2)
                     <div class="mt-2">
                         <img src="{{ asset('uploads/hero/'.$homeContent->hero_banner_image_2) }}" alt="Banner 2" class="h-20 rounded border border-gray-300">
@@ -87,7 +87,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Banner Image 3</label>
                     <input type="file" name="hero_banner_image_3" accept="image/*"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">Maks: 10MB (JPG, PNG)</p>
+                    <p class="text-sm text-gray-500 mt-1">Maks: 2MB (JPG, PNG)</p>
                     @if($homeContent->hero_banner_image_3)
                     <div class="mt-2">
                         <img src="{{ asset('uploads/hero/'.$homeContent->hero_banner_image_3) }}" alt="Banner 3" class="h-20 rounded border border-gray-300">

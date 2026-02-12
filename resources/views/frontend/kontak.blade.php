@@ -166,17 +166,6 @@
                     <p class="text-gray-600 leading-relaxed">{{ $kontak->alamat }}</p>
                 </div>
 
-                <!-- Telepon Card -->
-                <div class="contact-card bg-white rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="200">
-                    <div class="contact-icon w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 mx-auto mb-6">
-                        <i class="fas fa-phone text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Telepon</h3>
-                    <a href="tel:{{ $kontak->telepon }}" class="text-green-600 font-bold text-lg hover:text-green-700 transition-colors">
-                        {{ $kontak->telepon }}
-                    </a>
-                </div>
-
                 <!-- Email Card -->
                 <div class="contact-card bg-white rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="300">
                     <div class="contact-icon w-20 h-20 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600 mx-auto mb-6">
@@ -258,9 +247,6 @@
                 Tim kami siap membantu Anda dengan segala kebutuhan administrasi dan pelayanan masyarakat.
             </p>
             <div class="flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
-                <a href="tel:{{ $kontak->telepon }}" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-phone mr-2"></i> Hubungi Sekarang
-                </a>
                 <a href="mailto:{{ $kontak->email }}" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-blue-600 transition-all">
                     <i class="fas fa-envelope mr-2"></i> Kirim Email
                 </a>

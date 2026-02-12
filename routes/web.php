@@ -12,6 +12,7 @@ use App\Http\Controllers\Frontend\JelajahLekopController as FrontJelajahLekop;
 use App\Http\Controllers\Frontend\BeritaController as FrontBerita;
 use App\Http\Controllers\Admin\KontakController;
 use App\Http\Controllers\Admin\SocialMediaController;
+use App\Http\Controllers\FooterController;
 
 
 
@@ -72,6 +73,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // === SOCIAL MEDIA ===
     Route::resource('social-media', SocialMediaController::class);
+
+    // === FOOTER ===
+    Route::resource('footer', FooterController::class);
 });
 
 /*

@@ -28,81 +28,24 @@
 
     <style>
         :root {
-
             --primary-900: #1e3a8a;
-
             --primary-600: #2563eb;
-
             --accent-500: #f59e0b;
-
         }
-
-
 
         html {
-
             scroll-behavior: smooth;
-
         }
-
-
 
         body {
-
             font-family: 'Inter', system-ui, sans-serif;
-
             background-color: #f8fafc;
-
             overflow-x: hidden;
-
         }
 
-
-
-        /* Header Asli */
-
-        .modern-header {
-
-            position: fixed;
-
-            top: 0;
-
-            left: 0;
-
-            width: 100%;
-
-            z-index: 1000;
-
-            background: rgba(15, 23, 42, 0.1);
-
-            backdrop-filter: blur(10px);
-
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-            transition: all 0.3s ease;
-
-        }
-
-
-
-        .modern-header.scrolled {
-
-            background: var(--primary-900) !important;
-
-            backdrop-filter: none !important;
-
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-
-        }
-
-
-
-        /* Custom Styles */
 
         .card-hover {
-
             transition: all 0.3s ease;
-
         }
 
 
@@ -292,7 +235,7 @@
 
         {{-- 1. HERO SECTION --}}
 
-        <section class="relative h-[600px] overflow-hidden">
+        <section class="relative h-[650px] md:h-[650px] overflow-hidden -mt-20">
 
             <div class="absolute inset-0">
 
@@ -308,7 +251,7 @@
 
 
 
-            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-12">
+            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-20">
 
                 <div class="text-center max-w-4xl" data-aos="fade-up">
 
@@ -494,20 +437,21 @@
 
 
                     <div class="lg:w-1/2 order-1 lg:order-2" data-aos="fade-left">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
                             <!-- Gambar utama selalu ditampilkan pertama -->
-                            <div class="relative group photo-card">
-                                <img src="{{ $sentra->gambar_url ?? 'https://placehold.co/400x500/f3f4f6/333333?text=' . urlencode($sentra->nama) }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                            <div class="relative group photo-card h-64 rounded-2xl overflow-hidden shadow-lg">
+                                <img src="{{ $sentra->gambar_url ?? 'https://placehold.co/400x500/f3f4f6/333333?text=' . urlencode($sentra->nama) }}"
+                                    alt="{{ $sentra->nama }}"
+                                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105">
+
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                                     <div class="p-4 text-white">
                                         <p class="text-sm font-semibold">{{ $sentra->nama }}</p>
-                                        <p class="text-xs opacity-90">Gambar Utama</p>
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Galeri tambahan -->
-                            {{-- Debug: Show galeri data --}}
-                            {{-- {{ dd($sentra->galeri) }} --}}
                             @if($sentra->galeri && count($sentra->galeri) > 0)
                             @foreach($sentra->galeri as $galeriItem)
                             @php
@@ -515,9 +459,9 @@
                             $fullPath = public_path('uploads/jelajah-lekop/' . $galeriItem);
                             $finalSrc = file_exists($fullPath) ? asset($imagePath) : asset('images/default-galeri.jpg');
                             @endphp
-                            <div class="relative group photo-card">
-                                <img src="{{ $finalSrc }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                            <div class="relative group photo-card h-64 rounded-2xl overflow-hidden shadow-lg mt-12">
+                                <img src="{{ $finalSrc }}" alt="{{ $sentra->nama }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                                     <div class="p-4 text-white">
                                         <p class="text-sm font-semibold">{{ $sentra->nama }}</p>
                                         <p class="text-xs opacity-90">{{ $sentra->detail['highlight'] ?? 'Produk unggulan' }}</p>
@@ -527,9 +471,9 @@
                             @endforeach
                             @else
                             <!-- Placeholder jika tidak ada galeri -->
-                            <div class="relative group photo-card">
-                                <img src="https://placehold.co/400x500/f3f4f6/333333?text={{ urlencode('Galeri ' . $sentra->nama) }}" alt="{{ $sentra->nama }}" class="w-full h-64 object-cover rounded-2xl shadow-lg transition-all duration-700 group-hover:scale-105 group-hover:shadow-2xl">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end">
+                            <div class="relative group photo-card h-64 rounded-2xl overflow-hidden shadow-lg mt-8">
+                                <img src="https://placehold.co/400x500/f3f4f6/333333?text={{ urlencode('Galeri ' . $sentra->nama) }}" alt="{{ $sentra->nama }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                                     <div class="p-4 text-white">
                                         <p class="text-sm font-semibold">{{ $sentra->nama }}</p>
                                         <p class="text-xs opacity-90">Tambahkan Galeri</p>
@@ -570,22 +514,22 @@
 
                     <p class="text-slate-600 mt-2">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
 
-                </div>
-
-                {{-- Search Bar for Fasilitas --}}
-                <div class="max-w-2xl mx-auto mb-8" data-aos="fade-up">
-                    <div class="relative">
-                        <input
-                            type="text"
-                            id="fasilitas-search"
-                            placeholder="Cari fasilitas berdasarkan nama, deskripsi, atau lokasi..."
-                            class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm"
-                            onkeyup="searchFasilitas(this.value)">
-                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-search text-xl"></i>
+                    {{-- Search Bar for Fasilitas --}}
+                    <div class="max-w-2xl mx-auto mt-6" data-aos="fade-up">
+                        <div class="relative">
+                            <input
+                                type="text"
+                                id="fasilitas-search"
+                                placeholder="Cari fasilitas berdasarkan nama, deskripsi, atau lokasi..."
+                                class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm"
+                                onkeyup="searchFasilitas(this.value)">
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
                         </div>
+                        <div id="fasilitas-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
                     </div>
-                    <div id="fasilitas-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
+
                 </div>
 
 
@@ -645,22 +589,22 @@
 
                     <p class="text-slate-600 max-w-2xl mx-auto">Dukung produk-produk unggulan Usaha Mikro Kecil Menengah khas Sungai Lekop, Bintan</p>
 
-                </div>
-
-                {{-- Search Bar for UMKM --}}
-                <div class="max-w-2xl mx-auto mb-8" data-aos="fade-up">
-                    <div class="relative">
-                        <input
-                            type="text"
-                            id="umkm-search"
-                            placeholder="Cari UMKM berdasarkan nama, produk, pemilik, atau deskripsi..."
-                            class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-300 shadow-sm"
-                            onkeyup="searchUMKM(this.value)">
-                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                            <i class="fas fa-search text-xl"></i>
+                    {{-- Search Bar for UMKM --}}
+                    <div class="max-w-2xl mx-auto mt-6" data-aos="fade-up">
+                        <div class="relative">
+                            <input
+                                type="text"
+                                id="umkm-search"
+                                placeholder="Cari UMKM berdasarkan nama, produk, pemilik, atau deskripsi..."
+                                class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-300 shadow-sm"
+                                onkeyup="searchUMKM(this.value)">
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
                         </div>
+                        <div id="umkm-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
                     </div>
-                    <div id="umkm-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
+
                 </div>
 
                 @if($umkm->count() > 0)
@@ -1092,25 +1036,6 @@
                 offset: 100
 
             });
-
-
-
-            // Header Scroll Effect
-
-            const header = document.querySelector(".modern-header");
-
-            if (header) {
-
-                window.addEventListener("scroll", () => {
-
-                    if (window.scrollY > 50) header.classList.add("scrolled");
-
-                    else header.classList.remove("scrolled");
-
-                });
-
-            }
-
 
 
             // Gallery Data from PHP

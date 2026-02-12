@@ -30,9 +30,18 @@ new class extends Component
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <!-- Test dengan manual class -->
+                    <a href="{{ route('dashboard') }}"
+                        class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('dashboard') ? 'border-yellow-400 text-yellow-700' : 'border-transparent text-gray-500' }} text-sm font-medium leading-5 hover:text-yellow-600 hover:border-yellow-300 focus:outline-none focus:text-yellow-700 focus:border-yellow-300 transition duration-150 ease-in-out"
+                        wire:navigate>
                         {{ __('Dashboard') }}
-                    </x-nav-link>
+                    </a>
+
+                    <!-- Debug info -->
+                    <div class="text-xs text-gray-500">
+                        Route: {{ request()->route()->getName() }}<br>
+                        Is Dashboard: {{ request()->routeIs('dashboard') ? 'YES' : 'NO' }}
+                    </div>
                 </div>
             </div>
 
@@ -43,7 +52,7 @@ new class extends Component
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
 
-                               <div class="ms-1">
+                            <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>

@@ -123,9 +123,9 @@ class HomeContentController extends Controller
                 // Hero Banner
                 'hero_title' => 'nullable|string|max:255',
                 'hero_subtitle' => 'nullable|string',
-                'hero_banner_image_1' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
-                'hero_banner_image_2' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
-                'hero_banner_image_3' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
+                'hero_banner_image_1' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'hero_banner_image_2' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'hero_banner_image_3' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
                 // Profil Singkat
                 'profil_tentang' => 'nullable|string',

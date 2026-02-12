@@ -140,7 +140,7 @@
                             <div class="md:w-1/3 bg-slate-100 flex items-center justify-center p-6 border-r border-slate-200 relative">
                                 <div class="text-center w-full">
                                     @if(isset($profil->foto_lurah))
-                                    <img src="{{ asset('uploads/lurah/'.$profil->foto_lurah) }}" alt="Foto Lurah" class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white shadow-md mb-3">
+                                    <img src="{{ asset('uploads/lurah/'.$profil->foto_lurah) }}" alt="Foto Lurah" class="w-32 h-32 rounded-full mx-auto object-cover object-top border-4 border-white shadow-md mb-3">
                                     @else
                                     <div class="w-32 h-32 rounded-full mx-auto bg-slate-200 flex items-center justify-center border-4 border-white shadow-md mb-3 text-slate-400">
                                         <i class="fas fa-user text-5xl"></i>
@@ -148,7 +148,7 @@
                                     @endif
 
                                     <div class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase">
-                                        Lurah / Kepala Desa
+                                        Lurah
                                     </div>
                                 </div>
                             </div>
@@ -167,10 +167,6 @@
                                     <div class="text-sm">
                                         <span class="block text-xs text-slate-400 uppercase">Email Resmi</span>
                                         <span class="font-medium text-slate-700">{{ $profil->email ?? 'kelurahan@sungailekop.id' }}</span>
-                                    </div>
-                                    <div class="text-sm">
-                                        <span class="block text-xs text-slate-400 uppercase">Telepon/WA</span>
-                                        <span class="font-medium text-slate-700">{{ $profil->telepon ?? '-' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +205,7 @@
                                 <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
                                     <i class="fas fa-star text-yellow-400"></i> VISI
                                 </h3>
-                                <p class="text-xl font-serif italic leading-relaxed relative z-10">
+                                <p class="text-l font-serif italic leading-relaxed relative z-10">
                                     "{{ $profil->visi ?? 'Visi belum diinput' }}"
                                 </p>
                             </div>
@@ -287,17 +283,31 @@
                                     </div>
                                 </div>
 
-                                @if($profil->jumlah_kk)
-                                <div class="p-4 bg-green-50 rounded-lg border border-green-200 hover:shadow-md transition">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                                        <div>
-                                            <p class="text-xs text-slate-500 font-semibold">Total Kepala Keluarga</p>
-                                            <p class="font-bold text-green-800 text-xl">{{ number_format($profil->jumlah_kk, 0, ',', '.') }} KK</p>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    @if($profil->jumlah_kk)
+                                    <div class="p-4 bg-green-50 rounded-lg border border-green-200 hover:shadow-md transition">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <div>
+                                                <p class="text-xs text-slate-500 font-semibold">Total Kepala Keluarga</p>
+                                                <p class="font-bold text-green-800 text-xl">{{ number_format($profil->jumlah_kk, 0, ',', '.') }} KK</p>
+                                            </div>
                                         </div>
                                     </div>
+                                    @endif
+
+                                    @if($profil->jumlah_penduduk)
+                                    <div class="p-4 bg-purple-50 rounded-lg border border-purple-200 hover:shadow-md transition">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                            <div>
+                                                <p class="text-xs text-slate-500 font-semibold">Jumlah Penduduk</p>
+                                                <p class="font-bold text-purple-800 text-xl">{{ number_format($profil->jumlah_penduduk, 0, ',', '.') }} Jiwa</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
-                                @endif
                             </div>
                         </div>
 
@@ -378,11 +388,11 @@
                     <section id="lokasi" class="bg-white rounded-xl shadow-md p-8 border border-slate-100 mb-8" data-aos="fade-up">
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-slate-800">Lokasi Kantor</h2>
-                            <span class="text-sm text-slate-500"><i class="fas fa-map-marker-alt text-red-500"></i> {{ $profil->alamat ?? 'Kelurahan Sungai Lekop' }}</span>
+                            <span class="text-sm text-slate-500"><i class="fas fa-map-marker-alt text-red-500"></i> Kantor Lurah Kelurahan Sungai Lekop, Kecamatan Bintan Timur, Kabupaten Bintan</span>
                         </div>
                         <div class="w-full h-80 bg-slate-200 rounded-xl overflow-hidden shadow-inner">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15956.123456789!2d104.4!3d0.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwNTQnMDAuMCJOIDEwNMKwMjQnMDAuMCJF!5e0!3m2!1sid!2sid!4v123456789"
+                                src="https://maps.google.com/maps?q=Kantor+Lurah+Kelurahan+Sungai+Lekop+Bintan+Timur&t=m&z=15&output=embed"
                                 width="100%"
                                 height="100%"
                                 style="border:0;"

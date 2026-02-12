@@ -492,7 +492,23 @@
             {{-- 3. KONTEN TENGAH --}}
             <div class="hero-content animate-fade-in">
                 <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 drop-shadow-lg leading-tight">
-                    {{ $homeContent->hero_title ?? 'Selamat Datang di Kelurahan Sungai Lekop' }}
+                    @if($homeContent->hero_title)
+                    @php
+                    $titleParts = explode(' di ', $homeContent->hero_title, 2);
+                    if(count($titleParts) == 2) {
+                    $firstPart = $titleParts[0] . ' di';
+                    $secondPart = $titleParts[1];
+                    } else {
+                    $firstPart = 'Selamat Datang di';
+                    $secondPart = $homeContent->hero_title;
+                    }
+                    @endphp
+                    <div class="text-white">{{ $firstPart }}</div>
+                    <div class="text-blue-300">{{ $secondPart }}</div>
+                    @else
+                    <div class="text-white">Selamat Datang di</div>
+                    <div class="text-blue">Kelurahan Sungai Lekop</div>
+                    @endif
                 </h1>
 
                 <p class="text-base md:text-xl mb-8 text-gray-200 font-light max-w-2xl mx-auto drop-shadow-md">
@@ -639,15 +655,31 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {{-- Berita Besar Kiri --}}
                         <div class="lg:col-span-2">
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg h-[450px] group cursor-pointer">
-                                <img src="{{ $homeContent->berita_featured_image ?? 'https://images.unsplash.com/photo-1590402494587-44b71d87e3f6?q=80&w=1280' }}" alt="News" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                            @if(isset($beritas) && $beritas->count() > 0)
+                            @php
+                            $featuredBerita = $beritas->first();
+                            @endphp
+                            <a href="{{ route('berita.show', $featuredBerita->slug) }}" class="relative rounded-2xl overflow-hidden shadow-lg h-[450px] group cursor-pointer block">
+                                @if($featuredBerita->gambar)
+                                <img src="{{ asset('uploads/berita/'.$featuredBerita->gambar) }}" alt="{{ $featuredBerita->judul }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                                @else
+                                <img src="https://images.unsplash.com/photo-1590402494587-44b71d87e3f6?q=80&w=1280" alt="{{ $featuredBerita->judul }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                                @endif
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                                 <div class="absolute bottom-0 left-0 p-8 text-white">
-                                    <span class="bg-blue-600 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">{{ $homeContent->berita_featured_label ?? 'TERBARU' }}</span>
-                                    <h3 class="text-2xl md:text-3xl font-bold mb-2 leading-tight">{{ $homeContent->berita_featured_title ?? 'Kegiatan Gotong Royong Massal di Lingkungan RW 02' }}</h3>
-                                    <p class="text-gray-300 text-sm line-clamp-2 mt-2">{{ $homeContent->berita_featured_desc ?? 'Masyarakat Kelurahan Sungai Lekop antusias mengikuti kegiatan bersih-bersih lingkungan demi kenyamanan bersama.' }}</p>
+                                    <span class="bg-blue-600 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">{{ strtoupper($featuredBerita->kategori ?? 'BERITA') }}</span>
+                                    <h3 class="text-2xl md:text-3xl font-bold mb-2 leading-tight">{{ $featuredBerita->judul }}</h3>
+                                    <p class="text-gray-300 text-sm line-clamp-2 mt-2">{{ \Illuminate\Support\Str::limit(strip_tags($featuredBerita->isi), 120) }}</p>
+                                </div>
+                            </a>
+                            @else
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg h-[450px] bg-gray-100 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fas fa-newspaper text-6xl text-gray-400 mb-4"></i>
+                                    <p class="text-gray-600">Belum ada berita utama</p>
                                 </div>
                             </div>
+                            @endif
                         </div>
 
                         {{-- List Berita Kanan --}}
@@ -661,18 +693,30 @@
                                 {{-- Tab Terkini --}}
                                 <div id="terkini" class="news-tab-content active space-y-4">
                                     @if(isset($beritas) && $beritas->count() > 0)
-                                    @foreach($beritas->take(4) as $berita)
-                                    <div class="flex items-start gap-4 p-2 hover:bg-blue-50 rounded-lg transition cursor-pointer">
+                                    @php
+                                    $listBeritas = $beritas->skip(1)->take(4); // Skip featured, take next 4
+                                    @endphp
+                                    @foreach($listBeritas as $berita)
+                                    <a href="{{ route('berita.show', $berita->slug) }}" class="flex items-start gap-4 p-2 hover:bg-blue-50 rounded-lg transition cursor-pointer block">
                                         <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
-                                            <img src="{{ asset('uploads/berita/'.$berita->gambar) }}" alt="thumb" class="w-full h-full object-cover">
+                                            @if($berita->gambar)
+                                            <img src="{{ asset('uploads/berita/'.$berita->gambar) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
+                                            @else
+                                            <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                                                <i class="fas fa-newspaper text-gray-500"></i>
+                                            </div>
+                                            @endif
                                         </div>
-                                        <div>
-                                            <a href="{{ route('berita.show', $berita->slug) }}" class="font-bold text-gray-800 hover:text-blue-700 line-clamp-2 mb-1 text-sm leading-snug">
+                                        <div class="flex-1">
+                                            <div class="font-bold text-gray-800 hover:text-blue-700 line-clamp-2 mb-1 text-sm leading-snug">
                                                 {{ $berita->judul }}
-                                            </a>
-                                            <span class="text-xs text-gray-500 block mt-1"><i class="far fa-clock mr-1"></i> {{ $berita->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">{{ strtoupper($berita->kategori ?? 'BERITA') }}</span>
+                                                <span><i class="far fa-clock mr-1"></i> {{ $berita->created_at->diffForHumans() }}</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                     @endforeach
                                     @else
                                     <p class="text-sm text-gray-500 text-center py-4">Belum ada berita.</p>
@@ -681,7 +725,35 @@
 
                                 {{-- Tab Populer --}}
                                 <div id="populer" class="news-tab-content space-y-4">
+                                    @if(isset($beritas) && $beritas->count() > 1)
+                                    @php
+                                    $populerBeritas = $beritas->skip(1)->take(4); // Same as terkini for now
+                                    @endphp
+                                    @foreach($populerBeritas as $berita)
+                                    <a href="{{ route('berita.show', $berita->slug) }}" class="flex items-start gap-4 p-2 hover:bg-blue-50 rounded-lg transition cursor-pointer block">
+                                        <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+                                            @if($berita->gambar)
+                                            <img src="{{ asset('uploads/berita/'.$berita->gambar) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
+                                            @else
+                                            <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                                                <i class="fas fa-newspaper text-gray-500"></i>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-bold text-gray-800 hover:text-blue-700 line-clamp-2 mb-1 text-sm leading-snug">
+                                                {{ $berita->judul }}
+                                            </div>
+                                            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded">{{ strtoupper($berita->kategori ?? 'BERITA') }}</span>
+                                                <span><i class="far fa-clock mr-1"></i> {{ $berita->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    @endforeach
+                                    @else
                                     <p class="text-sm text-gray-500 text-center py-4">Belum ada berita populer.</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>

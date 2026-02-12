@@ -38,10 +38,6 @@
                         <div class="text-xs text-gray-500 uppercase">Email</div>
                         <div class="font-semibold">{{ $profil->email ?? '-' }}</div>
                     </div>
-                    <div>
-                        <div class="text-xs text-gray-500 uppercase">Telepon/WA</div>
-                        <div class="font-semibold">{{ $profil->telepon ?? '-' }}</div>
-                    </div>
                     <div class="md:col-span-2">
                         <div class="text-xs text-gray-500 uppercase">Motto</div>
                         <div class="text-gray-700">{{ $profil->motto_lurah ?? '-' }}</div>
@@ -85,7 +81,7 @@
 
     <div class="bg-white rounded-xl shadow p-6">
         <h2 class="text-lg font-semibold mb-4">Demografi</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-slate-50 border rounded-lg p-4">
                 <div class="text-xs text-gray-500 uppercase">Laki-laki</div>
                 <div class="text-xl font-bold text-blue-700">{{ number_format($profil->jumlah_laki_laki ?? 0, 0, ',', '.') }}</div>
@@ -98,7 +94,11 @@
                 <div class="text-xs text-gray-500 uppercase">Jumlah KK</div>
                 <div class="text-xl font-bold text-green-700">{{ number_format($profil->jumlah_kk ?? 0, 0, ',', '.') }}</div>
             </div>
-            <div class="md:col-span-3">
+            <div class="bg-slate-50 border rounded-lg p-4">
+                <div class="text-xs text-gray-500 uppercase">Jumlah Penduduk</div>
+                <div class="text-xl font-bold text-purple-700">{{ number_format($profil->jumlah_penduduk ?? 0, 0, ',', '.') }}</div>
+            </div>
+            <div class="lg:col-span-4">
                 <div class="text-xs text-gray-500 uppercase">Deskripsi</div>
                 <div class="text-gray-700">{{ $profil->demografi_deskripsi ?? '-' }}</div>
             </div>

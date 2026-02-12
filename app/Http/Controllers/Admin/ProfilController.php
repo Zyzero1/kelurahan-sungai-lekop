@@ -43,17 +43,17 @@ class ProfilController extends Controller
             'jumlah_laki_laki' => ['nullable', 'integer', 'min:0'],
             'jumlah_perempuan' => ['nullable', 'integer', 'min:0'],
             'jumlah_kk' => ['nullable', 'integer', 'min:0'],
+            'jumlah_penduduk' => ['nullable', 'integer', 'min:0'],
             'demografi_deskripsi' => ['nullable', 'string'],
             'nama_lurah' => ['nullable', 'string', 'max:255'],
             'nip_lurah' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'string', 'max:255'],
-            'telepon' => ['nullable', 'string', 'max:50'],
             'motto_lurah' => ['nullable', 'string'],
             'visi' => ['nullable', 'string'],
             'misi' => ['nullable', 'string'],
             'sejarah' => ['nullable', 'string'],
-            'foto_lurah' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'struktur' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:8192'],
+            'foto_lurah' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'struktur' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         // Upload foto lurah
@@ -100,6 +100,7 @@ class ProfilController extends Controller
             'jumlah_laki_laki'     => $validated['jumlah_laki_laki'] ?? null,
             'jumlah_perempuan'     => $validated['jumlah_perempuan'] ?? null,
             'jumlah_kk'            => $validated['jumlah_kk'] ?? null,
+            'jumlah_penduduk'     => $validated['jumlah_penduduk'] ?? null,
             'demografi_deskripsi'  => $validated['demografi_deskripsi'] ?? null,
 
             // Pimpinan & Identitas
@@ -107,7 +108,6 @@ class ProfilController extends Controller
             'nip_lurah'      => $validated['nip_lurah'] ?? null,
             'foto_lurah'     => $namaFotoLurah,
             'email'          => $validated['email'] ?? null,
-            'telepon'        => $validated['telepon'] ?? null,
             'motto_lurah'    => $validated['motto_lurah'] ?? null,
 
             // Visi & Misi

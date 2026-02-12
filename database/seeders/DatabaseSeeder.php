@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             BeritaSeeder::class,
             ProfilSeeder::class,
             SocialMediaSeeder::class,
+            FooterSeeder::class,
         ]);
     }
 }

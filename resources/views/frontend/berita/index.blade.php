@@ -361,7 +361,7 @@
                     @foreach($beritas as $index => $berita)
                     <div class="news-card group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                         data-title="{{ strtolower($berita->judul) }}"
-                        data-category="all"
+                        data-category="{{ $berita->kategori ?? 'berita' }}"
                         data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
 
                         {{-- Image Container --}}
@@ -379,7 +379,7 @@
                             {{-- Category Badge --}}
                             <span class="news-card-category absolute top-4 left-4">
                                 <i class="fas fa-newspaper mr-1"></i>
-                                BERITA
+                                {{ strtoupper($berita->kategori ?? 'BERITA') }}
                             </span>
                         </div>
 
@@ -536,7 +536,7 @@
                     const matchesCategory = activeCategory === 'all' || category === activeCategory;
 
                     if (matchesSearch && matchesCategory) {
-                        card.style.display = 'flex';
+                        card.style.display = 'block';
                         // Re-trigger animation
                         card.classList.remove('animate-card');
                         void card.offsetWidth;

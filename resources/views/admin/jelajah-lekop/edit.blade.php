@@ -57,7 +57,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Utama</label>
                 <input type="file" name="gambar" accept="image/*" class="w-full border rounded-lg px-3 py-2">
-                <p class="text-xs text-gray-500 mt-1">Maks: 10MB, Format: JPEG, PNG, JPG, GIF</p>
+                <p class="text-xs text-gray-500 mt-1">Maks: 2MB, Format: JPEG, PNG, JPG, GIF</p>
                 @if($jelajahLekop->gambar)
                 <div class="mt-2">
                     <p class="text-xs text-gray-600">Gambar saat ini:</p>
@@ -81,7 +81,7 @@
                 <div class="mb-4">
                     <input type="file" name="galeri[]" accept="image/*" multiple class="w-full border rounded-lg px-3 py-2 bg-white" id="galleryInput">
                     <p class="text-xs text-gray-500 mt-2" id="galleryHelpText">
-                        <i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)
+                        <i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 2MB per file)
                     </p>
                 </div>
 
@@ -122,7 +122,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Hero Banner</label>
                     <input type="file" name="hero_image" accept="image/*" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-xs text-gray-500 mt-1">Maks: 10MB (JPG, PNG)</p>
+                    <p class="text-xs text-gray-500 mt-1">Maks: 2MB (JPG, PNG)</p>
                     @if($jelajahLekop->hero_image)
                     <div class="mt-2">
                         <img src="{{ $jelajahLekop->hero_image_url }}" alt="Banner" class="h-24 rounded border border-gray-300">
@@ -391,9 +391,9 @@
             }
             if (galleryHelpText) {
                 if (tipe === 'fasilitas') {
-                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih 1 atau 2 foto untuk fasilitas (Format: JPG, PNG, GIF | Max: 10MB per file)<br><span class="text-orange-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Upload foto baru akan mengganti semua foto yang ada</span>';
+                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih 1 atau 2 foto untuk fasilitas (Format: JPG, PNG, GIF | Max: 2MB per file)<br><span class="text-orange-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Upload foto baru akan mengganti semua foto yang ada</span>';
                 } else {
-                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)';
+                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 2MB per file)';
                 }
             }
         } else {
@@ -405,7 +405,7 @@
                 galleryTypeLabel.textContent = '(Multiple)';
             }
             if (galleryHelpText) {
-                galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 10MB per file)';
+                galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 2MB per file)';
             }
         }
     }

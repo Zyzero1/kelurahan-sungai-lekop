@@ -22,6 +22,7 @@ class Profil extends Model
         'jumlah_laki_laki',
         'jumlah_perempuan',
         'jumlah_kk',
+        'jumlah_penduduk',
         'demografi_deskripsi',
 
         // Pimpinan & Identitas
