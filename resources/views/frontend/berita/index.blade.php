@@ -267,11 +267,11 @@
                                 <div class="flex flex-wrap gap-4 text-sm text-gray-200 mb-8" data-aos="fade-up" data-aos-delay="300">
                                     <div class="flex items-center bg-black/30 px-3 py-1 rounded-full glass-effect">
                                         <i class="far fa-calendar-alt mr-2"></i>
-                                        <span>{{ \Carbon\Carbon::parse($slider->created_at)->isoFormat('D MMMM Y') }}</span>
+                                        <span>{{ $slider->tanggal ? \Carbon\Carbon::parse($slider->tanggal)->isoFormat('D MMMM Y') : \Carbon\Carbon::parse($slider->created_at)->isoFormat('D MMMM Y') }}</span>
                                     </div>
                                     <div class="flex items-center bg-black/30 px-3 py-1 rounded-full glass-effect">
                                         <i class="far fa-user mr-2"></i>
-                                        <span>Admin Kelurahan</span>
+                                        <span>{{ $slider->admin_kelurahan ?: 'Admin Kelurahan' }}</span>
                                     </div>
                                 </div>
 
@@ -287,19 +287,6 @@
                     </div>
                 </div>
                 @endforeach
-            </div>
-
-            {{-- Social Media Vertical (Optional: Menjaga layout hero tetap seimbang) --}}
-            <div class="absolute left-6 top-1/2 -translate-y-1/2 z-30 flex-col space-y-4 hidden md:flex" data-aos="fade-right">
-                <a href="#" class="group w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition-all border border-white/20">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="group w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-sky-500 hover:scale-110 transition-all border border-white/20">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="group w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-pink-600 hover:scale-110 transition-all border border-white/20">
-                    <i class="fab fa-instagram"></i>
-                </a>
             </div>
 
             {{-- Navigation Controls --}}
@@ -387,7 +374,7 @@
                         <div class="news-card-body p-5">
                             <div class="news-card-date text-sm text-gray-500 mb-2">
                                 <i class="far fa-calendar-alt mr-2"></i>
-                                {{ \Carbon\Carbon::parse($berita->created_at)->isoFormat('D MMMM Y') }}
+                                {{ $berita->tanggal ? \Carbon\Carbon::parse($berita->tanggal)->isoFormat('D MMMM Y') : \Carbon\Carbon::parse($berita->created_at)->isoFormat('D MMMM Y') }}
                             </div>
 
                             <h3 class="news-card-title text-lg font-bold mb-3 leading-tight">

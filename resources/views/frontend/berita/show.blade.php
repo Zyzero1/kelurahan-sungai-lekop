@@ -55,12 +55,12 @@
         /* Hero Effects */
         .hero-gradient-overlay {
             background: linear-gradient(to bottom,
-                    rgba(0, 0, 0, 0.75) 0%,
-                    rgba(0, 0, 0, 0.5) 25%,
-                    rgba(0, 0, 0, 0.3) 45%,
-                    rgba(0, 0, 0, 0.15) 65%,
-                    rgba(0, 0, 0, 0.05) 80%,
-                    transparent 95%);
+                    rgba(0, 0, 0, 0.85) 0%,
+                    rgba(0, 0, 0, 0.75) 25%,
+                    rgba(0, 0, 0, 0.6) 45%,
+                    rgba(0, 0, 0, 0.4) 65%,
+                    rgba(0, 0, 0, 0.2) 80%,
+                    rgba(0, 0, 0, 0.1) 95%);
         }
 
         .fade-to-white-smooth {
@@ -311,7 +311,7 @@
                 class="container mx-auto px-6 h-full flex items-end pb-24 relative z-30"
                 style="transform: translateY(-40px)">
                 <div class="max-w-4xl w-full">
-                    <nav class="mb-8">
+                    <nav class="mb-8" data-aos="fade-up" data-aos-delay="100">
                         <div class="flex items-center space-x-2 text-gray-300 text-sm">
                             <a href="{{ route('home') }}" class="hover:text-white transition-colors">
                                 Beranda
@@ -323,130 +323,77 @@
                         </div>
                     </nav>
 
-                    <div class="absolute right-6 bottom-24 z-40 banner-share-container">
-                        <button id="banner-share-btn" class="relative group">
-                            <div
-                                class="flex items-center space-x-2 px-4 py-2 bg-blue-600/90 hover:bg-blue-700 rounded-full text-white shadow-lg transition-all duration-300 transform hover:scale-105">
+                    <div class="absolute right-6 bottom-24 z-40 banner-share-container" data-aos="fade-up" data-aos-delay="200">
+                        <div id="banner-share-btn" class="relative group">
+                            <div class="flex items-center space-x-2 px-4 py-2 bg-blue-600/90 hover:bg-blue-700 rounded-full text-white shadow-lg transition-all duration-300 cursor-pointer">
                                 <span class="font-medium text-sm">Bagikan Berita</span>
                                 <i class="fas fa-share-alt"></i>
                             </div>
-                            <div
-                                class="absolute right-0 bottom-full mb-3 opacity-0 invisible transition-all duration-300 transform translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+
+                            <div class="absolute right-0 bottom-full mb-3 opacity-0 invisible transition-all duration-300 transform translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
                                 <div class="flex flex-col items-end space-y-4">
-                                    <a
-                                        href="#"
-                                        class="share-option relative w-10 h-10 rounded-full bg-blue-600 text-white overflow-hidden group/facebook"
+                                    {{-- Facebook --}}
+                                    @php
+                                    $facebookUrl = 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode(Request::fullUrl());
+                                    if($footerData['social'] && $footerData['social']->count() > 0) {
+                                    $facebookSocial = $footerData['social']->where('judul', 'Facebook')->first();
+                                    if($facebookSocial && $facebookSocial->url) {
+                                    $facebookUrl = $facebookSocial->url;
+                                    }
+                                    }
+                                    @endphp
+                                    <a href="{{ $facebookUrl }}"
+                                        target="_blank"
+                                        class="share-option w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
                                         title="Share on Facebook">
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover/facebook:opacity-0 group-hover/facebook:-translate-y-2">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </div>
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0 translate-y-2 group-hover/facebook:opacity-100 group-hover/facebook:translate-y-0">
-                                            <i class="fab fa-facebook-f text-blue-100"></i>
-                                        </div>
+                                        <i class="fab fa-facebook-f"></i>
                                     </a>
 
-                                    <a
-                                        href="#"
-                                        class="share-option relative w-10 h-10 rounded-full bg-blue-400 text-white overflow-hidden group/twitter"
-                                        title="Share on Twitter">
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover/twitter:opacity-0 group-hover/twitter:-translate-y-2">
-                                            <i class="fab fa-twitter"></i>
-                                        </div>
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0 translate-y-2 group-hover/twitter:opacity-100 group-hover/twitter:translate-y-0">
-                                            <i class="fab fa-twitter text-blue-100"></i>
-                                        </div>
-                                    </a>
-
-                                    <a
-                                        href="#"
-                                        class="share-option relative w-10 h-10 rounded-full bg-green-500 text-white overflow-hidden group/whatsapp"
-                                        title="Share on WhatsApp">
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover/whatsapp:opacity-0 group-hover/whatsapp:-translate-y-2">
-                                            <i class="fab fa-whatsapp"></i>
-                                        </div>
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0 translate-y-2 group-hover/whatsapp:opacity-100 group-hover/whatsapp:translate-y-0">
-                                            <i class="fab fa-whatsapp text-green-100"></i>
-                                        </div>
-                                    </a>
-
-                                    <a
-                                        href="mailto:?subject=Bagikan%20Artikel&body=Saya%20ingin%20berbagi%20artikel%20ini%20dengan%20Anda%3A%0A%0A{{ route('berita.show', $berita->slug) }}%0A%0A"
-                                        class="share-option relative w-10 h-10 rounded-full bg-blue-500 text-white overflow-hidden group/email"
+                                    {{-- Email --}}
+                                    <a href="mailto:?subject={{ $berita->judul }}&body=Baca berita ini: {{ Request::fullUrl() }}"
+                                        class="share-option w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
                                         title="Share via Email">
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover/email:opacity-0 group-hover/email:-translate-y-2">
-                                            <i class="fas fa-envelope"></i>
-                                        </div>
-                                        <div
-                                            class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0 translate-y-2 group-hover/email:opacity-100 group-hover/email:translate-y-0">
-                                            <i class="fas fa-envelope-open-text text-blue-100"></i>
-                                        </div>
+                                        <i class="fas fa-envelope"></i>
                                     </a>
+
+                                    {{-- Copy Link dengan Tooltip Full URL --}}
+                                    <div class="relative group/copy">
+                                        <button onclick="copyToClipboard()"
+                                            class="share-option w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                                            <i class="fas fa-link"></i>
+                                        </button>
+                                        <div id="copy-tooltip" class="absolute right-12 top-1/2 -translate-y-1/2 bg-black/90 text-white text-[10px] py-1.5 px-3 rounded lg opacity-0 invisible group-hover/copy:opacity-100 group-hover/copy:visible transition-all whitespace-nowrap border border-white/20">
+                                            {{ Request::fullUrl() }}
+                                            <div class="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-black/90 rotate-45"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </button>
+                        </div>
                     </div>
 
-                    <div class="mb-2">
+                    <div class="mb-2" data-aos="fade-up" data-aos-delay="250">
                         <span
-                            class="inline-flex items-center bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-semibold border border-white/20"
-                            style="
-                  backdrop-filter: blur(8px);
-                  -webkit-backdrop-filter: blur(8px);
-                ">
-                            <i class="fas fa-newspaper mr-1"></i>
-                            BERITA
+                            class="inline-flex items-center bg-blue-600/95 text-white px-3 py-1 rounded-full text-xs font-semibold border border-white/30 backdrop-blur-md shadow-lg">
+                            <i class="fas fa-newspaper mr-1"></i> BERITA
                         </span>
                     </div>
 
                     <h1
                         class="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-white"
-                        style="
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6),
-                  0 4px 8px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2);
-              ">
+                        style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);"
+                        data-aos="fade-up" data-aos-delay="300">
                         {{ $berita->judul }}
                     </h1>
 
-                    <div class="flex flex-wrap gap-3 text-sm text-gray-300 mt-6">
-                        <div class="flex items-center bg-black/30 px-3 py-1 rounded-full"
-                            style="
-                  backdrop-filter: blur(6px);
-                  -webkit-backdrop-filter: blur(6px);">
+                    <div class="flex flex-wrap gap-3 text-sm text-gray-200 mt-6" data-aos="fade-up" data-aos-delay="500">
+                        <div class="flex items-center bg-black/50 px-3 py-1 rounded-full backdrop-blur-md border border-white/20">
                             <i class="far fa-calendar-alt mr-1"></i>
-                            <span>{{ \Carbon\Carbon::parse($berita->created_at)->isoFormat('D MMMM Y') }}</span>
+                            <span>{{ $berita->tanggal ? \Carbon\Carbon::parse($berita->tanggal)->isoFormat('D MMMM Y') : \Carbon\Carbon::parse($berita->created_at)->isoFormat('D MMMM Y') }}</span>
                         </div>
-                        <div class="flex items-center bg-black/30 px-3 py-1 rounded-full"
-                            style="
-                  backdrop-filter: blur(6px);
-                  -webkit-backdrop-filter: blur(6px);
-                ">
+                        <div class="flex items-center bg-black/50 px-3 py-1 rounded-full backdrop-blur-md border border-white/20">
                             <i class="far fa-user mr-1"></i>
-                            <span>Admin Kelurahan</span>
-                        </div>
-                        <div class="flex items-center bg-black/30 px-3 py-1 rounded-full"
-                            style="
-                  backdrop-filter: blur(6px);
-                  -webkit-backdrop-filter: blur(6px);
-                ">
-                            <i class="far fa-eye mr-1"></i>
-                            <span>{{ rand(100, 999) }} Views</span>
-                        </div>
-                        <div
-                            class="flex items-center px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
-                            style="
-                  background: rgba(255, 255, 255, 0.1);
-                  backdrop-filter: blur(10px);
-                  -webkit-backdrop-filter: blur(10px);
-                ">
-                            <i class="far fa-clock mr-2"></i>
-                            <span>{{ rand(3, 8) }} min read</span>
+                            <span>{{ $berita->admin_kelurahan ?: 'Admin Kelurahan' }}</span>
                         </div>
                     </div>
                     <div class="mt-8" data-aos="fade-up" data-aos-delay="500"></div>
@@ -602,6 +549,22 @@
                 });
             }
         });
+
+        function copyToClipboard() {
+            const fullUrl = window.location.href;
+            const tooltip = document.getElementById('copy-tooltip');
+
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                const originalText = tooltip.innerText;
+                tooltip.innerText = "Tautan Berhasil Disalin!";
+                tooltip.style.backgroundColor = "#059669"; // Warna hijau sukses
+
+                setTimeout(() => {
+                    tooltip.innerText = originalText;
+                    tooltip.style.backgroundColor = "rgba(0,0,0,0.9)";
+                }, 2000);
+            });
+        }
     </script>
 </body>
 

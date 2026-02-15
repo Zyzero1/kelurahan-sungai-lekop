@@ -47,6 +47,17 @@ class JelajahLekopController extends Controller
 
     public function store(Request $request)
     {
+        // Accept alternate input names from the form (e.g. nama_regular, nama_hero)
+        // and ensure `nama` and `deskripsi` exist on the request before validation.
+        $mergedNama = $request->input('nama') ?? $request->input('nama_regular') ?? $request->input('nama_hero');
+        $mergedDeskripsi = $request->input('deskripsi') ?? $request->input('deskripsi_regular') ?? $request->input('deskripsi_hero');
+        if ($mergedNama !== null || $mergedDeskripsi !== null) {
+            $request->merge([
+                'nama' => $mergedNama,
+                'deskripsi' => $mergedDeskripsi,
+            ]);
+        }
+
         $request->validate([
             'tipe' => 'required|in:sentra_industri,fasilitas,umkm,galeri_kegiatan,hero',
             'kategori' => 'nullable|string',
@@ -165,6 +176,32 @@ class JelajahLekopController extends Controller
 
     public function update(Request $request, JelajahLekop $jelajahLekop)
     {
+        // Debug: Log all request data
+        Log::info('=== UPDATE DEBUG START ===');
+        Log::info('Request all data:', $request->all());
+        Log::info('Request tipe: ' . $request->tipe);
+        Log::info('Request nama: ' . ($request->nama ?? 'NULL'));
+        Log::info('Request nama_regular: ' . ($request->nama_regular ?? 'NULL'));
+        Log::info('Request nama_hero: ' . ($request->nama_hero ?? 'NULL'));
+        Log::info('Request deskripsi: ' . ($request->deskripsi ?? 'NULL'));
+        Log::info('Request deskripsi_regular: ' . ($request->deskripsi_regular ?? 'NULL'));
+        Log::info('Request deskripsi_hero: ' . ($request->deskripsi_hero ?? 'NULL'));
+
+        // Merge alternate name/description fields into canonical fields
+        $mergedNama = $request->input('nama') ?? $request->input('nama_regular') ?? $request->input('nama_hero');
+        $mergedDeskripsi = $request->input('deskripsi') ?? $request->input('deskripsi_regular') ?? $request->input('deskripsi_hero');
+        Log::info('Merged nama: ' . ($mergedNama ?? 'NULL'));
+        Log::info('Merged deskripsi: ' . ($mergedDeskripsi ?? 'NULL'));
+
+        if ($mergedNama !== null || $mergedDeskripsi !== null) {
+            $request->merge([
+                'nama' => $mergedNama,
+                'deskripsi' => $mergedDeskripsi,
+            ]);
+            Log::info('After merge - Request nama: ' . $request->nama);
+            Log::info('After merge - Request deskripsi: ' . $request->deskripsi);
+        }
+
         $request->validate([
             'tipe' => 'required|in:sentra_industri,fasilitas,umkm,galeri_kegiatan,hero',
             'kategori' => 'nullable|string',
@@ -218,6 +255,13 @@ class JelajahLekopController extends Controller
             $data['deskripsi'] = $request->deskripsi ?? $jelajahLekop->deskripsi;
             Log::info('After hero handling - nama: ' . $data['nama']);
             Log::info('After hero handling - deskripsi: ' . $data['deskripsi']);
+        } else {
+            // For non-hero types, use merged data directly
+            $data['nama'] = $mergedNama ?? $jelajahLekop->nama;
+            $data['deskripsi'] = $mergedDeskripsi ?? $jelajahLekop->deskripsi;
+            Log::info('Non-hero type - Using merged data');
+            Log::info('Final nama: ' . $data['nama']);
+            Log::info('Final deskripsi: ' . $data['deskripsi']);
         }
 
         // Handle upload gambar utama

@@ -15,5 +15,8 @@ class Berita extends Model
         'isi',
         'gambar',
         'kategori',
+        'tanggal',
+        'admin_kelurahan',
+        'urutan',
     ];
 }

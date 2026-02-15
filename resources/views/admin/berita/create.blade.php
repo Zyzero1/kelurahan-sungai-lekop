@@ -24,6 +24,36 @@
         </div>
 
         <div class="mb-4">
+            <label class="font-semibold">Tanggal</label>
+            <input type="date" name="tanggal"
+                class="w-full border rounded p-2">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Admin Kelurahan</label>
+            <input type="text" name="admin_kelurahan"
+                class="w-full border rounded p-2"
+                placeholder="Nama admin kelurahan">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Kategori</label>
+            <select name="kategori" class="w-full border rounded p-2">
+                <option value="">Pilih Kategori</option>
+                <option value="pemerintahan">Pemerintahan</option>
+                <option value="kegiatan">Kegiatan</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Urutan</label>
+            <input type="number" name="urutan"
+                class="w-full border rounded p-2"
+                placeholder="0 (kosong untuk urutan otomatis)"
+                min="0">
+        </div>
+
+        <div class="mb-4">
             <label class="font-semibold">Gambar (Opsional)</label>
             <input type="file" name="gambar"
                 class="w-full border rounded p-2">

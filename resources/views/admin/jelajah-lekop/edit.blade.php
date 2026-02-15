@@ -8,8 +8,36 @@
         <p class="text-gray-600">Edit data untuk: <strong>{{ $jelajahLekop->nama }}</strong></p>
     </div>
 
-    <form action="{{ route('admin.jelajah-lekop.update', $jelajahLekop->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf @method('PUT')
+    <form action="{{ route('admin.jelajah-lekop.update', $jelajahLekop->id) }}"
+        method="POST"
+        enctype="multipart/form-data"
+        onsubmit="prepareFormDataForSubmit(document.querySelector('select[name=tipe]').value)">
+        @csrf
+        @method('PUT')
+
+        {{-- Flash & Validation Messages --}}
+        @if(session('success'))
+        <div class="mb-4 p-3 rounded bg-green-50 border border-green-200 text-green-800">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-800">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @if($errors->any())
+        <div class="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-800">
+            <strong class="block mb-2">Terjadi kesalahan:</strong>
+            <ul class="list-disc pl-5">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
         <!-- Basic Information -->
         <div id="basicInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6" @if($jelajahLekop->tipe === 'hero') style="display: grid" @endif>
@@ -36,14 +64,18 @@
         </div>
 
         <div id="nameDesc" @if($jelajahLekop->tipe === 'hero') style="display: none" @endif>
+            {{-- Hidden canonical fields used for submission (tanpa value statis) --}}
+            <input type="hidden" name="nama" id="hiddenNama">
+            <input type="hidden" name="deskripsi" id="hiddenDeskripsi">
+
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama *</label>
-                <input type="text" name="nama" value="{{ $jelajahLekop->nama }}" class="w-full border rounded-lg px-3 py-2" required>
+                <input type="text" id="regularNamaInput" name="nama_regular" value="{{ old('nama', $jelajahLekop->nama) }}" class="w-full border rounded-lg px-3 py-2" required>
             </div>
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
-                <textarea name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2" required>{{ $jelajahLekop->deskripsi }}</textarea>
+                <textarea id="regularDeskripsiInput" name="deskripsi_regular" rows="4" class="w-full border rounded-lg px-3 py-2" required>{{ old('deskripsi', $jelajahLekop->deskripsi) }}</textarea>
             </div>
 
             <div class="mb-6">
@@ -133,14 +165,14 @@
                 <!-- Title/Nama -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Hero</label>
-                    <input type="text" id="heroTitleInput" name="nama" value="{{ $jelajahLekop->nama }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
+                    <input type="text" id="heroNamaInput" name="nama_hero" data-form-name="nama" value="{{ old('nama', $jelajahLekop->nama) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
                     <p class="text-xs text-gray-500 mt-1">Judul utama yang ditampilkan di banner</p>
                 </div>
 
                 <!-- Subtitle/Deskripsi -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Subjudul / Deskripsi Hero</label>
-                    <textarea id="heroSubtitleInput" name="deskripsi" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ $jelajahLekop->deskripsi }}</textarea>
+                    <textarea id="heroDeskripsiInput" name="deskripsi_hero" data-form-name="deskripsi" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ old('deskripsi', $jelajahLekop->deskripsi) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Teks deskripsi yang muncul di hero banner</p>
                 </div>
 
@@ -334,6 +366,7 @@
         const imageUploadDiv = document.getElementById('imageUpload');
         const galleryUploadDiv = document.getElementById('galleryUpload');
         const detailFieldsDiv = document.getElementById('detailFields');
+        const heroFields = document.getElementById('hero_fields');
 
         // Hide all detail fields first
         document.querySelectorAll('.detail-fields').forEach(field => {
@@ -349,7 +382,6 @@
             detailFieldsDiv.style.display = 'none';
 
             // Show hero fields
-            const heroFields = document.getElementById('hero_fields');
             if (heroFields) {
                 heroFields.style.display = 'block';
             }
@@ -373,6 +405,27 @@
 
         // Update kategori options
         updateKategoriOptions(tipe);
+    }
+
+    function prepareFormDataForSubmit(tipe) {
+        const regularNamaInput = document.getElementById('regularNamaInput');
+        const regularDeskripsiInput = document.getElementById('regularDeskripsiInput');
+        const heroNamaInput = document.getElementById('heroNamaInput');
+        const heroDeskripsiInput = document.getElementById('heroDeskripsiInput');
+        const hiddenNama = document.getElementById('hiddenNama');
+        const hiddenDeskripsi = document.getElementById('hiddenDeskripsi');
+
+        if (tipe === 'hero') {
+            // Jika tipe Hero, ambil dari field hero
+            hiddenNama.value = heroNamaInput ? heroNamaInput.value : '';
+            hiddenDeskripsi.value = heroDeskripsiInput ? heroDeskripsiInput.value : '';
+        } else {
+            // Jika tipe Fasilitas/UMKM/dll, ambil dari field regular
+            hiddenNama.value = regularNamaInput ? regularNamaInput.value : '';
+            hiddenDeskripsi.value = regularDeskripsiInput ? regularDeskripsiInput.value : '';
+        }
+
+        console.log('Sync Data:', hiddenNama.value, hiddenDeskripsi.value); // Untuk Debug
     }
 
     function updateGallerySettings(tipe) {
@@ -500,88 +553,125 @@
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
-        updateFormFields('{{ $jelajahLekop->tipe }}');
+        const currentTipe = '{{ $jelajahLekop->tipe }}';
+        updateFormFields(currentTipe);
+        // Initialize hidden fields dengan data awal
+        prepareFormDataForSubmit(currentTipe);
 
-        // Add form submission handler - removed sync function as it's no longer needed
+        // Add event listener for tipe select to update form fields and prepare data
+        const tipeSelect = document.querySelector('select[name="tipe"]');
+        if (tipeSelect) {
+            tipeSelect.addEventListener('change', function(e) {
+                const newTipe = e.target.value;
+                updateFormFields(newTipe);
+                prepareFormDataForSubmit(newTipe);
+                console.log('Form fields updated for tipe:', newTipe);
+            });
+        }
+
+        // Add real-time sync for regular inputs
+        const regularNamaInput = document.getElementById('regularNamaInput');
+        const regularDeskripsiInput = document.getElementById('regularDeskripsiInput');
+        const hiddenNama = document.getElementById('hiddenNama');
+        const hiddenDeskripsi = document.getElementById('hiddenDeskripsi');
+
+        if (regularNamaInput && hiddenNama) {
+            regularNamaInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe !== 'hero') {
+                    hiddenNama.value = this.value;
+                }
+            });
+        }
+
+        if (regularDeskripsiInput && hiddenDeskripsi) {
+            regularDeskripsiInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe !== 'hero') {
+                    hiddenDeskripsi.value = this.value;
+                }
+            });
+        }
+
+        // Add real-time sync for hero inputs
+        const heroNamaInput = document.getElementById('heroNamaInput');
+        const heroDeskripsiInput = document.getElementById('heroDeskripsiInput');
+
+        if (heroNamaInput && hiddenNama) {
+            heroNamaInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe === 'hero') {
+                    hiddenNama.value = this.value;
+                }
+            });
+        }
+
+        if (heroDeskripsiInput && hiddenDeskripsi) {
+            heroDeskripsiInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe === 'hero') {
+                    hiddenDeskripsi.value = this.value;
+                }
+            });
+        }
+
+        // Add form submission handler
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
-                console.log('Form submission detected');
-                console.log('Form data before submit:', new FormData(form));
+                console.log('=== FORM SUBMISSION DEBUG ===');
 
-                // Debug: Log hero fields specifically
+                // Get current tipe
                 const tipe = document.querySelector('select[name="tipe"]').value;
                 console.log('Current tipe:', tipe);
 
-                if (tipe === 'hero') {
-                    const heroTitle = document.getElementById('heroTitleInput')?.value;
-                    const heroSubtitle = document.getElementById('heroSubtitleInput')?.value;
-                    console.log('Hero Title:', heroTitle);
-                    console.log('Hero Subtitle:', heroSubtitle);
-                }
+                // Get input values before sync
+                const regularNama = document.getElementById('regularNamaInput')?.value;
+                const regularDeskripsi = document.getElementById('regularDeskripsiInput')?.value;
+                const heroNama = document.getElementById('heroNamaInput')?.value;
+                const heroDeskripsi = document.getElementById('heroDeskripsiInput')?.value;
+                const hiddenNama = document.getElementById('hiddenNama')?.value;
+                const hiddenDeskripsi = document.getElementById('hiddenDeskripsi')?.value;
 
-                // Debug: Log gallery fields
-                const removeImagesInput = document.getElementById('removeImages');
-                if (removeImagesInput) {
-                    console.log('Remove images value:', removeImagesInput.value);
-                }
+                console.log('Before sync:');
+                console.log('- Regular Nama:', regularNama);
+                console.log('- Regular Deskripsi:', regularDeskripsi);
+                console.log('- Hero Nama:', heroNama);
+                console.log('- Hero Deskripsi:', heroDeskripsi);
+                console.log('- Hidden Nama:', hiddenNama);
+                console.log('- Hidden Deskripsi:', hiddenDeskripsi);
 
-                const galleryInput = document.getElementById('galleryInput');
-                if (galleryInput && galleryInput.files.length > 0) {
-                    console.log('Gallery files to upload:', galleryInput.files.length);
-                    for (let i = 0; i < galleryInput.files.length; i++) {
-                        console.log('File ' + i + ':', galleryInput.files[i].name);
-                    }
-                } else {
-                    console.log('No new gallery files to upload');
-                }
+                // Prepare form data based on current tipe
+                prepareFormDataForSubmit(tipe);
+
+                // Get values after sync
+                const finalNama = document.getElementById('hiddenNama')?.value;
+                const finalDeskripsi = document.getElementById('hiddenDeskripsi')?.value;
+
+                console.log('After sync:');
+                console.log('- Final Nama:', finalNama);
+                console.log('- Final Deskripsi:', finalDeskripsi);
+
+                // Log prepared data
+                const formData = new FormData(form);
+                console.log('Form data being submitted:');
+                console.log('- nama:', formData.get('nama'));
+                console.log('- deskripsi:', formData.get('deskripsi'));
 
                 // Validate fasilitas gallery limit
+                const galleryInput = document.getElementById('galleryInput');
                 if (tipe === 'fasilitas' && galleryInput && galleryInput.files.length > 2) {
                     alert('Maksimal 2 foto untuk fasilitas. Silakan pilih ulang.');
                     e.preventDefault();
                     return false;
                 }
 
-                // Let the form submit normally
+                console.log('=== END DEBUG ===');
                 return true;
             });
         }
-    });
 
-    // Handle gallery image removal
-    function removeGalleryImage(imageName, event) {
-        console.log('Removing gallery image:', imageName);
-        console.log('Event:', event);
-
-        const removeImagesInput = document.getElementById('removeImages');
-        if (!removeImagesInput) {
-            console.error('removeImages input not found');
-            return;
-        }
-
-        const currentValue = removeImagesInput.value;
-        const imagesToRemove = currentValue ? currentValue.split(',') : [];
-        console.log('Current images to remove:', imagesToRemove);
-
-        if (!imagesToRemove.includes(imageName)) {
-            imagesToRemove.push(imageName);
-            removeImagesInput.value = imagesToRemove.join(',');
-            console.log('Updated remove_images value:', removeImagesInput.value);
-        }
-
-        // Hide image from view with better error handling
-        const imageContainer = event ? event.target.closest('.relative') : document.querySelector(`img[src*="${imageName}"]`).closest('.relative');
-        if (imageContainer) {
-            imageContainer.style.display = 'none';
-            console.log('Hidden image container for:', imageName);
-        } else {
-            console.error('Could not find image container to hide');
-        }
-    }
-
-    // Handle gallery file input preview
-    document.addEventListener('DOMContentLoaded', function() {
+        // Handle gallery file input preview
         const galleryInput = document.getElementById('galleryInput');
         if (galleryInput) {
             galleryInput.addEventListener('change', function(e) {
@@ -619,20 +709,56 @@
                 });
             });
         }
+
+        // Add click handlers for existing gallery images
+        const galleryImages = document.querySelectorAll('[onclick*="removeGalleryImage"]');
+        galleryImages.forEach(img => {
+            const container = img.closest('.relative');
+            if (container) {
+                container.style.cursor = 'pointer';
+                container.addEventListener('click', function(e) {
+                    if (!e.target.closest('button')) {
+                        const img = this.querySelector('img');
+                        if (img && img.src) {
+                            openGalleryModal(img.src);
+                        }
+                    }
+                });
+            }
+        });
     });
-</script>
 
-<!-- Gallery Modal -->
-<div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center">
-    <div class="relative max-w-4xl max-h-[90vh] mx-4">
-        <button onclick="closeGalleryModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-3xl font-bold">
-            <i class="fas fa-times"></i>
-        </button>
-        <img id="galleryModalImage" src="" alt="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
-    </div>
-</div>
+    // Handle gallery image removal
+    function removeGalleryImage(imageName, event) {
+        console.log('Removing gallery image:', imageName);
+        console.log('Event:', event);
 
-<script>
+        const removeImagesInput = document.getElementById('removeImages');
+        if (!removeImagesInput) {
+            console.error('removeImages input not found');
+            return;
+        }
+
+        const currentValue = removeImagesInput.value;
+        const imagesToRemove = currentValue ? currentValue.split(',') : [];
+        console.log('Current images to remove:', imagesToRemove);
+
+        if (!imagesToRemove.includes(imageName)) {
+            imagesToRemove.push(imageName);
+            removeImagesInput.value = imagesToRemove.join(',');
+            console.log('Updated remove_images value:', removeImagesInput.value);
+        }
+
+        // Hide image from view with better error handling
+        const imageContainer = event ? event.target.closest('.relative') : document.querySelector(`img[src*="${imageName}"]`)?.closest('.relative');
+        if (imageContainer) {
+            imageContainer.style.display = 'none';
+            console.log('Hidden image container for:', imageName);
+        } else {
+            console.error('Could not find image container to hide');
+        }
+    }
+
     function openGalleryModal(imageSrc) {
         const modal = document.getElementById('galleryModal');
         const modalImage = document.getElementById('galleryModalImage');
@@ -650,24 +776,15 @@
             document.body.style.overflow = 'auto';
         }
     }
-
-    // Add click handlers for existing gallery images
-    document.addEventListener('DOMContentLoaded', function() {
-        const galleryImages = document.querySelectorAll('[onclick*="removeGalleryImage"]');
-        galleryImages.forEach(img => {
-            const container = img.closest('.relative');
-            if (container) {
-                container.style.cursor = 'pointer';
-                container.addEventListener('click', function(e) {
-                    if (!e.target.closest('button')) {
-                        const img = this.querySelector('img');
-                        if (img && img.src) {
-                            openGalleryModal(img.src);
-                        }
-                    }
-                });
-            }
-        });
-    });
 </script>
+
+<!-- Gallery Modal -->
+<div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center">
+    <div class="relative max-w-4xl max-h-[90vh] mx-4">
+        <button onclick="closeGalleryModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-3xl font-bold">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="galleryModalImage" src="" alt="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
+    </div>
+</div>
 @endpush

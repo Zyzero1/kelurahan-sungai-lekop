@@ -43,6 +43,16 @@
             overflow-x: hidden;
         }
 
+        /* Hero Section - Mobile Responsive */
+        @media (max-width: 767px) {
+            main>section:first-child {
+                height: 380px !important;
+            }
+
+            main>section:first-child .container {
+                padding-top: 0 !important;
+            }
+        }
 
         .card-hover {
             transition: all 0.3s ease;
@@ -108,6 +118,22 @@
 
             background: #555;
 
+        }
+
+
+
+        /* UMKM Modal Image Styling */
+        #modalImage {
+            max-height: 100%;
+            width: auto;
+            margin: auto;
+            display: block;
+        }
+
+        #modalImageContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
 
@@ -235,7 +261,7 @@
 
         {{-- 1. HERO SECTION --}}
 
-        <section class="relative h-[650px] md:h-[650px] overflow-hidden -mt-20">
+        <section class="relative h-[500px] md:h-[500px] overflow-hidden mt-16 md:mt-0">
 
             <div class="absolute inset-0">
 
@@ -251,7 +277,7 @@
 
 
 
-            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-20">
+            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-12">
 
                 <div class="text-center max-w-4xl" data-aos="fade-up">
 
@@ -289,7 +315,7 @@
 
                     </div>
 
-                    <a href="#sentra-industri" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-blue-900 bg-blue-100/80 rounded-full hover:bg-blue-200/90 transition duration-300 shadow-lg" style="transform: translateY(80px)">
+                    <a href="#sentra-industri" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-blue-900 bg-blue-100/80 rounded-full hover:bg-blue-200/90 transition duration-300 shadow-lg" style="transform: translateY(40px)">
 
                         Mulai Menjelajah <i class="fas fa-arrow-down ml-2 animate-bounce"></i>
 
@@ -390,7 +416,6 @@
 
 
             <div class="container mx-auto px-6 relative z-10">
-
                 @if($sentraIndustri->count() > 0)
                 @foreach($sentraIndustri as $index => $sentra)
                 <div class="flex flex-col lg:flex-row items-center gap-12 {{ $index > 0 ? 'mt-16' : '' }}">
@@ -433,8 +458,6 @@
                         @endif
 
                     </div>
-
-
 
                     <div class="lg:w-1/2 order-1 lg:order-2" data-aos="fade-left">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
@@ -497,6 +520,8 @@
 
             </div>
 
+            </div>
+
         </section>
 
 
@@ -508,28 +533,44 @@
 
             <div class="container mx-auto px-6">
 
-                <div class="text-center mb-16" data-aos="fade-up">
-
+                <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold text-slate-900">Fasilitas</h2>
-
                     <p class="text-slate-600 mt-2">Mengenal lebih dekat infrastruktur dan kehidupan sosial di Sungai Lekop.</p>
+                </div>
 
-                    {{-- Search Bar for Fasilitas --}}
-                    <div class="max-w-2xl mx-auto mt-6" data-aos="fade-up">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+                    {{-- Kategori Fasilitas (Kiri) --}}
+                    <div class="lg:w-3/5 mb-4 lg:mb-0 lg:flex lg:items-center">
+                        @if($fasilitas->count() > 0)
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="filterFasilitas('all')" class="fasilitas-tab px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 text-sm font-medium transition">
+                                Semua
+                            </button>
+                            @foreach($fasilitas->groupBy('kategori') as $kategori => $items)
+                            @if($kategori && $items->count() > 0)
+                            <button onclick="filterFasilitas('{{ $kategori }}')" class="fasilitas-tab px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 text-sm font-medium transition bg-gray-100 hover:bg-gray-200">
+                                {{ $items->first()->getLabelKategori() }}
+                            </button>
+                            @endif
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
+
+                    {{-- Search Bar (Kanan) --}}
+                    <div class="lg:w-2/5 lg:pl-4 lg:flex lg:items-center lg:justify-end">
                         <div class="relative">
                             <input
                                 type="text"
                                 id="fasilitas-search"
-                                placeholder="Cari fasilitas berdasarkan nama, deskripsi, atau lokasi..."
-                                class="w-full px-6 py-4 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm"
+                                placeholder="Cari..."
+                                class="w-full px-6 py-2 pr-12 text-gray-700 bg-white border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm"
                                 onkeyup="searchFasilitas(this.value)">
                             <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                 <i class="fas fa-search text-xl"></i>
                             </div>
                         </div>
-                        <div id="fasilitas-search-results" class="text-center mt-4 text-sm text-gray-600"></div>
                     </div>
-
                 </div>
 
 
@@ -537,24 +578,28 @@
                 @if($fasilitas->count() > 0)
                 <div id="facilities-grid" class="grid md:grid-cols-3 gap-8">
                     @foreach($fasilitas as $index => $fasilitasItem)
-                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" data-category="{{ $fasilitasItem->kategori ?? 'all' }}" onclick="openModal('{{ $fasilitasItem->id }}')" data-gallery='@json($fasilitasItem->galeri_urls ?? [$fasilitasItem->gambar_url ?? asset(' images/default-fasilitas.jpg')])'>
-                        <div class="h-48 overflow-hidden">
+                    <div class="facility-card bg-white rounded-2xl overflow-hidden shadow-md card-hover group cursor-pointer flex flex-col h-full" data-category="{{ $fasilitasItem->kategori ?? 'all' }}" data-lokasi="{{ $fasilitasItem->lokasi ?? ($fasilitasItem->detail['lokasi'] ?? '') }}" onclick="openModal('{{ $fasilitasItem->id }}')" data-gallery='@json($fasilitasItem->galeri_urls ?? [$fasilitasItem->gambar_url ?? asset(' images/default-fasilitas.jpg')])'>
+
+                        <div class="h-48 overflow-hidden flex-shrink-0">
                             <img src="{{ $fasilitasItem->gambar_url ?? asset('images/default-fasilitas.jpg') }}" alt="{{ $fasilitasItem->nama }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                         </div>
-                        <div class="p-6">
+
+                        <div class="p-6 flex-grow flex flex-col">
                             <div class="flex items-center mb-3">
                                 <span class="{{ $fasilitasItem->detail['warna_label'] ?? 'bg-blue-100 text-blue-800' }} text-xs font-semibold px-2.5 py-0.5 rounded">
                                     {{ $fasilitasItem->getLabelKategori() }}
                                 </span>
                                 <i class="fas fa-arrow-right ml-auto text-gray-400 group-hover:text-blue-600 transition"></i>
                             </div>
+
                             <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $fasilitasItem->nama }}</h3>
+
                             <p class="text-slate-600 text-sm mb-4">{{ $fasilitasItem->deskripsi }}</p>
-                            @if($fasilitasItem->detail['lokasi'] ?? false)
-                            <div class="text-xs text-gray-500">
-                                <i class="fas fa-map-marker-alt mr-1"></i> {{ $fasilitasItem->detail['lokasi'] }}
+
+                            <div class="text-xs text-gray-500 mt-auto pt-3 border-t border-gray-50">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                {{ $fasilitasItem->lokasi ?? $fasilitasItem->detail['lokasi'] ?? 'Lokasi tidak tersedia' }}
                             </div>
-                            @endif
                         </div>
                     </div>
                     @endforeach
@@ -581,7 +626,7 @@
 
             <div class="container mx-auto px-6">
 
-                <div class="text-center mb-16" data-aos="fade-up">
+                <div class="text-center mb-16">
 
                     <h2 class="text-3xl font-bold text-slate-900 mb-4">
                         <i class="fas fa-store text-orange-500 mr-2"></i>UMKM Lokal
@@ -590,7 +635,7 @@
                     <p class="text-slate-600 max-w-2xl mx-auto">Dukung produk-produk unggulan Usaha Mikro Kecil Menengah khas Sungai Lekop, Bintan</p>
 
                     {{-- Search Bar for UMKM --}}
-                    <div class="max-w-2xl mx-auto mt-6" data-aos="fade-up">
+                    <div class="max-w-2xl mx-auto mt-6">
                         <div class="relative">
                             <input
                                 type="text"
@@ -610,7 +655,7 @@
                 @if($umkm->count() > 0)
                 <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
                     @foreach($umkm as $index => $umkmItem)
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" onclick="openUMKMModal('umkm-{{ $umkmItem->id }}')"
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover group cursor-pointer h-full flex flex-col" onclick="openUMKMModal('umkm-{{ $umkmItem->id }}')"
                         data-name="{{ $umkmItem->nama }}"
                         data-category="{{ $umkmItem->detail['kategori'] ?? 'UMKM' }}"
                         data-image="{{ $umkmItem->gambar_url ?? asset('images/default-umkm.jpg') }}"
@@ -641,7 +686,7 @@
                             </div>
                             @endif
                         </div>
-                        <div class="p-4">
+                        <div class="p-4 flex flex-col h-full">
                             <div class="flex items-center mb-2">
                                 <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-2">
                                     <i class="fas fa-{{ $umkmItem->detail['ikon'] ?? 'store' }} text-orange-600 text-sm"></i>
@@ -658,7 +703,10 @@
                                 @endforeach
                             </div>
                             @endif
-                            <div class="flex items-center justify-between">
+                            <!-- Spacer untuk mendorong harga dan arrow ke bawah -->
+                            <div class="flex-grow"></div>
+                            <!-- Harga dan arrow di posisi paling bawah -->
+                            <div class="flex items-center justify-between mt-auto">
                                 <span class="text-orange-600 font-bold text-sm">{{ $umkmItem->detail['harga'] ?? 'Hubungi' }}</span>
                                 <button class="text-orange-500 hover:text-orange-600 transition">
                                     <i class="fas fa-arrow-right"></i>
@@ -684,12 +732,12 @@
 
                     <section id="galeri-kegiatan" class="py-20 bg-white">
 
-                        <div class="flex justify-between items-end mb-8" data-aos="fade-up">
+                        <div class="flex justify-between items-end mb-8">
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800"><i class="fas fa-images text-blue-800 mr-2"></i> Galeri Kegiatan</h2>
                         </div>
 
                         @if($galeriKegiatan->count() > 0)
-                        <div class="flex justify-center mb-8" data-aos="fade-up">
+                        <div class="flex justify-center mb-8">
                             <div class="bg-gray-100 rounded-lg p-1 inline-flex">
                                 <button onclick="showGallery('semua')" class="gallery-tab px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium transition">Semua</button>
                                 @foreach($galeriByCategory as $kategori => $items)
@@ -785,7 +833,7 @@
 
                 {{-- Modal Popup untuk Detail Fasilitas --}}
 
-                <div id="facilityModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+                <div id="facilityModal" class="fixed inset-0 bg-black bg-opacity-70 z-[9999] hidden flex items-center justify-center p-4">
 
                     <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto modal-scroll">
 
@@ -811,20 +859,16 @@
 
                 {{-- UMKM Modal --}}
 
-                <div id="umkmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div id="umkmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-4">
 
                     <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-scroll">
 
                         <div class="relative">
 
-                            <div class="h-64 overflow-hidden relative">
-
-                                <div id="modalImageContainer" class="relative h-full">
-
-                                    <img id="modalImage" src="" alt="" class="w-full h-full object-cover">
-
+                            <div class="h-96 overflow-hidden relative">
+                                <div id="modalImageContainer" class="relative h-full bg-gray-100">
+                                    <img id="modalImage" src="" alt="" class="w-full h-full object-contain">
                                     <!-- Additional images will be added here -->
-
                                 </div>
 
 
@@ -1037,6 +1081,17 @@
 
             });
 
+            // Header Scroll Effect - TRANSPARENT TO BLUE
+            const header = document.querySelector(".modern-header");
+            if (header) {
+                window.addEventListener("scroll", () => {
+                    if (window.scrollY > 50) {
+                        header.classList.add("scrolled");
+                    } else {
+                        header.classList.remove("scrolled");
+                    }
+                });
+            }
 
             // Gallery Data from PHP
             let viewerCurrentImages = [];
@@ -1555,6 +1610,10 @@
                 window.currentFacilityGallery = galleryImages;
                 window.currentFacilityIndex = 0;
 
+                // Get location text from card (if available)
+                const facilityLocationEl = facilityCard.querySelector('.text-xs.text-gray-500');
+                const facilityLocation = facilityLocationEl ? facilityLocationEl.textContent.trim() : (facilityCard.getAttribute('data-lokasi') || 'Lokasi tidak tersedia');
+
                 // Build modal content with dynamic layout
                 let imageSection = '';
                 if (galleryImages.length === 1) {
@@ -1565,10 +1624,9 @@
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
                                     <div class="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                         <div class="text-white">
-                                            <p class="text-sm font-semibold mb-2">${facilityName}</p>
                                             <div class="flex items-center text-sm">
                                                 <i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
-                                                <span>Lokasi: Sungai Lekop</span>
+                                                <span>${facilityLocation}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1583,7 +1641,10 @@
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
                                         <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                             <div class="text-white">
-                                                <p class="text-xs font-semibold">${facilityName}</p>
+                                                <div class="flex items-center text-sm">
+                                                    <i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
+                                                    <span>${facilityLocation}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1592,7 +1653,10 @@
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
                                         <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                             <div class="text-white">
-                                                <p class="text-xs font-semibold">${facilityName}</p>
+                                                <div class="flex items-center text-sm">
+                                                    <i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
+                                                    <span>${facilityLocation}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1607,10 +1671,9 @@
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent rounded-xl"></div>
                                         <div class="absolute bottom-0 left-0 right-0 p-6">
                                             <div class="text-white">
-                                                <p class="text-sm font-semibold mb-2">${facilityName}</p>
                                                 <div class="flex items-center text-sm">
                                                     <i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
-                                                    <span>Lokasi: Sungai Lekop</span>
+                                                    <span>${facilityLocation}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -2141,6 +2204,41 @@
                 });
 
                 console.log('Gallery filtering completed for category:', category);
+            }
+
+            // Fasilitas Category Filter Function
+            function filterFasilitas(category) {
+                console.log('=== FILTERING FASILITAS ===');
+                console.log('Selected category:', category);
+
+                const facilityCards = document.querySelectorAll('.facility-card');
+                const tabs = document.querySelectorAll('.fasilitas-tab');
+
+                // Update tab styles - reset all tabs to inactive
+                tabs.forEach(tab => {
+                    tab.classList.remove('bg-blue-600', 'text-white');
+                    tab.classList.add('text-gray-600', 'hover:text-gray-900', 'bg-gray-100', 'hover:bg-gray-200');
+                });
+
+                // Highlight active tab
+                event.target.classList.remove('text-gray-600', 'hover:text-gray-900', 'bg-gray-100', 'hover:bg-gray-200');
+                event.target.classList.add('bg-blue-600', 'text-white');
+
+                // Filter facility cards
+                facilityCards.forEach(card => {
+                    const itemCategory = card.getAttribute('data-category') || 'all';
+
+                    // Show all cards if 'all' is selected, otherwise show only matching category
+                    if (category === 'all' || itemCategory === category) {
+                        card.style.display = 'block';
+                        // Add fade-in animation
+                        card.style.animation = 'fadeIn 0.3s ease-in-out';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                console.log('Facility filtering completed for category:', category);
             }
 
             // Search Functions

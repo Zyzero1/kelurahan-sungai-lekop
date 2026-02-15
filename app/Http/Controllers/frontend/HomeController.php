@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $beritas = Berita::latest()->limit(3)->get();
+        $beritas = Berita::orderBy('urutan', 'asc')->orderBy('created_at', 'desc')->limit(4)->get();
         $homeContent = HomeContent::firstOrCreate([]);
 
         try {

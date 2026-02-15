@@ -32,8 +32,8 @@
 
                 <a href="{{ url('/login') }}"
                     class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-full text-sm font-semibold transition flex items-center gap-2 group">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span class="group-hover:text-yellow-300 transition-colors duration-300 -mt-0.5 block">Login</span>
+                    <i class="fas fa-sign-in-alt group-hover:rotate-12 transition-transform duration-300"></i>
+                    <span class="group-hover:text-yellow-300 transition-colors duration-300">Login</span>
                 </a>
             </nav>
 
@@ -108,18 +108,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Header Scroll Effect
-            const header = document.querySelector(".modern-header");
-            if (header) {
-                window.addEventListener("scroll", () => {
-                    if (window.scrollY > 50) {
-                        header.classList.add("scrolled");
-                    } else {
-                        header.classList.remove("scrolled");
-                    }
-                });
-            }
-
             // Get current page URL
             const currentPath = window.location.pathname;
             const navItems = document.querySelectorAll('.nav-item');

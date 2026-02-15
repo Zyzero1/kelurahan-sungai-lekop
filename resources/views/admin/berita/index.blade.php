@@ -22,6 +22,7 @@
         <thead class="bg-blue-900 text-white">
             <tr>
                 <th class="p-2 border w-12">No</th>
+                <th class="p-2 border w-20">Urutan</th>
                 <th class="p-2 border w-32">Gambar</th>
                 <th class="p-2 border">Judul</th>
                 <th class="p-2 border">Isi</th>
@@ -33,6 +34,9 @@
             <tr class="hover:bg-gray-100">
                 <td class="p-2 border text-center">
                     {{ $loop->iteration }}
+                </td>
+                <td class="p-2 border text-center">
+                    {{ $berita->urutan ?? 0 }}
                 </td>
                 <td>
                     @if ($berita->gambar)
@@ -69,7 +73,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="p-4 text-center text-gray-500">
+                <td colspan="6" class="p-4 text-center text-gray-500">
                     Belum ada berita
                 </td>
             </tr>

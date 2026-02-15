@@ -52,6 +52,12 @@
     </div>
     @endif
 
+    @if(session('error'))
+    <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <!-- Hero Banner Section -->
     <div class="mb-8">
         <h2 class="text-lg font-bold mb-4 text-indigo-800">
@@ -106,9 +112,15 @@
     <!-- Sentra Industri Section -->
     @if(isset($groupedData['sentra_industri']) && $groupedData['sentra_industri']->count() > 0)
     <div class="mb-8">
-        <h2 class="text-lg font-bold mb-4 text-blue-800">
-            <i class="fas fa-industry mr-2"></i>Sentra Industri
-        </h2>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-blue-800">
+                <i class="fas fa-industry mr-2"></i>Sentra Industri
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=sentra_industri"
+                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                <i class="fas fa-plus mr-1"></i>Tambah Sentra Industri
+            </a>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($groupedData['sentra_industri'] as $item)
             <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
@@ -144,14 +156,40 @@
             @endforeach
         </div>
     </div>
+    @else
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-blue-800">
+                <i class="fas fa-industry mr-2"></i>Sentra Industri
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=sentra_industri"
+                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                <i class="fas fa-plus mr-1"></i>Tambah Sentra Industri
+            </a>
+        </div>
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+            <i class="fas fa-industry text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600 mb-4">Belum ada data Sentra Industri</p>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=sentra_industri"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-plus mr-2"></i>Tambah Data Pertama
+            </a>
+        </div>
+    </div>
     @endif
 
     <!-- Fasilitas Section -->
     @if(isset($groupedData['fasilitas']) && $groupedData['fasilitas']->count() > 0)
     <div class="mb-8">
-        <h2 class="text-lg font-bold mb-4 text-green-800">
-            <i class="fas fa-building mr-2"></i>Fasilitas
-        </h2>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-green-800">
+                <i class="fas fa-building mr-2"></i>Fasilitas
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=fasilitas"
+                class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                <i class="fas fa-plus mr-1"></i>Tambah Fasilitas
+            </a>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($groupedData['fasilitas'] as $item)
             <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
@@ -192,14 +230,40 @@
             @endforeach
         </div>
     </div>
+    @else
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-green-800">
+                <i class="fas fa-building mr-2"></i>Fasilitas
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=fasilitas"
+                class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                <i class="fas fa-plus mr-1"></i>Tambah Fasilitas
+            </a>
+        </div>
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+            <i class="fas fa-building text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600 mb-4">Belum ada data Fasilitas</p>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=fasilitas"
+                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                <i class="fas fa-plus mr-2"></i>Tambah Data Pertama
+            </a>
+        </div>
+    </div>
     @endif
 
     <!-- UMKM Section -->
     @if(isset($groupedData['umkm']) && $groupedData['umkm']->count() > 0)
     <div class="mb-8">
-        <h2 class="text-lg font-bold mb-4 text-orange-800">
-            <i class="fas fa-store mr-2"></i>UMKM Lokal
-        </h2>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-orange-800">
+                <i class="fas fa-store mr-2"></i>UMKM Lokal
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=umkm"
+                class="bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700">
+                <i class="fas fa-plus mr-1"></i>Tambah UMKM
+            </a>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($groupedData['umkm'] as $item)
             <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
@@ -238,14 +302,40 @@
             @endforeach
         </div>
     </div>
+    @else
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-orange-800">
+                <i class="fas fa-store mr-2"></i>UMKM Lokal
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=umkm"
+                class="bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700">
+                <i class="fas fa-plus mr-1"></i>Tambah UMKM
+            </a>
+        </div>
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+            <i class="fas fa-store text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600 mb-4">Belum ada data UMKM</p>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=umkm"
+                class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
+                <i class="fas fa-plus mr-2"></i>Tambah Data Pertama
+            </a>
+        </div>
+    </div>
     @endif
 
     <!-- Galeri Kegiatan Section -->
     @if(isset($groupedData['galeri_kegiatan']) && $groupedData['galeri_kegiatan']->count() > 0)
     <div class="mb-8">
-        <h2 class="text-lg font-bold mb-4 text-purple-800">
-            <i class="fas fa-images mr-2"></i>Galeri Kegiatan
-        </h2>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-purple-800">
+                <i class="fas fa-images mr-2"></i>Galeri Kegiatan
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=galeri_kegiatan"
+                class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">
+                <i class="fas fa-plus mr-1"></i>Tambah Galeri
+            </a>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             @foreach($groupedData['galeri_kegiatan'] as $item)
             <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
@@ -280,6 +370,26 @@
                 </div>
             </div>
             @endforeach
+        </div>
+    </div>
+    @else
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-purple-800">
+                <i class="fas fa-images mr-2"></i>Galeri Kegiatan
+            </h2>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=galeri_kegiatan"
+                class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">
+                <i class="fas fa-plus mr-1"></i>Tambah Galeri
+            </a>
+        </div>
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+            <i class="fas fa-images text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600 mb-4">Belum ada data Galeri Kegiatan</p>
+            <a href="{{ route('admin.jelajah-lekop.create') }}?tipe=galeri_kegiatan"
+                class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                <i class="fas fa-plus mr-2"></i>Tambah Data Pertama
+            </a>
         </div>
     </div>
     @endif

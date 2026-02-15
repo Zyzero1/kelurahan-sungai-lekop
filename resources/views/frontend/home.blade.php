@@ -421,30 +421,6 @@
         .animate-fade-in {
             animation: fadeInUp 1s ease-out forwards;
         }
-
-        /* News Tabs */
-        .news-tab-btn {
-            padding: 8px 16px;
-            font-weight: 600;
-            color: #64748b;
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
-
-        .news-tab-btn.active {
-            color: var(--primary-800);
-            border-bottom: 2px solid var(--primary-600);
-        }
-
-        .news-tab-content {
-            display: none;
-        }
-
-        .news-tab-content.active {
-            display: block;
-            animation: fadeInUp 0.5s;
-        }
     </style>
 </head>
 
@@ -670,6 +646,10 @@
                                     <span class="bg-blue-600 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">{{ strtoupper($featuredBerita->kategori ?? 'BERITA') }}</span>
                                     <h3 class="text-2xl md:text-3xl font-bold mb-2 leading-tight">{{ $featuredBerita->judul }}</h3>
                                     <p class="text-gray-300 text-sm line-clamp-2 mt-2">{{ \Illuminate\Support\Str::limit(strip_tags($featuredBerita->isi), 120) }}</p>
+                                    <div class="flex items-center gap-2 text-xs text-gray-300 mt-3">
+                                        <i class="far fa-calendar-alt mr-1"></i>
+                                        <span>{{ $featuredBerita->tanggal ? \Carbon\Carbon::parse($featuredBerita->tanggal)->isoFormat('D MMMM Y') : \Carbon\Carbon::parse($featuredBerita->created_at)->isoFormat('D MMMM Y') }}</span>
+                                    </div>
                                 </div>
                             </a>
                             @else
@@ -686,15 +666,14 @@
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 h-full">
                                 <div class="flex border-b mb-4">
-                                    <button class="news-tab-btn active mr-4" data-tab="terkini">{{ $homeContent->berita_tab_terkini ?? 'Terkini' }}</button>
-                                    <button class="news-tab-btn" data-tab="populer">{{ $homeContent->berita_tab_populer ?? 'Populer' }}</button>
+                                    <h3 class="text-lg font-semibold text-gray-800">{{ $homeContent->berita_tab_terkini ?? 'Terkini' }}</h3>
                                 </div>
 
                                 {{-- Tab Terkini --}}
-                                <div id="terkini" class="news-tab-content active space-y-4">
+                                <div class="space-y-4">
                                     @if(isset($beritas) && $beritas->count() > 0)
                                     @php
-                                    $listBeritas = $beritas->skip(1)->take(4); // Skip featured, take next 4
+                                    $listBeritas = $beritas->skip(1)->take(3); // Skip featured, take next 3
                                     @endphp
                                     @foreach($listBeritas as $berita)
                                     <a href="{{ route('berita.show', $berita->slug) }}" class="flex items-start gap-4 p-2 hover:bg-blue-50 rounded-lg transition cursor-pointer block">
@@ -713,46 +692,13 @@
                                             </div>
                                             <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
                                                 <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">{{ strtoupper($berita->kategori ?? 'BERITA') }}</span>
-                                                <span><i class="far fa-clock mr-1"></i> {{ $berita->created_at->diffForHumans() }}</span>
+                                                <span><i class="far fa-calendar-alt mr-1"></i> {{ $berita->tanggal ? \Carbon\Carbon::parse($berita->tanggal)->isoFormat('D MMMM Y') : \Carbon\Carbon::parse($berita->created_at)->isoFormat('D MMMM Y') }}</span>
                                             </div>
                                         </div>
                                     </a>
                                     @endforeach
                                     @else
                                     <p class="text-sm text-gray-500 text-center py-4">Belum ada berita.</p>
-                                    @endif
-                                </div>
-
-                                {{-- Tab Populer --}}
-                                <div id="populer" class="news-tab-content space-y-4">
-                                    @if(isset($beritas) && $beritas->count() > 1)
-                                    @php
-                                    $populerBeritas = $beritas->skip(1)->take(4); // Same as terkini for now
-                                    @endphp
-                                    @foreach($populerBeritas as $berita)
-                                    <a href="{{ route('berita.show', $berita->slug) }}" class="flex items-start gap-4 p-2 hover:bg-blue-50 rounded-lg transition cursor-pointer block">
-                                        <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
-                                            @if($berita->gambar)
-                                            <img src="{{ asset('uploads/berita/'.$berita->gambar) }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
-                                            @else
-                                            <div class="w-full h-full bg-gray-300 flex items-center justify-center">
-                                                <i class="fas fa-newspaper text-gray-500"></i>
-                                            </div>
-                                            @endif
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-bold text-gray-800 hover:text-blue-700 line-clamp-2 mb-1 text-sm leading-snug">
-                                                {{ $berita->judul }}
-                                            </div>
-                                            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded">{{ strtoupper($berita->kategori ?? 'BERITA') }}</span>
-                                                <span><i class="far fa-clock mr-1"></i> {{ $berita->created_at->diffForHumans() }}</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    @endforeach
-                                    @else
-                                    <p class="text-sm text-gray-500 text-center py-4">Belum ada berita populer.</p>
                                     @endif
                                 </div>
                             </div>
@@ -1200,7 +1146,6 @@
                 });
             });
         }
-        setupTabs('.news-tab-btn', '.news-tab-content');
         setupTabs('.stat-tab', '.stat-tab-content');
 
         // Init style awal tab

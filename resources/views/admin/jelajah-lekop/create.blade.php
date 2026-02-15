@@ -8,8 +8,32 @@
         <p class="text-gray-600">Tambahkan data baru untuk tipe: <strong>{{ ucfirst($tipe) }}</strong></p>
     </div>
 
-    <form action="{{ route('admin.jelajah-lekop.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.jelajah-lekop.store') }}" method="POST" enctype="multipart/form-data" onsubmit="prepareFormDataForSubmit()">
         @csrf
+
+        {{-- Flash & Validation Messages --}}
+        @if(session('success'))
+        <div class="mb-4 p-3 rounded bg-green-50 border border-green-200 text-green-800">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-800">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @if($errors->any())
+        <div class="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-800">
+            <strong class="block mb-2">Terjadi kesalahan:</strong>
+            <ul class="list-disc pl-5">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
         <!-- Basic Information -->
         <div id="basicInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6" @if($tipe==='hero' ) style="display: grid" @endif>
@@ -36,14 +60,19 @@
         </div>
 
         <div id="nameDesc" @if($tipe==='hero' ) style="display: none" @endif>
+            {{-- Hidden canonical fields used for submission (always named) --}}
+            <input type="hidden" name="nama" id="hiddenNama" value="{{ old('nama') }}">
+            <input type="hidden" name="deskripsi" id="hiddenDeskripsi" value="{{ old('deskripsi') }}">
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama *</label>
-                <input type="text" name="nama" class="w-full border rounded-lg px-3 py-2" required>
+                <input type="text" id="regularNamaInput" name="nama_regular" data-form-name="nama" class="w-full border rounded-lg px-3 py-2" required placeholder="Contoh: Puskesmas Pembantu Sungai Lekop" value="{{ old('nama') }}">
+                <p class="text-xs text-gray-500 mt-1">Nama yang akan ditampilkan</p>
             </div>
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
-                <textarea name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2" required></textarea>
+                <textarea id="regularDeskripsiInput" name="deskripsi_regular" data-form-name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2" required placeholder="Jelaskan secara singkat...">{{ old('deskripsi') }}</textarea>
+                <p class="text-xs text-gray-500 mt-1">Deskripsi singkat yang akan muncul</p>
             </div>
 
             <div class="mb-6">
@@ -82,7 +111,7 @@
             </div>
         </div>
 
-        <!-- Hero Fields - SIMPLIFIED -->
+        <!-- Hero Fields -->
         <div id="hero_fields" class="detail-fields bg-white rounded-lg border border-blue-200 p-6 mb-6" @if($tipe==='hero' ) style="display: block" @else style="display: none" @endif>
             <h2 class="text-xl font-bold text-blue-800 mb-4">
                 <i class="fas fa-image text-blue-600 mr-2"></i>Konfigurasi Hero Banner
@@ -100,14 +129,14 @@
                 <!-- Title/Nama -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Hero</label>
-                    <input type="text" id="heroTitleInput" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
+                    <input type="text" id="heroNamaInput" name="nama_hero" data-form-name="nama" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner" value="{{ old('nama') }}">
                     <p class="text-xs text-gray-500 mt-1">Judul utama yang ditampilkan di banner</p>
                 </div>
 
                 <!-- Subtitle/Deskripsi -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Subjudul / Deskripsi Hero</label>
-                    <textarea id="heroSubtitleInput" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner"></textarea>
+                    <textarea id="heroDeskripsiInput" name="deskripsi_hero" data-form-name="deskripsi" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ old('deskripsi') }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Teks deskripsi yang muncul di hero banner</p>
                 </div>
 
@@ -119,10 +148,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Hidden inputs for nama dan deskripsi when hero type -->
-        <input type="hidden" id="hiddenNamaInput" name="nama" value="">
-        <input type="hidden" id="hiddenDeskripsiInput" name="deskripsi" value="">
 
         <!-- Dynamic Detail Fields Based on Tipe -->
         <div id="detailFields" class="mb-6" @if($tipe==='hero' ) style="display: none" @endif>
@@ -340,32 +365,39 @@
         updateKategoriOptions(tipe);
     }
 
+    function prepareFormDataForSubmit(tipe) {
+        // Get inputs from both sections
+        const regularNamaInput = document.getElementById('regularNamaInput');
+        const regularDeskripsiInput = document.getElementById('regularDeskripsiInput');
+        const heroNamaInput = document.getElementById('heroNamaInput');
+        const heroDeskripsiInput = document.getElementById('heroDeskripsiInput');
+        const hiddenNama = document.getElementById('hiddenNama');
+        const hiddenDeskripsi = document.getElementById('hiddenDeskripsi');
+
+        if (tipe === 'hero') {
+            // Use hero inputs for hero type
+            if (heroNamaInput && hiddenNama) hiddenNama.value = heroNamaInput.value || '';
+            if (heroDeskripsiInput && hiddenDeskripsi) hiddenDeskripsi.value = heroDeskripsiInput.value || '';
+        } else {
+            // Use regular inputs for non-hero types
+            if (regularNamaInput && hiddenNama) hiddenNama.value = regularNamaInput.value || '';
+            if (regularDeskripsiInput && hiddenDeskripsi) hiddenDeskripsi.value = regularDeskripsiInput.value || '';
+        }
+    }
+
     function updateGallerySettings(tipe) {
         const galleryInput = document.getElementById('galleryInput');
         const galleryTypeLabel = document.getElementById('galleryTypeLabel');
         const galleryHelpText = document.getElementById('galleryHelpText');
-        const newGalleryPreview = document.getElementById('newGalleryPreview');
 
         if (tipe === 'fasilitas') {
-            // Set max 2 files for fasilitas
-            if (galleryInput) {
-                galleryInput.max = '2';
-            }
             if (galleryTypeLabel) {
                 galleryTypeLabel.textContent = '(Maks 2 foto)';
             }
             if (galleryHelpText) {
-                if (tipe === 'fasilitas') {
-                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih 1 atau 2 foto untuk fasilitas (Format: JPG, PNG, GIF | Max: 2MB per file)<br><span class="text-orange-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Upload foto baru akan mengganti semua foto yang ada</span>';
-                } else {
-                    galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih satu atau lebih foto (Format: JPG, PNG, GIF | Max: 2MB per file)';
-                }
+                galleryHelpText.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Pilih 1 atau 2 foto untuk fasilitas (Format: JPG, PNG, GIF | Max: 2MB per file)<br><span class="text-orange-600 font-medium"><i class="fas fa-exclamation-triangle mr-1"></i>Upload foto baru akan mengganti semua foto yang ada</span>';
             }
         } else {
-            // No limit for other types
-            if (galleryInput) {
-                galleryInput.removeAttribute('max');
-            }
             if (galleryTypeLabel) {
                 galleryTypeLabel.textContent = '(Multiple)';
             }
@@ -456,80 +488,151 @@
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
-        updateFormFields('{{ $tipe }}');
+        const initialTipe = '{{ $tipe }}';
+        updateFormFields(initialTipe);
+        prepareFormDataForSubmit(initialTipe);
+
+        // Add event listener for tipe select to update form fields and prepare data
+        const tipeSelect = document.querySelector('select[name="tipe"]');
+        if (tipeSelect) {
+            tipeSelect.addEventListener('change', function(e) {
+                const newTipe = e.target.value;
+                updateFormFields(newTipe);
+                prepareFormDataForSubmit(newTipe);
+                console.log('Form fields updated for tipe:', newTipe);
+            });
+        }
+
+        // Add real-time sync for regular inputs
+        const regularNamaInput = document.getElementById('regularNamaInput');
+        const regularDeskripsiInput = document.getElementById('regularDeskripsiInput');
+        const hiddenNama = document.getElementById('hiddenNama');
+        const hiddenDeskripsi = document.getElementById('hiddenDeskripsi');
+
+        if (regularNamaInput && hiddenNama) {
+            regularNamaInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe !== 'hero') {
+                    hiddenNama.value = this.value;
+                }
+            });
+        }
+
+        if (regularDeskripsiInput && hiddenDeskripsi) {
+            regularDeskripsiInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe !== 'hero') {
+                    hiddenDeskripsi.value = this.value;
+                }
+            });
+        }
+
+        // Add real-time sync for hero inputs
+        const heroNamaInput = document.getElementById('heroNamaInput');
+        const heroDeskripsiInput = document.getElementById('heroDeskripsiInput');
+
+        if (heroNamaInput && hiddenNama) {
+            heroNamaInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe === 'hero') {
+                    hiddenNama.value = this.value;
+                }
+            });
+        }
+
+        if (heroDeskripsiInput && hiddenDeskripsi) {
+            heroDeskripsiInput.addEventListener('input', function() {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                if (tipe === 'hero') {
+                    hiddenDeskripsi.value = this.value;
+                }
+            });
+        }
 
         // Add form submission handler
         const form = document.querySelector('form');
         if (form) {
-            form.addEventListener('submit', function() {
-                syncHeroFieldsBeforeSubmit();
+            form.addEventListener('submit', function(e) {
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                console.log('Form submitting with tipe:', tipe);
+
+                // Prepare form data based on current tipe (fill hidden canonical fields)
+                prepareFormDataForSubmit(tipe);
+
+                // Debug: Log form data before submission
+                const formData = new FormData(form);
+                console.log('Form data before submission:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
+                // Validate required fields
+                const namaInput = document.querySelector('input[name="nama"]');
+                const deskripsiInput = document.querySelector('textarea[name="deskripsi"]');
+
+                if (!namaInput || !namaInput.value.trim()) {
+                    alert('Nama wajib diisi!');
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (!deskripsiInput || !deskripsiInput.value.trim()) {
+                    alert('Deskripsi wajib diisi!');
+                    e.preventDefault();
+                    return false;
+                }
 
                 // Validate fasilitas gallery limit
-                const tipe = document.querySelector('select[name="tipe"]').value;
                 const galleryInput = document.getElementById('galleryInput');
                 if (tipe === 'fasilitas' && galleryInput && galleryInput.files.length > 2) {
                     alert('Maksimal 2 foto untuk fasilitas. Silakan pilih ulang.');
+                    e.preventDefault();
                     return false;
                 }
+
+                console.log('Form validation passed, submitting...');
+                return true;
+            });
+        }
+
+        // Handle gallery file input preview
+        const galleryInput = document.getElementById('galleryInput');
+        if (galleryInput) {
+            galleryInput.addEventListener('change', function(e) {
+                const preview = document.getElementById('newGalleryPreview');
+                preview.innerHTML = '';
+
+                // Get current tipe
+                const tipe = document.querySelector('select[name="tipe"]').value;
+
+                // Limit to 2 files for fasilitas
+                let files = Array.from(this.files);
+                if (tipe === 'fasilitas' && files.length > 2) {
+                    files = files.slice(0, 2);
+                    alert('Maksimal 2 foto untuk fasilitas. Hanya 2 foto pertama yang akan diupload.');
+                }
+
+                files.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const div = document.createElement('div');
+                        div.className = 'relative group';
+                        const borderColor = tipe === 'fasilitas' ? 'border-green-400' : 'border-blue-400';
+                        const badgeColor = tipe === 'fasilitas' ? 'bg-green-500' : 'bg-blue-500';
+                        const badgeText = tipe === 'fasilitas' ? `Foto ${index + 1}` : 'New';
+
+                        div.innerHTML = `
+                            <img src="${event.target.result}" alt="${tipe === 'fasilitas' ? 'Fasilitas ' + (index + 1) : 'New Gallery ' + (index + 1)}" class="w-full h-32 object-cover rounded-lg border-2 ${borderColor}">
+                            <div class="absolute top-1 right-1 ${badgeColor} text-white px-2 py-1 rounded text-xs font-bold">
+                                ${badgeText}
+                            </div>
+                        `;
+                        preview.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
             });
         }
     });
-
-    // Sync hero fields to hidden inputs before form submission
-    function syncHeroFieldsBeforeSubmit() {
-        const tipe = document.querySelector('select[name="tipe"]').value;
-        if (tipe === 'hero') {
-            const heroTitle = document.getElementById('heroTitleInput')?.value || '';
-            const heroSubtitle = document.getElementById('heroSubtitleInput')?.value || '';
-
-            document.getElementById('hiddenNamaInput').value = heroTitle;
-            document.getElementById('hiddenDeskripsiInput').value = heroSubtitle;
-        }
-    }
-</script>
-}
-}
-
-// Handle gallery file input preview
-document.addEventListener('DOMContentLoaded', function() {
-const galleryInput = document.getElementById('galleryInput');
-if (galleryInput) {
-galleryInput.addEventListener('change', function(e) {
-const preview = document.getElementById('newGalleryPreview');
-preview.innerHTML = '';
-
-// Get current tipe
-const tipe = document.querySelector('select[name="tipe"]').value;
-
-// Limit to 2 files for fasilitas
-let files = Array.from(this.files);
-if (tipe === 'fasilitas' && files.length > 2) {
-files = files.slice(0, 2);
-alert('Maksimal 2 foto untuk fasilitas. Hanya 2 foto pertama yang akan diupload.');
-}
-
-files.forEach((file, index) => {
-const reader = new FileReader();
-reader.onload = function(event) {
-const div = document.createElement('div');
-div.className = 'relative group';
-const borderColor = tipe === 'fasilitas' ? 'border-green-400' : 'border-blue-400';
-const badgeColor = tipe === 'fasilitas' ? 'bg-green-500' : 'bg-blue-500';
-const badgeText = tipe === 'fasilitas' ? `Foto ${index + 1}` : 'New';
-
-div.innerHTML = `
-<img src="${event.target.result}" alt="${tipe === 'fasilitas' ? 'Fasilitas ' + (index + 1) : 'New Gallery ' + (index + 1)}" class="w-full h-32 object-cover rounded-lg border-2 ${borderColor}">
-<div class="absolute top-1 right-1 ${badgeColor} text-white px-2 py-1 rounded text-xs font-bold">
-    ${badgeText}
-</div>
-`;
-preview.appendChild(div);
-};
-reader.readAsDataURL(file);
-});
-});
-}
-});
-
 </script>
 @endpush
