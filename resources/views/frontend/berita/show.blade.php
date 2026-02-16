@@ -259,19 +259,50 @@
             .news-detail-hero {
                 height: 60vh;
             }
+
+            .vignette-effect {
+                background: radial-gradient(ellipse at center bottom,
+                        transparent 0%,
+                        transparent 50%,
+                        rgba(0, 0, 0, 0.1) 75%,
+                        rgba(0, 0, 0, 0.25) 100%);
+            }
+
+            /* Glass Morphism Effect */
+            .glass-card {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+
+            .glass-card:hover {
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateY(-5px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+                border-color: rgba(255, 255, 255, 0.25);
+            }
         }
 
+        /* Mobile Responsive Adjustments */
         @media (max-width: 768px) {
             .news-detail-hero {
-                height: 50vh;
-                min-height: 400px;
+                height: 40vh;
+                min-height: 300px;
             }
         }
 
         @media (max-width: 640px) {
             .news-detail-hero {
-                height: 45vh;
-                min-height: 350px;
+                height: 35vh;
+                min-height: 280px;
+            }
+
+            /* Move banner content up on mobile */
+            .news-detail-hero .container {
+                padding-bottom: 16px !important;
+                transform: translateY(-20px) !important;
             }
         }
     </style>

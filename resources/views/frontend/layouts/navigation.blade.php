@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
 
             {{-- LOGO --}}
-            <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+            <a href="{{ url('/') }}" class="flex items-center gap-2 group">
                 {{-- Ganti src dengan logo asli --}}
                 <img src="{{ asset('images/Bintan-Logo.png') }}" class="h-12" alt="Logo Kelurahan Sungai Lekop">
                 <div class="text-white flex flex-col">

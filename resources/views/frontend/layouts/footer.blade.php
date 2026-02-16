@@ -95,7 +95,7 @@
 
         <div class="border-t border-gray-800 pt-8 text-center">
             <p class="text-gray-500 text-sm">
-                &copy; {{ date('Y') }} Kelurahan Sungai Lekop. <span class="text-yellow-400">Design by KKN UMRAH 2026</span>. All rights reserved.
+                &copy; {{ date('Y') }} Kelurahan Sungai Lekop. <span class="text-yellow-400">Design by KELOMPOK 5 KKN UMRAH 2026</span>. All rights reserved.
             </p>
         </div>
     </div>

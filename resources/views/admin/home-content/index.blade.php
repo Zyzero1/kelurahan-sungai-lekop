@@ -150,6 +150,38 @@
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
+
+                <!-- Social Media Links Section -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-share-alt text-blue-600 text-xl mr-3"></i>
+                        <h2 class="text-xl font-bold text-gray-800">Media Sosial (Banner Beranda)</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facebook URL</label>
+                            <input type="url" name="social_facebook" value="{{ $homeContent->social_facebook ?? '#' }}"
+                                placeholder="https://facebook.com/kelurahansungailekop"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Link Facebook untuk ikon di banner beranda</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Instagram URL</label>
+                            <input type="url" name="social_instagram" value="{{ $homeContent->social_instagram ?? '#' }}"
+                                placeholder="https://instagram.com/kelurahansungailekop"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Link Instagram untuk ikon di banner beranda</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">YouTube URL</label>
+                            <input type="url" name="social_youtube" value="{{ $homeContent->social_youtube ?? '#' }}"
+                                placeholder="https://youtube.com/@kelurahansungailekop"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-xs text-gray-500 mt-1">Link YouTube untuk ikon di banner beranda</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>

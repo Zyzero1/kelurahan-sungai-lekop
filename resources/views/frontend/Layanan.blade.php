@@ -41,24 +41,87 @@
             font-family: 'Inter', system-ui, sans-serif;
             background-color: #f8fafc;
             overflow-x: hidden;
+            max-width: 100vw;
         }
 
-        /* Hero Section - Mobile Responsive */
+        /* Fix desktop content width */
+        @media (min-width: 768px) {
+            body {
+                padding-left: 0;
+                padding-right: 0;
+                overflow-x: hidden;
+            }
+
+            main {
+                max-width: 100%;
+                margin: 0 auto;
+                overflow-x: hidden;
+            }
+        }
+
+        /* Hero Section - Mobile Responsive - simplified */
         @media (max-width: 767px) {
             main>section:first-child {
-                height: 380px !important;
+                height: 500px !important;
             }
 
             main>section:first-child .container {
-                padding-top: 0 !important;
+                padding-top: 0px !important;
             }
+        }
+
+        /* Prevent horizontal overflow - simplified */
+        * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        /* Additional overflow prevention - simplified */
+        .container:not(.modern-header .container) {
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Ensure content stays within bounds on desktop */
+        @media (min-width: 768px) {
+            .container:not(.modern-header .container) {
+                max-width: 1300px;
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+
+        /* Modern Header - Override for consistency with standard navigation */
+        .modern-header {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Ensure scroll effect works - override any conflicting styles */
+        .modern-header.scrolled {
+            background: #1e3a8a !important;
+            backdrop-filter: none !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+            border-bottom: none !important;
         }
 
         .card-hover {
             transition: all 0.3s ease;
         }
-
-
 
         .card-hover:hover {
 
@@ -67,8 +130,6 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 
         }
-
-
 
         .text-gradient {
 
@@ -82,8 +143,6 @@
 
         }
 
-
-
         /* Custom Scrollbar for Modal */
 
         .modal-scroll::-webkit-scrollbar {
@@ -91,8 +150,6 @@
             width: 8px;
 
         }
-
-
 
         .modal-scroll::-webkit-scrollbar-track {
 
@@ -102,8 +159,6 @@
 
         }
 
-
-
         .modal-scroll::-webkit-scrollbar-thumb {
 
             background: #888;
@@ -112,15 +167,11 @@
 
         }
 
-
-
         .modal-scroll::-webkit-scrollbar-thumb:hover {
 
             background: #555;
 
         }
-
-
 
         /* UMKM Modal Image Styling */
         #modalImage {
@@ -230,15 +281,65 @@
 
 
 
-        /* Photo Cards - DISABLED floating animation to fix layout */
+        /* Additional mobile improvements */
+        @media (max-width: 767px) {
 
-        /* .photo-card {
-            transition: all 0.7s ease;
+            /* Improve text spacing */
+            .text-4xl {
+                font-size: 2rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .text-6xl {
+                font-size: 2.5rem !important;
+                line-height: 1.2 !important;
+            }
+
+            /* Improve button spacing - Exclude navigation container */
+            .container:not(.modern-header .container) {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            /* Fix modal overflow on mobile */
+            .modal-scroll {
+                max-height: 80vh;
+            }
+
+            /* Improve gallery grid on mobile */
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            /* Fix gallery sub-menu layout on mobile */
+            .inline-flex {
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+            }
+
+            /* Make gallery tabs 2 columns on mobile with "Semua" centered */
+            .gallery-tab {
+                width: auto !important;
+                text-align: center !important;
+                flex: 1 1 calc(50% - 0.25rem) !important;
+                min-width: calc(50% - 0.25rem) !important;
+            }
+
+            /* Special styling for "Semua" button to be centered */
+            .gallery-tab:first-child {
+                flex: 0 0 100% !important;
+                text-align: center !important;
+                order: -1 !important;
+            }
+
+            /* Improve gallery grid on mobile */
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
         }
-        
-        .photo-card:hover {
-            animation-play-state: paused;
-        } */
     </style>
 
 </head>
@@ -246,10 +347,6 @@
 
 
 <body class="font-sans antialiased text-slate-800">
-
-
-
-    {{-- Memanggil Navigasi --}}
 
     @include('frontend.layouts.navigation')
 
@@ -261,7 +358,7 @@
 
         {{-- 1. HERO SECTION --}}
 
-        <section class="relative h-[500px] md:h-[500px] overflow-hidden mt-16 md:mt-0">
+        <section class="relative h-[500px] md:h-[500px] overflow-hidden pt-20 md:pt-0">
 
             <div class="absolute inset-0">
 
@@ -275,9 +372,7 @@
 
             </div>
 
-
-
-            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-12">
+            <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-24 md:pt-12">
 
                 <div class="text-center max-w-4xl" data-aos="fade-up">
 
@@ -1081,18 +1176,6 @@
 
             });
 
-            // Header Scroll Effect - TRANSPARENT TO BLUE
-            const header = document.querySelector(".modern-header");
-            if (header) {
-                window.addEventListener("scroll", () => {
-                    if (window.scrollY > 50) {
-                        header.classList.add("scrolled");
-                    } else {
-                        header.classList.remove("scrolled");
-                    }
-                });
-            }
-
             // Gallery Data from PHP
             let viewerCurrentImages = [];
             let viewerCurrentIndex = 0;
@@ -1171,16 +1254,13 @@
                             }
 
                             console.log('Item', itemId, 'final images:', images);
-                            // Add to galleryData by category
-                            if (!galleryData[category]) {
-                                galleryData[category] = {
-                                    title: ucfirst(category),
-                                    images: []
-                                };
-                            }
-                            galleryData[category].images.push(...images);
+                            // Add to galleryData by item ID (like beranda page)
+                            galleryData[itemId] = {
+                                title: itemName,
+                                images: images
+                            };
 
-                            console.log('Gallery data after adding to', category, ':', galleryData[category].images.length, 'images');
+                            console.log('Gallery data after adding item', itemId, ':', images.length, 'images');
                         }
                     }
                 });
@@ -1237,41 +1317,24 @@
                         return;
                     }
 
-                    // Find item by ID across all categories
-                    let foundItem = null;
-                    let foundCategory = null;
-                    let foundIndex = 0;
-
-                    for (const [category, album] of Object.entries(galleryData)) {
-                        console.log('Checking category:', category, 'with', album.images.length, 'images');
-                        const itemIndex = album.images.findIndex(img => img.id == itemId);
-                        if (itemIndex !== -1) {
-                            foundItem = album.images[itemIndex];
-                            foundCategory = category;
-                            foundIndex = itemIndex;
-                            console.log('Found item in category', category, 'at index', itemIndex);
-                            break;
-                        }
-                    }
-
-                    if (!foundItem) {
-                        console.error("Item not found:", itemId);
-                        alert('Gambar tidak ditemukan dalam galeri. Silakan refresh halaman.');
+                    // Find item by ID directly (like beranda page)
+                    const album = galleryData[itemId];
+                    if (!album || !album.images || album.images.length === 0) {
+                        console.error('Album not found or is empty:', itemId);
+                        alert('Galeri tidak tersedia untuk item ini.');
                         return;
                     }
 
-                    console.log('Found item:', foundItem);
-                    console.log('Found category:', foundCategory);
-                    console.log('Found index:', foundIndex);
+                    console.log('Found album:', album.title, 'with', album.images.length, 'images');
 
                     // Set current viewing data
-                    viewerCurrentImages = galleryData[foundCategory].images;
-                    viewerCurrentIndex = foundIndex;
+                    viewerCurrentImages = album.images;
+                    viewerCurrentIndex = 0;
 
                     // Update album title
                     const albumTitle = document.getElementById('galleryViewerAlbumTitle');
                     if (albumTitle) {
-                        albumTitle.textContent = galleryData[foundCategory].title || ucfirst(foundCategory);
+                        albumTitle.textContent = album.title;
                     }
 
                     // Update modal content
@@ -1360,16 +1423,13 @@
                             }
 
                             console.log('Item', itemId, 'final images:', images);
-                            // Add to galleryData by category
-                            if (!galleryData[category]) {
-                                galleryData[category] = {
-                                    title: ucfirst(category),
-                                    images: []
-                                };
-                            }
-                            galleryData[category].images.push(...images);
+                            // Add to galleryData by item ID (like beranda page)
+                            galleryData[itemId] = {
+                                title: itemName,
+                                images: images
+                            };
 
-                            console.log('Gallery data after adding to', category, ':', galleryData[category].images.length, 'images');
+                            console.log('Gallery data after adding item', itemId, ':', images.length, 'images');
                         }
                     }
                 });
@@ -1473,103 +1533,19 @@
 
 
 
-            // Active navigation highlighting
-
-            const sections = document.querySelectorAll('section[id]');
-
-            const navLinks = document.querySelectorAll('.sticky a[href^="#"]');
-
-
-
-            window.addEventListener('scroll', () => {
-
-                let current = '';
-
-                const scrollPosition = window.scrollY + 80;
-
-
-
-                sections.forEach(section => {
-
-                    const sectionTop = section.offsetTop;
-
-                    const sectionHeight = section.offsetHeight;
-
-
-
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-
-                        current = section.getAttribute('id');
-
-                    }
-
-                });
-
-
-
-                navLinks.forEach(link => {
-
-                    link.classList.remove('bg-blue-600', 'text-white');
-
-                    link.classList.add('bg-gray-100', 'text-gray-700');
-
-                    if (link.getAttribute('href') === '#' + current) {
-
-                        link.classList.remove('bg-gray-100', 'text-gray-700');
-
-                        link.classList.add('bg-blue-600', 'text-white');
-
-                    }
-
-                });
-
-            });
-
-
-
-            // Smooth scroll
-
-            navLinks.forEach(link => {
-
-                link.addEventListener('click', function(e) {
-
-                    e.preventDefault();
-
-                    const targetId = this.getAttribute('href').substring(1);
-
-                    const targetSection = document.getElementById(targetId);
-
-
-
-                    if (targetSection) {
-
-                        const headerHeight = document.querySelector('.modern-header')?.offsetHeight || 80;
-
-                        const stickyNavHeight = document.querySelector('.sticky')?.offsetHeight || 60;
-
-                        const totalOffset = headerHeight + stickyNavHeight;
-
-
-
-                        const targetPosition = targetSection.offsetTop - totalOffset;
-
-
-
-                        window.scrollTo({
-
-                            top: targetPosition,
-
-                            behavior: 'smooth'
-
-                        });
-
-                    }
-
-                });
-
-            });
-
             // Modal Functions
+
+            // Header Scroll Effect - Ensure it works on this page
+            const header = document.querySelector(".modern-header");
+            if (header) {
+                window.addEventListener("scroll", () => {
+                    if (window.scrollY > 50) {
+                        header.classList.add("scrolled");
+                    } else {
+                        header.classList.remove("scrolled");
+                    }
+                });
+            }
 
             function openModal(facilityId) {
                 const modal = document.getElementById('facilityModal');
