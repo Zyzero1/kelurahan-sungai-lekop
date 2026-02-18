@@ -8,6 +8,7 @@ use App\Models\Profil;
 use App\Models\JelajahLekop;
 use App\Models\Berita;
 use App\Models\Kontak;
+use App\Models\Navigation;
 
 
 class DashboardController extends Controller
@@ -19,6 +20,7 @@ class DashboardController extends Controller
             'totalJelajahLekop' => JelajahLekop::count(),
             'totalBerita' => Berita::count(),
             'totalKontak' => Kontak::count(),
+            'totalNavigation' => Navigation::count(),
         ]);
     }
 }

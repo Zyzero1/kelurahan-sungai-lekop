@@ -461,7 +461,7 @@
                                     class="bg-gradient-to-r from-blue-50 to-blue-50 p-6 rounded-xl border-l-4 border-blue-500 mb-8">
                                     <p
                                         class="text-xl text-gray-800 leading-relaxed font-medium">
-                                        <span class="text-blue-600 font-bold">Tanjungpinang</span>
+                                        <span class="text-blue-600 font-bold">Bintan</span>
                                         - {!! nl2br(e($berita->isi)) !!}
                                     </p>
                                 </div>

@@ -12,6 +12,8 @@ use App\Http\Controllers\Frontend\JelajahLekopController as FrontJelajahLekop;
 use App\Http\Controllers\Frontend\BeritaController as FrontBerita;
 use App\Http\Controllers\Admin\KontakController;
 use App\Http\Controllers\Admin\SocialMediaController;
+use App\Http\Controllers\Admin\NavigationController;
+use App\Http\Controllers\Admin\KelurahanSettingController;
 use App\Http\Controllers\FooterController;
 
 
@@ -76,6 +78,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // === FOOTER ===
     Route::resource('footer', FooterController::class);
+
+    // === NAVIGATION ===
+    Route::resource('navigation', NavigationController::class);
+
+    // === KELURAHAN SETTING ===
+    Route::resource('kelurahan-setting', KelurahanSettingController::class);
 });
 
 /*

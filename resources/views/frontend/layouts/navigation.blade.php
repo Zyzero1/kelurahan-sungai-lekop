@@ -3,13 +3,34 @@
         <div class="flex items-center justify-between">
 
             {{-- LOGO --}}
-            <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-                {{-- Ganti src dengan logo asli --}}
-                <img src="{{ asset('images/Bintan-Logo.png') }}" class="h-12" alt="Logo Kelurahan Sungai Lekop">
-                <div class="text-white flex flex-col">
-                    <span class="text-xs font-medium uppercase tracking-widest opacity-90">Kelurahan</span>
-                    <span class="text-lg md:text-xl font-bold leading-none tracking-wide">Sungai Lekop</span>
+            <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+                {{-- Ambil logo dari pengaturan admin --}}
+                @php
+                try {
+                $kelurahanSetting = \App\Models\KelurahanSetting::getSetting();
+                $logoPath = $kelurahanSetting->logo_path ?? null;
+                $namaKelurahan = $kelurahanSetting->nama_kelurahan ?? 'Kelurahan Sungai Lekop';
+                } catch (Exception $e) {
+                $logoPath = null;
+                $namaKelurahan = 'Kelurahan Sungai Lekop';
+                }
+                @endphp
+
+                @if($logoPath && file_exists(public_path($logoPath)))
+                <img src="{{ asset($logoPath) }}" class="h-12" alt="Logo {{ $namaKelurahan }}">
+                <div class="flex flex-col">
+                    <span class="text-xs font-medium uppercase tracking-widest opacity-90 text-white">Kelurahan</span>
+                    <span class="text-lg md:text-xl font-bold leading-none tracking-wide text-white">{{ $namaKelurahan }}</span>
                 </div>
+                @else
+                <div class="text-white flex items-center gap-2">
+                    <i class="fas fa-landmark text-2xl"></i>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-medium uppercase tracking-widest opacity-90">Kelurahan</span>
+                        <span class="text-lg md:text-xl font-bold leading-none tracking-wide">{{ $namaKelurahan }}</span>
+                    </div>
+                </div>
+                @endif
             </a>
 
             {{-- DESKTOP MENU --}}

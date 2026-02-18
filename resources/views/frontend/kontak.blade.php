@@ -120,7 +120,7 @@
 
     <!-- Hero Banner - Persegi Panjang Standar -->
     <section class="hero-banner h-96 relative flex items-center justify-center">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-700/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-950/95 to-blue-900/90"></div>
 
         <div class="container mx-auto px-6 h-full flex items-center justify-center relative z-30 pt-16">
             <div class="text-center max-w-4xl" data-aos="fade-up">
@@ -240,7 +240,7 @@
 
     <!-- CTA Section -->
     @if($kontak)
-    <section class="py-16 bg-gradient-to-r from-blue-600 to-blue-800">
+    <section class="py-16 bg-gradient-to-r from-blue-950 to-blue-900">
         <div class="container mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-white mb-4" data-aos="fade-up">Butuh Bantuan?</h2>
             <p class="text-xl text-blue-100 mb-8" data-aos="fade-up" data-aos-delay="100">

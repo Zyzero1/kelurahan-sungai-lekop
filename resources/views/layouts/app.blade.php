@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/Bintan-Logo.png') }}">
 
     <title>Admin Kelurahan Sungai Lekop</title>
 
@@ -15,6 +17,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
+
 <body class="bg-slate-100 font-sans">
 
 
@@ -64,7 +67,7 @@
                         Berita
                     </a>
                 </li>
-            
+
             </ul>
         </aside>
 
@@ -76,4 +79,5 @@
     </div>
 
 </body>
+
 </html>

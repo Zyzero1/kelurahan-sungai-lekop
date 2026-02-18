@@ -48,7 +48,7 @@
                 @enderror
             </div>
             <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Motto Lurah</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Motto Kelurahan</label>
                 <textarea name="motto_lurah" rows="3" class="w-full border rounded p-2">{{ old('motto_lurah', $profil->motto_lurah) }}</textarea>
                 @error('motto_lurah')
                 <div class="text-sm text-red-600 mt-1">{{ $message }}</div>

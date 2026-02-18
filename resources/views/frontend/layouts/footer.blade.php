@@ -4,12 +4,28 @@
 
             {{-- KOLOM 1: TENTANG --}}
             <div class="lg:col-span-1 text-center sm:text-left">
+                {{-- Ambil data dari pengaturan admin --}}
+                @php
+                try {
+                $kelurahanSetting = \App\Models\KelurahanSetting::getSetting();
+                $logoPath = $kelurahanSetting->logo_path ?? null;
+                $namaKelurahan = $kelurahanSetting->nama_kelurahan ?? 'Sungai Lekop';
+                } catch (Exception $e) {
+                $logoPath = null;
+                $namaKelurahan = 'Sungai Lekop';
+                }
+                @endphp
+
                 <div class="flex items-center gap-3 mb-6 justify-center sm:justify-start">
-                    <img src="{{ asset('images/Bintan-Logo.png') }}" class="h-10" alt="Logo Kelurahan Sungai Lekop">
+                    @if($logoPath && file_exists(public_path($logoPath)))
+                    <img src="{{ asset($logoPath) }}" class="h-10" alt="Logo {{ $namaKelurahan }}">
+                    @else
+                    <i class="fas fa-landmark text-2xl text-yellow-400"></i>
+                    @endif
                     <div class="text-left">
                         <span class="text-xs font-medium uppercase tracking-widest opacity-90">Kelurahan</span>
                         <div class="text-lg md:text-xl font-bold leading-none tracking-wide">
-                            {{ $footerData['tentang']->judul ?? 'Sungai Lekop' }}
+                            {{ $namaKelurahan }}
                         </div>
                     </div>
                 </div>
@@ -95,7 +111,7 @@
 
         <div class="border-t border-gray-800 pt-8 text-center">
             <p class="text-gray-500 text-sm">
-                &copy; {{ date('Y') }} Kelurahan Sungai Lekop. <span class="text-yellow-400">Design by KELOMPOK 5 KKN UMRAH 2026</span>. All rights reserved.
+                &copy; {{ date('Y') }} Kelurahan Sungai Lekop. <span class="text-yellow-400">Developed by KELOMPOK 5 KKN UMRAH 2026</span>. All rights reserved.
             </p>
         </div>
     </div>
