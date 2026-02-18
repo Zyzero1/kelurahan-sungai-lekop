@@ -10,8 +10,7 @@
 
     <form action="{{ route('admin.jelajah-lekop.update', $jelajahLekop->id) }}"
         method="POST"
-        enctype="multipart/form-data"
-        onsubmit="prepareFormDataForSubmit(document.querySelector('select[name=tipe]').value)">
+        enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -64,18 +63,14 @@
         </div>
 
         <div id="nameDesc" @if($jelajahLekop->tipe === 'hero') style="display: none" @endif>
-            {{-- Hidden canonical fields used for submission (tanpa value statis) --}}
-            <input type="hidden" name="nama" id="hiddenNama">
-            <input type="hidden" name="deskripsi" id="hiddenDeskripsi">
-
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama *</label>
-                <input type="text" id="regularNamaInput" name="nama_regular" value="{{ old('nama', $jelajahLekop->nama) }}" class="w-full border rounded-lg px-3 py-2" required>
+                <input type="text" id="regularNamaInput" name="nama" value="{{ old('nama', $jelajahLekop->nama) }}" class="w-full border rounded-lg px-3 py-2" required>
             </div>
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
-                <textarea id="regularDeskripsiInput" name="deskripsi_regular" rows="4" class="w-full border rounded-lg px-3 py-2" required>{{ old('deskripsi', $jelajahLekop->deskripsi) }}</textarea>
+                <textarea id="regularDeskripsiInput" name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2" required>{{ old('deskripsi', $jelajahLekop->tipe === 'galeri_kegiatan' ? ($jelajahLekop->detail['deskripsi_singkat'] ?? $jelajahLekop->deskripsi) : $jelajahLekop->deskripsi) }}</textarea>
             </div>
 
             <div class="mb-6">
@@ -165,14 +160,14 @@
                 <!-- Title/Nama -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Hero</label>
-                    <input type="text" id="heroNamaInput" name="nama_hero" data-form-name="nama" value="{{ old('nama', $jelajahLekop->nama) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
+                    <input type="text" id="heroNamaInput" name="nama_hero" value="{{ old('nama', $jelajahLekop->nama) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Judul hero banner">
                     <p class="text-xs text-gray-500 mt-1">Judul utama yang ditampilkan di banner</p>
                 </div>
 
                 <!-- Subtitle/Deskripsi -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Subjudul / Deskripsi Hero</label>
-                    <textarea id="heroDeskripsiInput" name="deskripsi_hero" data-form-name="deskripsi" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ old('deskripsi', $jelajahLekop->deskripsi) }}</textarea>
+                    <textarea id="heroDeskripsiInput" name="deskripsi_hero" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Subjudul/deskripsi hero banner">{{ old('deskripsi', $jelajahLekop->deskripsi) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Teks deskripsi yang muncul di hero banner</p>
                 </div>
 
@@ -407,27 +402,6 @@
         updateKategoriOptions(tipe);
     }
 
-    function prepareFormDataForSubmit(tipe) {
-        const regularNamaInput = document.getElementById('regularNamaInput');
-        const regularDeskripsiInput = document.getElementById('regularDeskripsiInput');
-        const heroNamaInput = document.getElementById('heroNamaInput');
-        const heroDeskripsiInput = document.getElementById('heroDeskripsiInput');
-        const hiddenNama = document.getElementById('hiddenNama');
-        const hiddenDeskripsi = document.getElementById('hiddenDeskripsi');
-
-        if (tipe === 'hero') {
-            // Jika tipe Hero, ambil dari field hero
-            hiddenNama.value = heroNamaInput ? heroNamaInput.value : '';
-            hiddenDeskripsi.value = heroDeskripsiInput ? heroDeskripsiInput.value : '';
-        } else {
-            // Jika tipe Fasilitas/UMKM/dll, ambil dari field regular
-            hiddenNama.value = regularNamaInput ? regularNamaInput.value : '';
-            hiddenDeskripsi.value = regularDeskripsiInput ? regularDeskripsiInput.value : '';
-        }
-
-        console.log('Sync Data:', hiddenNama.value, hiddenDeskripsi.value); // Untuk Debug
-    }
-
     function updateGallerySettings(tipe) {
         const galleryInput = document.getElementById('galleryInput');
         const galleryTypeLabel = document.getElementById('galleryTypeLabel');
@@ -555,209 +529,57 @@
     document.addEventListener('DOMContentLoaded', function() {
         const currentTipe = '{{ $jelajahLekop->tipe }}';
         updateFormFields(currentTipe);
-        // Initialize hidden fields dengan data awal
-        prepareFormDataForSubmit(currentTipe);
 
-        // Add event listener for tipe select to update form fields and prepare data
+        // Add event listener for tipe select to update form fields
         const tipeSelect = document.querySelector('select[name="tipe"]');
         if (tipeSelect) {
             tipeSelect.addEventListener('change', function(e) {
                 const newTipe = e.target.value;
                 updateFormFields(newTipe);
-                prepareFormDataForSubmit(newTipe);
                 console.log('Form fields updated for tipe:', newTipe);
             });
         }
 
-        // Add real-time sync for regular inputs
-        const regularNamaInput = document.getElementById('regularNamaInput');
-        const regularDeskripsiInput = document.getElementById('regularDeskripsiInput');
-        const hiddenNama = document.getElementById('hiddenNama');
-        const hiddenDeskripsi = document.getElementById('hiddenDeskripsi');
-
-        if (regularNamaInput && hiddenNama) {
-            regularNamaInput.addEventListener('input', function() {
-                const tipe = document.querySelector('select[name="tipe"]').value;
-                if (tipe !== 'hero') {
-                    hiddenNama.value = this.value;
-                }
-            });
-        }
-
-        if (regularDeskripsiInput && hiddenDeskripsi) {
-            regularDeskripsiInput.addEventListener('input', function() {
-                const tipe = document.querySelector('select[name="tipe"]').value;
-                if (tipe !== 'hero') {
-                    hiddenDeskripsi.value = this.value;
-                }
-            });
-        }
-
-        // Add real-time sync for hero inputs
-        const heroNamaInput = document.getElementById('heroNamaInput');
-        const heroDeskripsiInput = document.getElementById('heroDeskripsiInput');
-
-        if (heroNamaInput && hiddenNama) {
-            heroNamaInput.addEventListener('input', function() {
-                const tipe = document.querySelector('select[name="tipe"]').value;
-                if (tipe === 'hero') {
-                    hiddenNama.value = this.value;
-                }
-            });
-        }
-
-        if (heroDeskripsiInput && hiddenDeskripsi) {
-            heroDeskripsiInput.addEventListener('input', function() {
-                const tipe = document.querySelector('select[name="tipe"]').value;
-                if (tipe === 'hero') {
-                    hiddenDeskripsi.value = this.value;
-                }
-            });
-        }
-
-        // Add form submission handler
+        // Add form submission handler for debugging
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
                 console.log('=== FORM SUBMISSION DEBUG ===');
-
-                // Get current tipe
-                const tipe = document.querySelector('select[name="tipe"]').value;
-                console.log('Current tipe:', tipe);
-
-                // Get input values before sync
-                const regularNama = document.getElementById('regularNamaInput')?.value;
-                const regularDeskripsi = document.getElementById('regularDeskripsiInput')?.value;
-                const heroNama = document.getElementById('heroNamaInput')?.value;
-                const heroDeskripsi = document.getElementById('heroDeskripsiInput')?.value;
-                const hiddenNama = document.getElementById('hiddenNama')?.value;
-                const hiddenDeskripsi = document.getElementById('hiddenDeskripsi')?.value;
-
-                console.log('Before sync:');
-                console.log('- Regular Nama:', regularNama);
-                console.log('- Regular Deskripsi:', regularDeskripsi);
-                console.log('- Hero Nama:', heroNama);
-                console.log('- Hero Deskripsi:', heroDeskripsi);
-                console.log('- Hidden Nama:', hiddenNama);
-                console.log('- Hidden Deskripsi:', hiddenDeskripsi);
-
-                // Prepare form data based on current tipe
-                prepareFormDataForSubmit(tipe);
-
-                // Get values after sync
-                const finalNama = document.getElementById('hiddenNama')?.value;
-                const finalDeskripsi = document.getElementById('hiddenDeskripsi')?.value;
-
-                console.log('After sync:');
-                console.log('- Final Nama:', finalNama);
-                console.log('- Final Deskripsi:', finalDeskripsi);
-
-                // Log prepared data
                 const formData = new FormData(form);
-                console.log('Form data being submitted:');
-                console.log('- nama:', formData.get('nama'));
-                console.log('- deskripsi:', formData.get('deskripsi'));
 
-                // Validate fasilitas gallery limit
-                const galleryInput = document.getElementById('galleryInput');
-                if (tipe === 'fasilitas' && galleryInput && galleryInput.files.length > 2) {
-                    alert('Maksimal 2 foto untuk fasilitas. Silakan pilih ulang.');
-                    e.preventDefault();
-                    return false;
+                // Log all form data
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}:`, value);
                 }
 
-                console.log('=== END DEBUG ===');
-                return true;
-            });
-        }
+                console.log('Nama being submitted:', formData.get('nama'));
+                console.log('Nama_hero being submitted:', formData.get('nama_hero'));
+                console.log('Deskripsi being submitted:', formData.get('deskripsi'));
+                console.log('Deskripsi_hero being submitted:', formData.get('deskripsi_hero'));
+                console.log('Tipe:', formData.get('tipe'));
 
-        // Handle gallery file input preview
-        const galleryInput = document.getElementById('galleryInput');
-        if (galleryInput) {
-            galleryInput.addEventListener('change', function(e) {
-                const preview = document.getElementById('newGalleryPreview');
-                preview.innerHTML = '';
-
-                // Get current tipe
-                const tipe = document.querySelector('select[name="tipe"]').value;
-
-                // Limit to 2 files for fasilitas
-                let files = Array.from(this.files);
-                if (tipe === 'fasilitas' && files.length > 2) {
-                    files = files.slice(0, 2);
-                    alert('Maksimal 2 foto untuk fasilitas. Hanya 2 foto pertama yang akan diupload.');
+                // Specifically check galeri_kegiatan case
+                if (formData.get('tipe') === 'galeri_kegiatan') {
+                    console.log('=== GALERI KEGIATAN DEBUG ===');
+                    console.log('Nama value from input:', document.getElementById('regularNamaInput')?.value);
+                    console.log('Deskripsi value from input:', document.getElementById('regularDeskripsiInput')?.value);
+                    console.log('Nama in FormData:', formData.get('nama'));
+                    console.log('Deskripsi in FormData:', formData.get('deskripsi'));
                 }
 
-                files.forEach((file, index) => {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        const div = document.createElement('div');
-                        div.className = 'relative group';
-                        const borderColor = tipe === 'fasilitas' ? 'border-green-400' : 'border-blue-400';
-                        const badgeColor = tipe === 'fasilitas' ? 'bg-green-500' : 'bg-blue-500';
-                        const badgeText = tipe === 'fasilitas' ? `Foto ${index + 1}` : 'New';
+                // Specifically check hero case
+                if (formData.get('tipe') === 'hero') {
+                    console.log('=== HERO DEBUG ===');
+                    console.log('Nama_hero value from input:', document.getElementById('heroNamaInput')?.value);
+                    console.log('Deskripsi_hero value from input:', document.getElementById('heroDeskripsiInput')?.value);
+                    console.log('Nama_hero in FormData:', formData.get('nama_hero'));
+                    console.log('Deskripsi_hero in FormData:', formData.get('deskripsi_hero'));
+                }
 
-                        div.innerHTML = `
-                            <img src="${event.target.result}" alt="${tipe === 'fasilitas' ? 'Fasilitas ' + (index + 1) : 'New Gallery ' + (index + 1)}" class="w-full h-32 object-cover rounded-lg border-2 ${borderColor}">
-                            <div class="absolute top-1 right-1 ${badgeColor} text-white px-2 py-1 rounded text-xs font-bold">
-                                ${badgeText}
-                            </div>
-                        `;
-                        preview.appendChild(div);
-                    };
-                    reader.readAsDataURL(file);
-                });
+                console.log('=== END FORM DEBUG ===');
             });
         }
-
-        // Add click handlers for existing gallery images
-        const galleryImages = document.querySelectorAll('[onclick*="removeGalleryImage"]');
-        galleryImages.forEach(img => {
-            const container = img.closest('.relative');
-            if (container) {
-                container.style.cursor = 'pointer';
-                container.addEventListener('click', function(e) {
-                    if (!e.target.closest('button')) {
-                        const img = this.querySelector('img');
-                        if (img && img.src) {
-                            openGalleryModal(img.src);
-                        }
-                    }
-                });
-            }
-        });
     });
-
-    // Handle gallery image removal
-    function removeGalleryImage(imageName, event) {
-        console.log('Removing gallery image:', imageName);
-        console.log('Event:', event);
-
-        const removeImagesInput = document.getElementById('removeImages');
-        if (!removeImagesInput) {
-            console.error('removeImages input not found');
-            return;
-        }
-
-        const currentValue = removeImagesInput.value;
-        const imagesToRemove = currentValue ? currentValue.split(',') : [];
-        console.log('Current images to remove:', imagesToRemove);
-
-        if (!imagesToRemove.includes(imageName)) {
-            imagesToRemove.push(imageName);
-            removeImagesInput.value = imagesToRemove.join(',');
-            console.log('Updated remove_images value:', removeImagesInput.value);
-        }
-
-        // Hide image from view with better error handling
-        const imageContainer = event ? event.target.closest('.relative') : document.querySelector(`img[src*="${imageName}"]`)?.closest('.relative');
-        if (imageContainer) {
-            imageContainer.style.display = 'none';
-            console.log('Hidden image container for:', imageName);
-        } else {
-            console.error('Could not find image container to hide');
-        }
-    }
 
     function openGalleryModal(imageSrc) {
         const modal = document.getElementById('galleryModal');

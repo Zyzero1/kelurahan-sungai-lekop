@@ -64,15 +64,18 @@
             <input type="hidden" name="nama" id="hiddenNama" value="{{ old('nama') }}">
             <input type="hidden" name="deskripsi" id="hiddenDeskripsi" value="{{ old('deskripsi') }}">
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Nama *</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Fasilitas *</label>
                 <input type="text" id="regularNamaInput" name="nama_regular" data-form-name="nama" class="w-full border rounded-lg px-3 py-2" required placeholder="Contoh: Puskesmas Pembantu Sungai Lekop" value="{{ old('nama') }}">
-                <p class="text-xs text-gray-500 mt-1">Nama yang akan ditampilkan</p>
+                <p class="text-xs text-gray-500 mt-1">Nama resmi fasilitas yang akan ditampilkan di kartu fasilitas</p>
             </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
-                <textarea id="regularDeskripsiInput" name="deskripsi_regular" data-form-name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2" required placeholder="Jelaskan secara singkat...">{{ old('deskripsi') }}</textarea>
-                <p class="text-xs text-gray-500 mt-1">Deskripsi singkat yang akan muncul</p>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Fasilitas *</label>
+                <textarea id="regularDeskripsiInput" name="deskripsi_regular" data-form-name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2" required placeholder="Jelaskan secara singkat fasilitas ini, layanan yang disediakan, dan manfaatnya bagi masyarakat...">{{ old('deskripsi') }}</textarea>
+                <div class="flex justify-between items-center mt-1">
+                    <p class="text-xs text-gray-500">Deskripsi singkat yang akan muncul di kartu fasilitas</p>
+                    <span class="text-xs text-gray-400"><span id="deskripsi-char-count">0</span>/200 karakter</span>
+                </div>
             </div>
 
             <div class="mb-6">
@@ -111,7 +114,7 @@
             </div>
         </div>
 
-        <!-- Hero Fields -->
+        <!-- Hero Fields - SIMPLIFIED -->
         <div id="hero_fields" class="detail-fields bg-white rounded-lg border border-blue-200 p-6 mb-6" @if($tipe==='hero' ) style="display: block" @else style="display: none" @endif>
             <h2 class="text-xl font-bold text-blue-800 mb-4">
                 <i class="fas fa-image text-blue-600 mr-2"></i>Konfigurasi Hero Banner
@@ -176,7 +179,10 @@
 
             <!-- Fasilitas Fields -->
             <div id="fasilitas_fields" class="detail-fields" @if($tipe==='fasilitas' ) style="display: block" @else style="display: none" @endif>
-                <h3 class="text-lg font-semibold mb-4">Detail Fasilitas</h3>
+                <h3 class="text-lg font-semibold mb-4">Informasi Tambahan Fasilitas</h3>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <p class="text-sm text-blue-800"><i class="fas fa-info-circle mr-2"></i>Bagian ini opsional. Nama dan deskripsi utama sudah diisi di atas.</p>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Icon (FontAwesome)</label>
@@ -326,6 +332,7 @@
         const nameDescDiv = document.getElementById('nameDesc');
         const imageUploadDiv = document.getElementById('imageUpload');
         const detailFieldsDiv = document.getElementById('detailFields');
+        const heroFields = document.getElementById('hero_fields');
 
         // Hide all detail fields first
         document.querySelectorAll('.detail-fields').forEach(field => {
@@ -340,7 +347,6 @@
             detailFieldsDiv.style.display = 'none';
 
             // Show hero fields
-            const heroFields = document.getElementById('hero_fields');
             if (heroFields) {
                 heroFields.style.display = 'block';
             }
@@ -549,22 +555,32 @@
             });
         }
 
+        // Add character counter listener
+        const deskripsiInput = document.getElementById('regularDeskripsiInput');
+        if (deskripsiInput) {
+            deskripsiInput.addEventListener('input', function() {
+                updateCharCounter(this);
+            });
+        }
+
         // Add form submission handler
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
-                const tipe = document.querySelector('select[name="tipe"]').value;
-                console.log('Form submitting with tipe:', tipe);
+                console.log('Form submission detected');
 
-                // Prepare form data based on current tipe (fill hidden canonical fields)
+                // Get current tipe
+                const tipe = document.querySelector('select[name="tipe"]').value;
+                console.log('Current tipe:', tipe);
+
+                // Prepare form data based on current tipe (just to be safe)
                 prepareFormDataForSubmit(tipe);
 
-                // Debug: Log form data before submission
+                // Log prepared data
                 const formData = new FormData(form);
-                console.log('Form data before submission:');
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
-                }
+                console.log('Form data being submitted:');
+                console.log('- nama:', formData.get('nama'));
+                console.log('- deskripsi:', formData.get('deskripsi'));
 
                 // Validate required fields
                 const namaInput = document.querySelector('input[name="nama"]');
@@ -634,5 +650,21 @@
             });
         }
     });
+
+    // Character counter for description
+    function updateCharCounter(textarea) {
+        const count = textarea.value.length;
+        const counter = document.getElementById('deskripsi-char-count');
+        if (counter) {
+            counter.textContent = count;
+            if (count > 200) {
+                counter.classList.add('text-red-500');
+                counter.classList.remove('text-gray-400');
+            } else {
+                counter.classList.remove('text-red-500');
+                counter.classList.add('text-gray-400');
+            }
+        }
+    }
 </script>
 @endpush

@@ -41,9 +41,9 @@
 
         <!-- Sidebar -->
         <aside class="admin-sidebar w-64 text-white p-6 shadow-2xl flex flex-col h-screen">
-            <div class="mb-8">
-                <h2 class="text-xl font-bold mb-2">ADMIN KELURAHAN</h2>
-                <div class="h-1 w-16 bg-blue-400 rounded"></div>
+            <div class="mb-8 text-center">
+                <h2 class="text-xl font-bold mb-2">Admin Kelurahan</h2>
+                <div class="h-1 w-16 bg-blue-400 rounded mx-auto"></div>
             </div>
 
             <nav class="space-y-2 flex-1">
@@ -75,10 +75,23 @@
                     <span>Media Sosial</span>
                 </a>
 
-                <a href="{{ route('admin.footer.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
-                    <span>Footer</span>
+                <a href="{{ route('admin.kelurahan-setting.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-cog me-3"></i>
+                    <span>Pengaturan Kelurahan</span>
+                </a>
+
+                <a href="{{ route('admin.navigation.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-compass me-3"></i>
+                    <span>Navigation</span>
                 </a>
             </nav>
+
+            <div class="mt-4">
+                <a href="{{ route('admin.footer.index') }}" class="flex items-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200 group">
+                    <i class="fas fa-globe me-3"></i>
+                    <span>Footer</span>
+                </a>
+            </div>
 
             <div class="pt-8">
                 <form method="POST" action="{{ route('logout') }}">
